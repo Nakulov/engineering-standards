@@ -2,6 +2,7 @@ package io.github.nakulov.standards.task.git
 
 import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.shell.Shell
+import io.github.nakulov.standards.task.shell.ShellResult
 
 /**
  * Операции `git`, нужные командам процесса. Ошибка `git` — [TaskError.Failure] с первой строкой его stderr.
@@ -28,11 +29,56 @@ class Git(
         read(args = listOf("fetch", "--prune", "origin"))
     }
 
+    fun hasLocalBranch(name: String): Boolean {
+        return exists(ref = "refs/heads/$name")
+    }
+
+    fun hasRemoteBranch(name: String): Boolean {
+        return exists(ref = "refs/remotes/origin/$name")
+    }
+
+    /** Новая ветка от [base] без отслеживания: `push -u` при PR задаст её `origin`. */
+    fun createBranch(
+        name: String,
+        base: String,
+    ) {
+        read(args = listOf("switch", "--quiet", "--create", name, "--no-track", base))
+    }
+
+    /** Переключение на существующую ветку; есть только в `origin` — создаётся локальная с отслеживанием. */
+    fun switchTo(name: String) {
+        read(args = listOf("switch", "--quiet", name))
+    }
+
+    /** Отсоединиться на [ref] — так worktree уходит со своей ветки, не трогая `dev`. */
+    fun detach(ref: String) {
+        read(args = listOf("switch", "--quiet", "--detach", ref))
+    }
+
+    /** `dev` основного клона — до `origin/dev`, только перемоткой. */
+    fun updateDev() {
+        read(args = listOf("switch", "--quiet", "dev"))
+        read(args = listOf("merge", "--quiet", "--ff-only", "origin/dev"))
+    }
+
+    /** Удаление с `-D`: после squash ветка не считается слитой, слияние PR проверяет вызывающий. */
+    fun deleteBranch(name: String) {
+        read(args = listOf("branch", "--quiet", "-D", name))
+    }
+
+    private fun exists(ref: String): Boolean {
+        return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
+    }
+
     private fun read(args: List<String>): String {
-        val result = shell.run(command = listOf("git") + args)
+        val result = run(args = args)
         if (result.code != 0) {
             throw TaskError.Failure(message = "git ${args.first()}: ${result.err.trim().lineSequence().first()}")
         }
         return result.out.trim()
+    }
+
+    private fun run(args: List<String>): ShellResult {
+        return shell.run(command = listOf("git") + args)
     }
 }

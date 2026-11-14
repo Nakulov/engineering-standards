@@ -12,7 +12,9 @@ data class LauncherRun(
 fun makeHelpRun(): LauncherRun {
     return LauncherRun(
         code = 0,
-        out = "task — механика процесса: ветки, PR, доска. Команды:\n\n  (команды появятся в следующих PR задачи #13)\n",
+        out = "task — механика процесса: ветки, PR, доска. Команды:\n\n" +
+            "  task start <N> <slug> [--long] — ветка task/<N>-<slug> от origin/dev, статус In progress\n" +
+            "  task done — после слияния PR: свежий dev, ветка удалена, статус Done\n",
         err = "",
     )
 }

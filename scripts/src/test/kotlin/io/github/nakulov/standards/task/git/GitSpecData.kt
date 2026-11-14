@@ -33,6 +33,32 @@ fun makeDirtyClone(): File {
     return clone
 }
 
+/** Клон, где ветка `task/3-z` есть только в `origin`. */
+fun makeCloneWithRemoteBranch(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("switch", "--quiet", "--create", "task/3-z"))
+    git(directory = clone, args = listOf("push", "--quiet", "origin", "task/3-z"))
+    git(directory = clone, args = listOf("switch", "--quiet", "dev"))
+    git(directory = clone, args = listOf("branch", "--quiet", "-D", "task/3-z"))
+    return clone
+}
+
+/** Клон на ветке задачи; в `origin/dev` есть коммит «второй коммит», которого нет в локальном `dev`. */
+fun makeCloneBehindOrigin(): File {
+    val clone = makeClone()
+    val other = File(clone.parentFile, "other")
+    git(directory = clone.parentFile, args = listOf("clone", "--quiet", "origin.git", "other"))
+    git(directory = other, args = listOf("commit", "--quiet", "--allow-empty", "--message", "второй коммит"))
+    git(directory = other, args = listOf("push", "--quiet", "origin", "dev"))
+    git(directory = clone, args = listOf("switch", "--quiet", "--create", "task/4-w"))
+    return clone
+}
+
+fun readHeadSubject(directory: File): String {
+    val process = ProcessBuilder(listOf("git", "log", "-1", "--format=%s")).directory(directory).start()
+    return process.inputStream.bufferedReader().readText().trim()
+}
+
 fun makeRepoWithoutOrigin(): File {
     val root = makeTempDirectory()
     git(directory = root, args = listOf("init", "--quiet"))
