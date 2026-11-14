@@ -24,6 +24,30 @@ class Issues(
         )
     }
 
+    /**
+     * Новая задача с меткой типа: `gh issue create --template` нельзя сочетать с готовым телом, поэтому метка ставится
+     * явно (#6, решение 1). Возвращает номер задачи.
+     */
+    fun create(
+        title: String,
+        body: String,
+        label: String,
+        parent: Int?,
+        blockedBy: List<Int>,
+    ): Int {
+        val parentLink = if (parent == null) emptyList() else listOf("--parent", "$parent")
+        val blockers = blockedBy.joinToString(separator = ",")
+        val blockerLinks = if (blockedBy.isEmpty()) emptyList() else listOf("--blocked-by", blockers)
+        val args = listOf("issue", "create", "--title", title, "--body", body, "--label", label)
+        val url = gitHub.write(args = args + parentLink + blockerLinks)
+        return url.lines().last().substringAfterLast(delimiter = "/").toInt()
+    }
+
+    /** Числовой id задачи — для REST-добавления на доску. */
+    fun databaseId(number: Int): String {
+        return gitHub.read(args = listOf("api", "repos/{owner}/{repo}/issues/$number", "--jq", ".id"))
+    }
+
     /** Глобальный id задачи — для GraphQL-запросов доски. */
     fun nodeId(number: Int): String {
         return gitHub.read(args = listOf("issue", "view", "$number", "--json", "id", "--jq", ".id"))

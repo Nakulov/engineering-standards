@@ -40,4 +40,6 @@ if [ ! -f "$jar" ]; then
   mv -f "$tmp" "$jar" # атомарно: параллельный запуск не увидит недописанный jar
 fi
 
+TASK_PLUGIN_ROOT=$(cd "$dir/.." && pwd)
+export TASK_PLUGIN_ROOT # шаблоны плагина (этап) — от корня плагина
 exec kotlin -cp "$jar" io.github.nakulov.standards.task.cli.MainKt "$@"
