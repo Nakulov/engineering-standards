@@ -78,6 +78,23 @@ class GitSpec :
             git.hasLocalBranch(name = "task/1-x")
         }
 
+        shouldReturnTest(true, options = TestOptions(name = "push отправляет ветку в origin")) {
+            val git = Git(shell = ProcessShell(directory = makeClone()))
+            git.createBranch(name = "long/5-v", base = "origin/dev")
+            git.push(name = "long/5-v")
+            git.hasRemoteBranch(name = "long/5-v")
+        }
+
+        shouldReturnTest(null, options = TestOptions(name = "базы ветки нет — PR в dev")) {
+            Git(shell = ProcessShell(directory = makeClone())).base(branch = "task/6-u")
+        }
+
+        shouldReturnTest("long/5-v", options = TestOptions(name = "база ветки в настройке git")) {
+            val git = Git(shell = ProcessShell(directory = makeClone()))
+            git.setBase(branch = "task/6-u", base = "long/5-v")
+            git.base(branch = "task/6-u")
+        }
+
         shouldReturnTest("второй коммит", options = TestOptions(name = "dev перематывается до origin/dev")) {
             val clone = makeCloneBehindOrigin()
             val git = Git(shell = ProcessShell(directory = clone))

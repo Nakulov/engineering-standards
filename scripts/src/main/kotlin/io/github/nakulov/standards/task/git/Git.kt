@@ -66,6 +66,25 @@ class Git(
         read(args = listOf("branch", "--quiet", "-D", name))
     }
 
+    /** Отправка ветки в `origin` с отслеживанием. */
+    fun push(name: String) {
+        read(args = listOf("push", "--quiet", "--set-upstream", "origin", name))
+    }
+
+    /** База ветки — long-ветка, от которой её начали (`task start --from`); PR открывается в неё. */
+    fun setBase(
+        branch: String,
+        base: String,
+    ) {
+        read(args = listOf("config", "branch.$branch.$BASE_KEY", base))
+    }
+
+    /** База ветки или `null` — тогда PR идёт в `dev`. */
+    fun base(branch: String): String? {
+        val result = run(args = listOf("config", "--get", "branch.$branch.$BASE_KEY"))
+        return result.out.trim().takeIf { result.code == 0 }
+    }
+
     private fun exists(ref: String): Boolean {
         return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
     }
@@ -80,5 +99,9 @@ class Git(
 
     private fun run(args: List<String>): ShellResult {
         return shell.run(command = listOf("git") + args)
+    }
+
+    private companion object {
+        const val BASE_KEY = "task-base"
     }
 }
