@@ -65,6 +65,28 @@ fun makeRepoWithoutOrigin(): File {
     return root
 }
 
+/** Пустой репозиторий (ветка по умолчанию `main`) с файлами стандарта и файлом проекта, без коммитов. */
+fun makeEmptyRepoWithFiles(): File {
+    val root = makeRepoWithoutOrigin()
+    git(directory = root, args = listOf("symbolic-ref", "HEAD", "refs/heads/main"))
+    git(directory = root, args = listOf("config", "user.name", "task"))
+    git(directory = root, args = listOf("config", "user.email", "task@example.invalid"))
+    File(root, ".gitignore").writeText("build/\n")
+    File(root, ".github").mkdirs()
+    File(root, ".github/pull_request_template.md").writeText("Closes #\n")
+    File(root, "notes.txt").writeText("файл проекта\n")
+    return root
+}
+
+fun makeFirstCommitResult(): List<String> {
+    return listOf("dev", "Начальная настройка", ".github/pull_request_template.md", ".gitignore")
+}
+
+fun readHeadFiles(directory: File): List<String> {
+    val process = ProcessBuilder(listOf("git", "ls-tree", "-r", "--name-only", "HEAD")).directory(directory).start()
+    return process.inputStream.bufferedReader().readText().lines().filter { line -> line.isNotBlank() }
+}
+
 /** Временная папка в `build/` модуля: её убирает `./gradlew clean`. */
 private fun makeTempDirectory(): File {
     val base = File(System.getProperty("task.cache"), "git")

@@ -90,6 +90,22 @@ class Git(
         return result.out.trim().takeIf { result.code == 0 }
     }
 
+    /** В репозитории есть хотя бы один коммит (`HEAD` указывает на коммит, а не на нерождённую ветку). */
+    fun hasCommits(): Boolean {
+        return exists(ref = "HEAD")
+    }
+
+    /** Первый коммит пустого репозитория — в ветку [branch], только [paths] (#8: файлы стандарта). */
+    fun firstCommit(
+        branch: String,
+        message: String,
+        paths: List<String>,
+    ) {
+        read(args = listOf("symbolic-ref", "HEAD", "refs/heads/$branch"))
+        read(args = listOf("add", "--") + paths)
+        read(args = listOf("commit", "--quiet", "--message", message))
+    }
+
     private fun exists(ref: String): Boolean {
         return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
     }

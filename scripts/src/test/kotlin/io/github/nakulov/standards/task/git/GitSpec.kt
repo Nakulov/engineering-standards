@@ -108,4 +108,17 @@ class GitSpec :
             git.updateDev()
             readHeadSubject(directory = clone)
         }
+
+        shouldReturnTest(listOf(false, true), options = TestOptions(name = "коммиты: пустой репозиторий и клон")) {
+            val empty = Git(shell = ProcessShell(directory = makeRepoWithoutOrigin())).hasCommits()
+            val clone = Git(shell = ProcessShell(directory = makeClone())).hasCommits()
+            listOf(empty, clone)
+        }
+
+        shouldReturnTest(makeFirstCommitResult(), options = TestOptions(name = "первый коммит — файлы стандарта")) {
+            val repository = makeEmptyRepoWithFiles()
+            val git = Git(shell = ProcessShell(directory = repository))
+            git.firstCommit(branch = "dev", message = "Начальная настройка", paths = listOf(".gitignore", ".github"))
+            listOf(git.currentBranch(), readHeadSubject(directory = repository)) + readHeadFiles(directory = repository)
+        }
     })

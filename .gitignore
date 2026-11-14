@@ -1,3 +1,15 @@
+# >>> engineering-standards
+# Общий блок стандарта: его пишет и сверяет setup, правки внутри перезапишутся. Строки проекта — ниже блока,
+# в том числе исключения через «!» (последняя подходящая строка выигрывает).
+.DS_Store
+.idea/*
 .gradle/
+.kotlin/
 build/
 local.properties
+*.hprof
+hs_err_pid*
+__pycache__/
+.venv/
+node_modules/
+# <<< engineering-standards
