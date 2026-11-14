@@ -31,6 +31,8 @@ class StartCommandSpec :
         justRun { git.fetch() }
         justRun { git.createBranch(name = any(), base = any()) }
         justRun { git.switchTo(name = any()) }
+        justRun { git.push(name = any()) }
+        justRun { git.setBase(branch = any(), base = any()) }
         every { git.isClean() } returns true
         every { issues.nodeId(number = 13) } returns "I_issue13"
 
@@ -81,6 +83,79 @@ class StartCommandSpec :
             }
         }
 
+        given("новая long-ветка") {
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
+            every { git.hasLocalBranch(name = "long/13-big") } returns false
+            every { git.hasRemoteBranch(name = "long/13-big") } returns false
+            `when` {
+                command.run(args = listOf("13", "big", "--long"), console = console)
+                then {
+                    verifySequence {
+                        git.isClean()
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        git.fetch()
+                        git.hasLocalBranch(name = "long/13-big")
+                        git.hasRemoteBranch(name = "long/13-big")
+                        git.createBranch(name = "long/13-big", base = "origin/dev")
+                        console.line(text = "ветка long/13-big от origin/dev")
+                        git.push(name = "long/13-big")
+                        console.line(text = "ветка long/13-big отправлена в origin")
+                        console.line(text = "#13 уже In progress")
+                    }
+                }
+            }
+        }
+
+        given("часть long-ветки: --from") {
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
+            every { git.hasLocalBranch(name = "task/13-part-a") } returns false
+            every { git.hasRemoteBranch(name = "task/13-part-a") } returns false
+            every { git.hasRemoteBranch(name = "long/13-big") } returns true
+            `when` {
+                command.run(args = listOf("13", "part-a", "--from", "long/13-big"), console = console)
+                then {
+                    verifySequence {
+                        git.isClean()
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        git.fetch()
+                        git.hasLocalBranch(name = "task/13-part-a")
+                        git.hasRemoteBranch(name = "task/13-part-a")
+                        git.hasRemoteBranch(name = "long/13-big")
+                        git.createBranch(name = "task/13-part-a", base = "origin/long/13-big")
+                        git.setBase(branch = "task/13-part-a", base = "long/13-big")
+                        console.line(text = "ветка task/13-part-a от origin/long/13-big")
+                        console.line(text = "#13 уже In progress")
+                    }
+                }
+            }
+        }
+
+        shouldThrowWithMessageTest<TaskError.Refusal>(makeNoLongBranchMessage()) {
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
+            every { git.hasLocalBranch(name = "task/13-part-a") } returns false
+            every { git.hasRemoteBranch(name = any()) } returns false
+            command.run(args = listOf("13", "part-a", "--from", "long/13-big"), console = console)
+        }
+
+        withGivens(
+            nameFn = { given -> "неверные аргументы ${given.arg1}" },
+            case(arg1 = listOf("13")),
+            case(arg1 = listOf("13", "part-a", "--long", "--from", "long/13-big")),
+            case(arg1 = listOf("13", "part-a", "--from", "task/13-x")),
+            case(arg1 = listOf("13", "part-a", "--from")),
+        ) { args ->
+            shouldThrowWithMessageTest<TaskError.Failure>(makeUsageMessage()) {
+                command.run(args = args, console = console)
+            }
+        }
+
         given("исследование") {
             every { issues.info(number = 13) } returns makeResearchInfo()
             every { board.item(issue = 13, nodeId = "I_issue13") } returns makeGroomedItem()
@@ -119,7 +194,4 @@ class StartCommandSpec :
             command.run(args = listOf("13", "task-scripts"), console = console)
         }
 
-        shouldThrowWithMessageTest<TaskError.Failure>(makeUsageMessage()) {
-            command.run(args = listOf("13"), console = console)
-        }
     })

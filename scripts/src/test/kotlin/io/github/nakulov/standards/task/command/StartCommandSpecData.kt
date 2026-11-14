@@ -44,7 +44,12 @@ fun makeDirtyMessage(): String {
 }
 
 fun makeUsageMessage(): String {
-    return "использование: task start <N> <slug> [--long] — ветка task/<N>-<slug> от origin/dev, статус In progress"
+    return "использование: task start <N> <slug> [--long | --from long/<M>-…] — ветка task/<N>-<slug> от origin/dev, " +
+        "статус In progress"
+}
+
+fun makeNoLongBranchMessage(): String {
+    return "нет ветки origin/long/13-big — сначала task start <N> <slug> --long"
 }
 
 private fun makeItem(status: String): BoardItem {
