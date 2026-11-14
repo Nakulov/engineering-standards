@@ -49,3 +49,27 @@ fun makeMoveArgs(): List<String> {
 fun makeMissingStatusMessage(): String {
     return "на доске нет статуса «Testing» — статусы по стандарту: Backlog, Groomed, In progress, In review, Done"
 }
+
+fun makeRepoArgs(): List<String> {
+    return listOf("repo", "view", "--json", "owner,name", "--jq", ".owner.login + \"\\t\" + .name")
+}
+
+fun makeRepoVariables(): Map<String, String> {
+    return mapOf("owner" to "owner", "name" to "repo")
+}
+
+fun makeItemsPath(): String {
+    return "users/owner/projectsV2/10/items"
+}
+
+fun makeAddArgs(): List<String> {
+    return listOf("api", "--method", "POST", "users/owner/projectsV2/10/items", "-f", "type=Issue", "-F", "id=9013")
+}
+
+fun makeInvisibleMessage(): String {
+    return "#13 добавлена, но не видна в списке доски — проверьте доску вручную"
+}
+
+fun makeNoBoardMessage(): String {
+    return "у репозитория нет связанной доски — свяжите с репозиторием одну доску"
+}

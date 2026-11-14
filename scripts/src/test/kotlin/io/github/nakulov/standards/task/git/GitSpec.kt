@@ -28,6 +28,12 @@ class GitSpec :
             Git(shell = ProcessShell(directory = makeDirtyClone())).isClean()
         }
 
+        shouldReturnTest(true, options = TestOptions(name = "корень репозитория из подпапки")) {
+            val clone = makeClone()
+            File(clone, "sub").mkdirs()
+            Git(shell = ProcessShell(directory = File(clone, "sub"))).root() == clone.canonicalPath
+        }
+
         shouldReturnTest("dev", options = TestOptions(name = "ветка основного клона")) {
             Git(shell = ProcessShell(directory = makeClone())).currentBranch()
         }

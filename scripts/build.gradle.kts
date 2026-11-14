@@ -22,6 +22,7 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
     systemProperty("task.launcher", file("task").absolutePath)
+    systemProperty("task.repoRoot", rootProject.projectDir.absolutePath)
     systemProperty("task.prTemplate", rootProject.file("templates/github/pull_request_template.md").absolutePath)
     systemProperty("task.cache", layout.buildDirectory.dir("test-cache").get().asFile.absolutePath)
 }

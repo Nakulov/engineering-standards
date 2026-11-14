@@ -18,7 +18,10 @@ fun makeHelpRun(): LauncherRun {
             "  task pr --title «…» --body-file <файл> [--check «команда»]… [--part] | --ready — " +
             "черновик PR по шаблону; --ready — к ревью\n" +
             "  task done — после слияния PR: свежий dev, ветка удалена, статус Done\n" +
-            "  task final <N> --title «…» --body-file <файл> [--check «команда»]… — итоговый PR long/<N>-… → dev\n",
+            "  task final <N> --title «…» --body-file <файл> [--check «команда»]… — итоговый PR long/<N>-… → dev\n" +
+            "  task stage create --title «…» --body-file <файл> [--due ГГГГ-ММ-ДД] — веха этапа по шаблону\n" +
+            "  task new <тип> --title «…» --body-file <файл> [--parent N] [--blocked-by N,N] — " +
+            "задача по шаблону типа в Backlog\n",
         err = "",
     )
 }

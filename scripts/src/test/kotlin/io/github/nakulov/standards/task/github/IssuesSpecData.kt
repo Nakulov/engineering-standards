@@ -41,3 +41,24 @@ fun makeNoPullRequestFailure(): TaskError.Failure {
 fun makeBadGatewayFailure(): TaskError.Failure {
     return TaskError.Failure(message = makeBadGatewayMessage())
 }
+
+fun makeCreateIssueArgs(): List<String> {
+    return listOf(
+        "issue",
+        "create",
+        "--title",
+        "Задача",
+        "--body",
+        "Тело",
+        "--label",
+        "type:task",
+        "--parent",
+        "14",
+        "--blocked-by",
+        "13,8",
+    )
+}
+
+fun makeCreatePlainIssueArgs(): List<String> {
+    return listOf("issue", "create", "--title", "Задача", "--body", "Тело", "--label", "type:bug")
+}

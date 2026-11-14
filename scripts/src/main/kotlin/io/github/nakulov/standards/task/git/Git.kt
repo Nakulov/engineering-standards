@@ -20,6 +20,11 @@ class Git(
         return read(args = listOf("status", "--porcelain")).isEmpty()
     }
 
+    /** Корень репозитория — от него ищутся шаблоны задач `.github/ISSUE_TEMPLATE/`. */
+    fun root(): String {
+        return read(args = listOf("rev-parse", "--show-toplevel"))
+    }
+
     fun currentBranch(): String {
         return read(args = listOf("branch", "--show-current"))
     }

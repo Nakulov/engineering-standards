@@ -27,6 +27,21 @@ class IssuesSpec :
             issues.info(number = 13)
         }
 
+        shouldReturnTest(40) {
+            every { gitHub.write(args = makeCreateIssueArgs()) } returns "https://github.com/owner/repo/issues/40"
+            issues.create(title = "Задача", body = "Тело", label = "type:task", parent = 14, blockedBy = listOf(13, 8))
+        }
+
+        shouldReturnTest(41) {
+            every { gitHub.write(args = makeCreatePlainIssueArgs()) } returns "https://github.com/owner/repo/issues/41"
+            issues.create(title = "Задача", body = "Тело", label = "type:bug", parent = null, blockedBy = emptyList())
+        }
+
+        shouldReturnTest("9013") {
+            every { gitHub.read(args = listOf("api", "repos/{owner}/{repo}/issues/13", "--jq", ".id")) } returns "9013"
+            issues.databaseId(number = 13)
+        }
+
         shouldReturnTest("I_kwDOissue13") {
             every { gitHub.read(args = makeNodeIdArgs()) } returns "I_kwDOissue13"
             issues.nodeId(number = 13)
