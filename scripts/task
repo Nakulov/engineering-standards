@@ -1,6 +1,7 @@
 #!/bin/bash
 # Запускатель task (#13, решения 1 и 3): проверяет Kotlin, один раз компилирует логику в jar в кеше и запускает её.
 # Логики процесса здесь нет — она в src/main/kotlin. Совместим с bash 3.2 (macOS).
+# Точка входа — TASK_MAIN (по умолчанию task); scripts/setup запускает через него setup (#8).
 set -eu
 
 min_major=2
@@ -42,4 +43,4 @@ fi
 
 TASK_PLUGIN_ROOT=$(cd "$dir/.." && pwd)
 export TASK_PLUGIN_ROOT # шаблоны плагина (этап) — от корня плагина
-exec kotlin -cp "$jar" io.github.nakulov.standards.task.cli.MainKt "$@"
+exec kotlin -cp "$jar" "${TASK_MAIN:-io.github.nakulov.standards.task.cli.MainKt}" "$@"

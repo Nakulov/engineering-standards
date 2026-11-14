@@ -7,7 +7,8 @@ import io.kotest.core.test.config.TestConfig
 import kotlin.time.Duration.Companion.minutes
 
 // Вне стандарта: спека проверяет не вызов класса, а запускатель `scripts/task` — запускает его процессом с разным PATH
-// (#13, решения 1, 3 и 7). Запуск и подготовка PATH — в TaskLauncherSpecData.
+// (#13, решения 1, 3 и 7) — и запускатель `scripts/setup` поверх него (#8). Запуск и подготовка PATH — в
+// TaskLauncherSpecData.
 class TaskLauncherSpec :
     BehaviorSpec({
         shouldReturnTest(
@@ -18,6 +19,16 @@ class TaskLauncherSpec :
             ),
         ) {
             runLauncher(path = makeSystemPath(), args = listOf("--help"))
+        }
+
+        shouldReturnTest(
+            makeSetupHelpRun(),
+            options = TestOptions(
+                name = "setup --help: та же компиляция, другая точка входа",
+                config = TestConfig(timeout = 3.minutes),
+            ),
+        ) {
+            runLauncher(path = makeSystemPath(), args = listOf("--help"), launcher = makeSetupLauncher())
         }
 
         shouldReturnTest(makeNoKotlinRun(), options = TestOptions(name = "нет kotlinc в PATH")) {
