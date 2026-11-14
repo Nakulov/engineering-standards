@@ -1,0 +1,43 @@
+#!/bin/bash
+# Запускатель task (#13, решения 1 и 3): проверяет Kotlin, один раз компилирует логику в jar в кеше и запускает её.
+# Логики процесса здесь нет — она в src/main/kotlin. Совместим с bash 3.2 (macOS).
+set -eu
+
+min_major=2
+min_minor=2 # совпадает с languageVersion в build.gradle.kts
+
+dir=$(cd "$(dirname "$0")" && pwd)
+
+if ! command -v kotlinc >/dev/null 2>&1; then
+  echo "Нет Kotlin — установите: brew install kotlin" >&2
+  exit 2
+fi
+
+# Ключ кеша: исходники и путь к kotlinc (в пути установки есть версия, при обновлении Kotlin jar пересобирается).
+kotlinc_path=$(readlink -f "$(command -v kotlinc)")
+key=$( (cd "$dir/src/main/kotlin" && find . -name '*.kt' | sort | xargs shasum; echo "$kotlinc_path") | shasum | cut -c1-16)
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/engineering-standards"
+jar="$cache/task-$key.jar"
+
+if [ ! -f "$jar" ]; then
+  version=$(kotlinc -version 2>&1 | sed -n 's/.*kotlinc-jvm \([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/p')
+  major=${version%%.*}
+  minor=${version#*.}
+  minor=${minor%%.*}
+  if [ -z "$version" ] || [ "$major" -lt "$min_major" ] ||
+    { [ "$major" -eq "$min_major" ] && [ "$minor" -lt "$min_minor" ]; }; then
+    echo "Kotlin ${version:-неизвестной версии}, нужен ≥ $min_major.$min_minor — обновите: brew upgrade kotlin" >&2
+    exit 2
+  fi
+  mkdir -p "$cache"
+  tmp="$cache/tmp-$$.jar"
+  if ! kotlinc -nowarn -language-version "$min_major.$min_minor" -api-version "$min_major.$min_minor" \
+    "$dir/src/main/kotlin" -d "$tmp" >&2; then
+    rm -f "$tmp"
+    echo "сбой компиляции task — подробности выше" >&2
+    exit 2
+  fi
+  mv -f "$tmp" "$jar" # атомарно: параллельный запуск не увидит недописанный jar
+fi
+
+exec kotlin -cp "$jar" io.github.nakulov.standards.task.cli.MainKt "$@"
