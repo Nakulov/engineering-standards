@@ -26,12 +26,27 @@ fun makeHelpRun(): LauncherRun {
     )
 }
 
+fun makeSetupHelpRun(): LauncherRun {
+    return LauncherRun(
+        code = 0,
+        out = "setup — настройка репозитория текущей папки по стандарту. Запуск:\n\n" +
+            "  setup — применить недостающее; удаляющие шаги только печатаются\n" +
+            "  setup --confirm — применить, включая удаляющие шаги\n" +
+            "  setup --check — только сверить: 0 — соответствует, 1 — отклонения\n",
+        err = "",
+    )
+}
+
 fun makeNoKotlinRun(): LauncherRun {
     return LauncherRun(code = 2, out = "", err = "Нет Kotlin — установите: brew install kotlin\n")
 }
 
 fun makeOldKotlinRun(): LauncherRun {
     return LauncherRun(code = 2, out = "", err = "Kotlin 2.1.20, нужен ≥ 2.2 — обновите: brew upgrade kotlin\n")
+}
+
+fun makeSetupLauncher(): String {
+    return System.getProperty("task.setupLauncher")
 }
 
 fun makeSystemPath(): String {
@@ -56,8 +71,9 @@ fun makeOldKotlinPath(): String {
 fun runLauncher(
     path: String,
     args: List<String>,
+    launcher: String = System.getProperty("task.launcher"),
 ): LauncherRun {
-    val builder = ProcessBuilder(listOf(System.getProperty("task.launcher")) + args)
+    val builder = ProcessBuilder(listOf(launcher) + args)
     builder.environment()["PATH"] = path
     builder.environment()["XDG_CACHE_HOME"] = System.getProperty("task.cache")
     val process = builder.start()
