@@ -29,12 +29,20 @@ class PullRequests(
         gitHub.write(args = listOf("pr", "ready", head))
     }
 
-    /** Первая строка тела PR — связь с задачей: `Closes #N` или `Part of #N`. */
+    /**
+     * Связь с задачей из тела PR — строка `Closes #N` или `Part of #N` в любом месте (#41: первой строкой мог быть
+     * комментарий шаблона, тело правят и в вебе); нет связи — пустая строка.
+     */
     fun link(head: String): String {
-        return gitHub.read(args = listOf("pr", "view", head, "--json", "body", "--jq", ".body | split(\"\\n\") | .[0]"))
+        return gitHub.read(args = listOf("pr", "view", head, "--json", "body", "--jq", LINK_JQ))
     }
 
     private fun url(output: String): String {
         return output.lines().last()
+    }
+
+    private companion object {
+        const val LINK_JQ = ".body | split(\"\\n\") | map(sub(\"\\r$\"; \"\")) | " +
+            "map(select(test(\"^(Closes|Part of) #[0-9]+$\"))) | .[0] // \"\""
     }
 }

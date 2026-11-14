@@ -34,5 +34,7 @@ fun makePrEditArgs(): List<String> {
 }
 
 fun makeLinkArgs(): List<String> {
-    return listOf("pr", "view", "task/13-x", "--json", "body", "--jq", ".body | split(\"\\n\") | .[0]")
+    val jq = ".body | split(\"\\n\") | map(sub(\"\\r$\"; \"\")) | " +
+        "map(select(test(\"^(Closes|Part of) #[0-9]+$\"))) | .[0] // \"\""
+    return listOf("pr", "view", "task/13-x", "--json", "body", "--jq", jq)
 }

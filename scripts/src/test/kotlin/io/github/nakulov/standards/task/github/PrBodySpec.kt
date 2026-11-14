@@ -35,6 +35,16 @@ class PrBodySpec :
             readTemplateChecks()
         }
 
+        // Вне стандарта: см. выше. Воспроизводит #41: комментарии шаблона попадали в тело (и в squash-коммит),
+        // а первой строкой вместо связи оказывался комментарий.
+        shouldReturnTest(makeTemplateHead(), options = TestOptions(name = "шаблон PR: связь первой, без подсказок")) {
+            readTemplateHead()
+        }
+
+        shouldReturnTest(makeQuotedCommentsBody()) {
+            PrBody.compose(text = makeQuotedCommentsText(), link = "Closes #41", checks = emptyList())
+        }
+
         shouldThrowWithMessageTest<TaskError.Failure>(makeNoAutomaticMessage()) {
             PrBody.compose(text = makeResource(path = "pr/no-automatic.md"), link = "Closes #13", checks = emptyList())
         }
