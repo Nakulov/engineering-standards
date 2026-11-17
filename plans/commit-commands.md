@@ -137,7 +137,7 @@
   - [x] Документация
 - PR 3: части плана записываются в тело задачи без дублей
   - [x] Задача 7: `IssueParts`
-  - [ ] Задача 8: тело задачи в `Issues`
+  - [x] Задача 8: тело задачи в `Issues`
   - [ ] Приёмка
   - [ ] Документация
 - PR 4: утверждённый план сохраняется командой `task plan`
@@ -1047,7 +1047,7 @@
 - Изменить: `github/Issues.kt` — `body(number)`, `editBody(number, body)`
 - Изменить: `github/IssuesSpec.kt`, `IssuesSpecData.kt` — аргументы `gh`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `IssuesSpecData.kt`:
   ```kotlin
   fun makeBodyArgs(): List<String> {
@@ -1070,8 +1070,8 @@
       issues.editBody(number = 13, body = "Новое тело")
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — падает: `Unresolved reference 'body'`
-- [ ] 3. Минимальный код в `Issues.kt` (после `nodeId`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — падает: `Unresolved reference 'body'`
+- [x] 3. Минимальный код в `Issues.kt` (после `nodeId`):
   ```kotlin
   /** Тело задачи — для частей плана (#53). */
   fun body(number: Int): String {
@@ -1085,8 +1085,8 @@
       gitHub.write(args = listOf("issue", "edit", "$number", "--body", body))
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: спеки `IssueParts` на образце тела #53
