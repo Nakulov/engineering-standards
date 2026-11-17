@@ -132,7 +132,7 @@
 - PR 2: план не попадает в `dev`
   - [x] Задача 4: основная папка, добавленные пути, удаление в `Git`
   - [x] Задача 5: `PlanArchive`
-  - [ ] Задача 6: архив в `Publisher`
+  - [x] Задача 6: архив в `Publisher`
   - [ ] Приёмка
   - [ ] Документация
 - PR 3: части плана записываются в тело задачи без дублей
@@ -797,7 +797,7 @@
 - Изменить: `command/PublisherSpecData.kt` — `makePartDraft()`
 - Изменить: `cli/Main.kt:34` — `Publisher(…, archive = PlanArchive(git = git))`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PublisherSpecData.kt`:
   ```kotlin
   /** Черновик блока PR в long-ветку — архив плана не нужен. */
@@ -834,8 +834,8 @@
   }
   ```
   (`import io.mockk.verify`)
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PublisherSpec*'` — падает: `No parameter with name 'archive' found`
-- [ ] 3. Минимальный код. `Publisher.kt`: в конструктор после `checks` — `private val archive: PlanArchive,`; в `publish` после проверки `isClean`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PublisherSpec*'` — падает: `No parameter with name 'archive' found`
+- [x] 3. Минимальный код. `Publisher.kt`: в конструктор после `checks` — `private val archive: PlanArchive,`; в `publish` после проверки `isClean`:
   ```kotlin
   if (draft.base == DEV && draft.link.startsWith(prefix = CLOSES)) {
       archive.run(console = console)
@@ -859,8 +859,8 @@
       archive = PlanArchive(git = git),
   )
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (`PrCommandSpec`, `FinalCommandSpec` подменяют `Publisher` целиком — не меняются)
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (`PrCommandSpec`, `FinalCommandSpec` подменяют `Publisher` целиком — не меняются)
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: в черновой ветке с `plans/x.md` `scripts/task pr` делает коммит «Убрать план: …», копия в `plans/done/` основной папки

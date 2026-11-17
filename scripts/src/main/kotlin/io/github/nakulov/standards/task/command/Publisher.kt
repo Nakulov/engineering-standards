@@ -8,13 +8,15 @@ import io.github.nakulov.standards.task.github.PrBody
 import io.github.nakulov.standards.task.github.PullRequests
 
 /**
- * Общее у `task pr` и `task final`: проверки, тело по шаблону, push, PR — новый или обновлённый (повтор безопасен).
+ * Общее у `task pr` и `task final`: проверки, план из ветки — в архив при PR в `dev` (#53), тело по шаблону, push,
+ * PR — новый или обновлённый (повтор безопасен).
  */
 class Publisher(
     private val git: Git,
     private val issues: Issues,
     private val pullRequests: PullRequests,
     private val checks: CheckRunner,
+    private val archive: PlanArchive,
 ) {
     fun publish(
         draft: PullRequestDraft,
@@ -22,6 +24,9 @@ class Publisher(
     ) {
         if (!git.isClean()) {
             throw TaskError.Refusal(message = "в рабочей папке незакоммиченные изменения — закоммитьте или уберите их")
+        }
+        if (draft.base == DEV && draft.link.startsWith(prefix = CLOSES)) {
+            archive.run(console = console)
         }
         draft.checks.forEach { check ->
             checks.run(command = check)
@@ -46,5 +51,10 @@ class Publisher(
             "PR обновлён: ${pullRequests.edit(head = draft.head, title = draft.title, body = body)}"
         }
         console.line(text = line)
+    }
+
+    private companion object {
+        const val DEV = "dev"
+        const val CLOSES = "Closes #"
     }
 }

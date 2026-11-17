@@ -6,6 +6,7 @@ import io.github.nakulov.standards.task.command.CommitCommand
 import io.github.nakulov.standards.task.command.DoneCommand
 import io.github.nakulov.standards.task.command.FinalCommand
 import io.github.nakulov.standards.task.command.NewCommand
+import io.github.nakulov.standards.task.command.PlanArchive
 import io.github.nakulov.standards.task.command.PrCommand
 import io.github.nakulov.standards.task.command.Publisher
 import io.github.nakulov.standards.task.command.StageCommand
@@ -33,7 +34,13 @@ fun main(args: Array<String>) {
     val board = Board(gitHub = gitHub, pause = pause)
     val pullRequests = PullRequests(gitHub = gitHub)
     val checks = CheckRunner(shell = shell)
-    val publisher = Publisher(git = git, issues = issues, pullRequests = pullRequests, checks = checks)
+    val publisher = Publisher(
+        git = git,
+        issues = issues,
+        pullRequests = pullRequests,
+        checks = checks,
+        archive = PlanArchive(git = git),
+    )
     val task = Task(
         commands = mapOf(
             "start" to StartCommand(git = git, issues = issues, board = board),
