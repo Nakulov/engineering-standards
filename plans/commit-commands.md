@@ -131,7 +131,7 @@
   - [x] Документация
 - PR 2: план не попадает в `dev`
   - [x] Задача 4: основная папка, добавленные пути, удаление в `Git`
-  - [ ] Задача 5: `PlanArchive`
+  - [x] Задача 5: `PlanArchive`
   - [ ] Задача 6: архив в `Publisher`
   - [ ] Приёмка
   - [ ] Документация
@@ -658,7 +658,7 @@
 - Создать: `command/PlanArchive.kt` — «Убрать план»
 - Создать: `command/PlanArchiveSpec.kt`, `PlanArchiveSpecData.kt` — копия и коммит; плана нет — ничего
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PlanArchiveSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -738,8 +738,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — падает: `Unresolved reference 'PlanArchive'`
-- [ ] 3. Минимальный код, `command/PlanArchive.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — падает: `Unresolved reference 'PlanArchive'`
+- [x] 3. Минимальный код, `command/PlanArchive.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -788,8 +788,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 6: архив в `Publisher`
 - Изменить: `command/Publisher.kt:13` — параметр `archive: PlanArchive`, вызов после проверки чистоты при `draft.base == "dev"` и связи `Closes #…`: `task pr --part` в `dev` оставляет базу `dev`, меняет только связь на `Part of` (`PrCommand.kt:40-41`)
