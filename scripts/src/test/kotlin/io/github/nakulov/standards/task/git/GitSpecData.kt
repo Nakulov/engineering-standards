@@ -54,6 +54,19 @@ fun makeCloneBehindOrigin(): File {
     return clone
 }
 
+/** Клон с личностью на ветке `task/7-p`: в ней добавлен `plans/p.md` («# План П»). */
+fun makeCloneWithPlanBranch(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("config", "user.name", "task"))
+    git(directory = clone, args = listOf("config", "user.email", "task@example.invalid"))
+    git(directory = clone, args = listOf("switch", "--quiet", "--create", "task/7-p"))
+    File(clone, "plans").mkdirs()
+    File(clone, "plans/p.md").writeText("# План П\n")
+    git(directory = clone, args = listOf("add", "plans/p.md"))
+    git(directory = clone, args = listOf("commit", "--quiet", "--message", "Добавить план: П"))
+    return clone
+}
+
 /** Клон с личностью в настройке: `a.txt` изменён, `b.txt` удалён, `c.txt` и `plans/x.md` — новые. */
 fun makeCloneWithChanges(): File {
     val clone = makeClone()

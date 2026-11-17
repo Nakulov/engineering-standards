@@ -16,6 +16,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifySequence
 
 class PublisherSpec :
@@ -26,8 +27,16 @@ class PublisherSpec :
         val issues = mockk<Issues>()
         val pullRequests = mockk<PullRequests>()
         val checks = mockk<CheckRunner>()
+        val archive = mockk<PlanArchive>()
         val console = mockk<Console>()
-        val publisher = Publisher(git = git, issues = issues, pullRequests = pullRequests, checks = checks)
+        val publisher = Publisher(
+            git = git,
+            issues = issues,
+            pullRequests = pullRequests,
+            checks = checks,
+            archive = archive,
+        )
+        justRun { archive.run(console = any()) }
         justRun { console.line(text = any()) }
         justRun { checks.run(command = any()) }
         justRun { git.push(name = any()) }
@@ -49,6 +58,7 @@ class PublisherSpec :
                 then {
                     verifySequence {
                         git.isClean()
+                        archive.run(console = console)
                         checks.run(command = "./gradlew test")
                         console.line(text = "проверка «./gradlew test» — прошла")
                         checks.run(command = "scripts/task --help")
@@ -78,6 +88,7 @@ class PublisherSpec :
                 then {
                     verifySequence {
                         git.isClean()
+                        archive.run(console = console)
                         checks.run(command = "./gradlew test")
                         console.line(text = "проверка «./gradlew test» — прошла")
                         checks.run(command = "scripts/task --help")
@@ -101,8 +112,41 @@ class PublisherSpec :
                     error.message shouldBe makeFailedCheckMessage()
                     verifySequence {
                         git.isClean()
+                        archive.run(console = console)
                         checks.run(command = "./gradlew test")
                     }
+                }
+            }
+        }
+
+        given("PR блока в long-ветку") {
+            every { issues.pullRequest(branch = "task/13-x") } returns null
+            every {
+                pullRequests.create(
+                    base = "long/53-commit-commands",
+                    head = "task/13-x",
+                    title = "Заголовок",
+                    body = any(),
+                    draft = true,
+                )
+            } returns "https://github.com/owner/repo/pull/33"
+            `when` {
+                publisher.publish(draft = makePartDraft(), console = console)
+                then {
+                    verify(exactly = 0) { archive.run(console = any()) }
+                }
+            }
+        }
+
+        given("PR --part в dev") {
+            every { issues.pullRequest(branch = "task/13-x") } returns null
+            every {
+                pullRequests.create(base = "dev", head = "task/13-x", title = "Заголовок", body = any(), draft = true)
+            } returns "https://github.com/owner/repo/pull/34"
+            `when` {
+                publisher.publish(draft = makeParsedDraft().copy(link = "Part of #13"), console = console)
+                then {
+                    verify(exactly = 0) { archive.run(console = any()) }
                 }
             }
         }

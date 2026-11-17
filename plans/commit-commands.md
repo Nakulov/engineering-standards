@@ -130,11 +130,11 @@
   - [x] Приёмка
   - [x] Документация
 - PR 2: план не попадает в `dev`
-  - [ ] Задача 4: основная папка, добавленные пути, удаление в `Git`
-  - [ ] Задача 5: `PlanArchive`
-  - [ ] Задача 6: архив в `Publisher`
-  - [ ] Приёмка
-  - [ ] Документация
+  - [x] Задача 4: основная папка, добавленные пути, удаление в `Git`
+  - [x] Задача 5: `PlanArchive`
+  - [x] Задача 6: архив в `Publisher`
+  - [x] Приёмка
+  - [x] Документация
 - PR 3: части плана записываются в тело задачи без дублей
   - [ ] Задача 7: `IssueParts`
   - [ ] Задача 8: тело задачи в `Issues`
@@ -588,7 +588,7 @@
 - Изменить: `git/GitSpecData.kt` — `makeCloneWithPlanBranch()`
 - Изменить: `git/GitSpec.kt` — три случая
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `GitSpecData.kt`:
   ```kotlin
   /** Клон с личностью на ветке `task/7-p`: в ней добавлен `plans/p.md` («# План П»). */
@@ -622,8 +622,8 @@
       listOf(readHeadSubject(directory = clone)) + readHeadFiles(directory = clone).filter { path -> path.startsWith(prefix = "plans/") }
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'mainRoot'`
-- [ ] 3. Минимальный код в `Git.kt` (`import java.io.File`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'mainRoot'`
+- [x] 3. Минимальный код в `Git.kt` (`import java.io.File`):
   ```kotlin
   /** Общий `.git` — у основной папки и всех её worktree один. */
   fun commonDir(): String {
@@ -651,14 +651,14 @@
       read(args = listOf("commit", "--quiet", "--message", message))
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 5: `PlanArchive`
 - Создать: `command/PlanArchive.kt` — «Убрать план»
 - Создать: `command/PlanArchiveSpec.kt`, `PlanArchiveSpecData.kt` — копия и коммит; плана нет — ничего
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PlanArchiveSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -738,8 +738,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — падает: `Unresolved reference 'PlanArchive'`
-- [ ] 3. Минимальный код, `command/PlanArchive.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — падает: `Unresolved reference 'PlanArchive'`
+- [x] 3. Минимальный код, `command/PlanArchive.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -788,8 +788,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PlanArchiveSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 6: архив в `Publisher`
 - Изменить: `command/Publisher.kt:13` — параметр `archive: PlanArchive`, вызов после проверки чистоты при `draft.base == "dev"` и связи `Closes #…`: `task pr --part` в `dev` оставляет базу `dev`, меняет только связь на `Part of` (`PrCommand.kt:40-41`)
@@ -797,7 +797,7 @@
 - Изменить: `command/PublisherSpecData.kt` — `makePartDraft()`
 - Изменить: `cli/Main.kt:34` — `Publisher(…, archive = PlanArchive(git = git))`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PublisherSpecData.kt`:
   ```kotlin
   /** Черновик блока PR в long-ветку — архив плана не нужен. */
@@ -834,8 +834,8 @@
   }
   ```
   (`import io.mockk.verify`)
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PublisherSpec*'` — падает: `No parameter with name 'archive' found`
-- [ ] 3. Минимальный код. `Publisher.kt`: в конструктор после `checks` — `private val archive: PlanArchive,`; в `publish` после проверки `isClean`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PublisherSpec*'` — падает: `No parameter with name 'archive' found`
+- [x] 3. Минимальный код. `Publisher.kt`: в конструктор после `checks` — `private val archive: PlanArchive,`; в `publish` после проверки `isClean`:
   ```kotlin
   if (draft.base == DEV && draft.link.startsWith(prefix = CLOSES)) {
       archive.run(console = console)
@@ -859,18 +859,18 @@
       archive = PlanArchive(git = git),
   )
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (`PrCommandSpec`, `FinalCommandSpec` подменяют `Publisher` целиком — не меняются)
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (`PrCommandSpec`, `FinalCommandSpec` подменяют `Publisher` целиком — не меняются)
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: в черновой ветке с `plans/x.md` `scripts/task pr` делает коммит «Убрать план: …», копия в `plans/done/` основной папки
-- [ ] Крайние случаи обработаны: из ворктри копия — в основной папке; PR в long-ветку и ветка без плана — без коммита; план в `plans/done/` не трогается
-- [ ] Полный набор тестов зелёный
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам (не этот блок)
+- [x] Что даёт этот PR — проверено: в черновой ветке с `plans/x.md` `scripts/task pr` делает коммит «Убрать план: …», копия в `plans/done/` основной папки
+- [x] Крайние случаи обработаны: из ворктри копия — в основной папке; PR в long-ветку и ветка без плана — без коммита; план в `plans/done/` не трогается
+- [x] Полный набор тестов зелёный
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам (не этот блок)
 
 ### Документация
-- [ ] README, `docs/` — не нужно (#34)
-- [ ] Новые паттерны — в файл проекта и карту: нет
+- [x] README, `docs/` — не нужно (#34)
+- [x] Новые паттерны — в файл проекта и карту: нет
 
 ## PR 3: части плана записываются в тело задачи без дублей
 **Объём:** `github/IssueParts.kt` + Spec + SpecData, `github/Issues.kt`, `IssuesSpec.kt`, `IssuesSpecData.kt`; ≈ 6 файлов
