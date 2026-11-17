@@ -125,7 +125,7 @@
 - PR 1: исполнитель коммитит по шаблону командой `task commit`
   - [x] Задача 1: изменённые пути и коммит путей в `Git`
   - [x] Задача 2: разбор сообщения `CommitMessage`
-  - [ ] Задача 3: команда `task commit`
+  - [x] Задача 3: команда `task commit`
   - [ ] Приёмка
   - [ ] Документация
 - PR 2: план не попадает в `dev`
@@ -366,7 +366,7 @@
 - Создать: `command/CommitCommandSpec.kt`, `CommitCommandSpecData.kt` — пути из «Файлов» + план, отказы
 - Изменить: `cli/Main.kt:48` — `"commit" to CommitCommand(…)`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `CommitCommandSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -445,8 +445,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — падает: `Unresolved reference 'CommitCommand'`
-- [ ] 3. Минимальный код, `command/CommitCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — падает: `Unresolved reference 'CommitCommand'`
+- [x] 3. Минимальный код, `command/CommitCommand.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -501,8 +501,8 @@
   ```kotlin
   "commit" to CommitCommand(git = git, directory = directory),
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `scripts/task commit --message-file <файл>` в черновой ветке коммитит только перечисленное
