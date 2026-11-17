@@ -124,7 +124,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: исполнитель коммитит по шаблону командой `task commit`
   - [x] Задача 1: изменённые пути и коммит путей в `Git`
-  - [ ] Задача 2: разбор сообщения `CommitMessage`
+  - [x] Задача 2: разбор сообщения `CommitMessage`
   - [ ] Задача 3: команда `task commit`
   - [ ] Приёмка
   - [ ] Документация
@@ -252,7 +252,7 @@
 - Создать: `command/CommitMessage.kt` — разбор и проверка шаблона
 - Создать: `command/CommitMessageSpec.kt`, `CommitMessageSpecData.kt` — случаи шаблона
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `CommitMessageSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -312,8 +312,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — падает: `Unresolved reference 'CommitMessage'`
-- [ ] 3. Минимальный код, `command/CommitMessage.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — падает: `Unresolved reference 'CommitMessage'`
+- [x] 3. Минимальный код, `command/CommitMessage.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -358,8 +358,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: команда `task commit`
 - Создать: `command/CommitCommand.kt` — `task commit`
