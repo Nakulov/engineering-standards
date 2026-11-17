@@ -190,4 +190,51 @@ class GitSpec :
             listOf(readHeadSubject(directory = clone)) +
                 readHeadFiles(directory = clone).filter { path -> path.startsWith(prefix = "plans/") }
         }
+
+        shouldReturnTest(true, options = TestOptions(name = "где открыта ветка")) {
+            val worktree = makeWorktree()
+            val clone = File(worktree.parentFile, "clone")
+            val opened = Git(shell = ProcessShell(directory = clone)).openedAt(branch = "task/1-x")
+            File(checkNotNull(opened)).canonicalPath == worktree.canonicalPath
+        }
+
+        shouldReturnTest(listOf(true, false), options = TestOptions(name = "предок ветки")) {
+            val git = Git(shell = ProcessShell(directory = makeCloneWithPlanBranch()))
+            listOf(
+                git.isAncestor(ancestor = "origin/dev", descendant = "task/7-p"),
+                git.isAncestor(ancestor = "task/7-p", descendant = "origin/dev"),
+            )
+        }
+
+        shouldReturnTest(
+            listOf(true, true, false),
+            options = TestOptions(name = "коммит во временном worktree и push"),
+        ) {
+            val clone = makeIdentityClone()
+            val git = Git(shell = ProcessShell(directory = clone))
+            val temp = File(git.commonDir(), "task-plan/q").path
+            git.addWorktree(path = temp, ref = "origin/dev")
+            File(temp, "plans").mkdirs()
+            File(temp, "plans/q.md").writeText("# План Q\n")
+            val changed = git.hasChanges(path = temp)
+            git.commitAll(path = temp, message = "Добавить план: Q")
+            git.pushHead(path = temp, branch = "task/8-q")
+            git.removeWorktree(path = temp)
+            git.fetch()
+            listOf(changed, git.hasRemoteBranch(name = "task/8-q"), File(temp).exists())
+        }
+
+        shouldReturnTest("Добавить план: Q", options = TestOptions(name = "локальная ветка перематывается на коммит")) {
+            val clone = makeIdentityClone()
+            val git = Git(shell = ProcessShell(directory = clone))
+            val temp = File(git.commonDir(), "task-plan/q").path
+            git.addWorktree(path = temp, ref = "origin/dev")
+            File(temp, "q.md").writeText("q\n")
+            git.commitAll(path = temp, message = "Добавить план: Q")
+            val commit = git.head(path = temp)
+            git.removeWorktree(path = temp)
+            git.moveBranch(branch = "task/8-q", commit = commit)
+            git.switchTo(name = "task/8-q")
+            readHeadSubject(directory = clone)
+        }
     })
