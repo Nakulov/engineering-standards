@@ -136,10 +136,10 @@
   - [x] Приёмка
   - [x] Документация
 - PR 3: части плана записываются в тело задачи без дублей
-  - [ ] Задача 7: `IssueParts`
-  - [ ] Задача 8: тело задачи в `Issues`
-  - [ ] Приёмка
-  - [ ] Документация
+  - [x] Задача 7: `IssueParts`
+  - [x] Задача 8: тело задачи в `Issues`
+  - [x] Приёмка
+  - [x] Документация
 - PR 4: утверждённый план сохраняется командой `task plan`
   - [ ] Задача 9: ворктри, push ссылки, перемотка в `Git`
   - [ ] Задача 10: команда `task plan`
@@ -879,7 +879,7 @@
 - Создать: `github/IssueParts.kt` — раскладка частей между метками
 - Создать: `github/IssuePartsSpec.kt`, `IssuePartsSpecData.kt` — дописать, заменить, вне меток, отказы
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `IssuePartsSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.github
@@ -956,8 +956,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — падает: `Unresolved reference 'IssueParts'`
-- [ ] 3. Минимальный код, `github/IssueParts.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — падает: `Unresolved reference 'IssueParts'`
+- [x] 3. Минимальный код, `github/IssueParts.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.github
 
@@ -1040,14 +1040,14 @@
   }
   ```
   Образец `makeMergedBody` выведен по коду: новый блок встаёт после последней непустой строки раздела, перед ним — пустая строка; пустые строки раздела после блока сохраняются.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 8: тело задачи в `Issues`
 - Изменить: `github/Issues.kt` — `body(number)`, `editBody(number, body)`
 - Изменить: `github/IssuesSpec.kt`, `IssuesSpecData.kt` — аргументы `gh`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `IssuesSpecData.kt`:
   ```kotlin
   fun makeBodyArgs(): List<String> {
@@ -1070,8 +1070,8 @@
       issues.editBody(number = 13, body = "Новое тело")
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — падает: `Unresolved reference 'body'`
-- [ ] 3. Минимальный код в `Issues.kt` (после `nodeId`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — падает: `Unresolved reference 'body'`
+- [x] 3. Минимальный код в `Issues.kt` (после `nodeId`):
   ```kotlin
   /** Тело задачи — для частей плана (#53). */
   fun body(number: Int): String {
@@ -1085,18 +1085,18 @@
       gitHub.write(args = listOf("issue", "edit", "$number", "--body", body))
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*IssuesSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: спеки `IssueParts` на образце тела #53
-- [ ] Крайние случаи обработаны: повтор без изменений даёт то же тело; сломанные метки; жирный подзаголовок и `##`; раздела нет
-- [ ] Полный набор тестов зелёный
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам (не этот блок)
+- [x] Что даёт этот PR — проверено: спеки `IssueParts` на образце тела #53
+- [x] Крайние случаи обработаны: повтор без изменений даёт то же тело; сломанные метки; жирный подзаголовок и `##`; раздела нет
+- [x] Полный набор тестов зелёный
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам (не этот блок)
 
 ### Документация
-- [ ] README, `docs/` — не нужно (#34)
-- [ ] Новые паттерны — в файл проекта и карту: нет
+- [x] README, `docs/` — не нужно (#34)
+- [x] Новые паттерны — в файл проекта и карту: нет
 
 ## PR 4: утверждённый план сохраняется командой `task plan`
 **Объём:** `git/Git.kt`, `GitSpec.kt`, `GitSpecData.kt`, `command/PlanCommand.kt` + Spec + SpecData, `cli/Main.kt`; ≈ 7 файлов

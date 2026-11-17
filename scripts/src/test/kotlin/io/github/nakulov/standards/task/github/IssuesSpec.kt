@@ -47,6 +47,16 @@ class IssuesSpec :
             issues.nodeId(number = 13)
         }
 
+        shouldReturnTest("Тело задачи") {
+            every { gitHub.read(args = makeBodyArgs()) } returns "Тело задачи"
+            issues.body(number = 13)
+        }
+
+        shouldReturnTest(Unit) {
+            every { gitHub.write(args = makeEditBodyArgs()) } returns "https://github.com/owner/repo/issues/13"
+            issues.editBody(number = 13, body = "Новое тело")
+        }
+
         shouldReturnTest(PullRequest(number = 30, merged = true)) {
             every { gitHub.read(args = makePullRequestArgs()) } returns "30\tMERGED"
             issues.pullRequest(branch = "task/13-x")
