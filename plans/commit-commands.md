@@ -123,11 +123,12 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: исполнитель коммитит по шаблону командой `task commit`
-  - [ ] Задача 1: изменённые пути и коммит путей в `Git`
-  - [ ] Задача 2: разбор сообщения `CommitMessage`
-  - [ ] Задача 3: команда `task commit`
-  - [ ] Приёмка
-  - [ ] Документация
+  - [x] Задача 1: изменённые пути и коммит путей в `Git`
+  - [x] Задача 2: разбор сообщения `CommitMessage`
+  - [x] Задача 3: команда `task commit`
+  - [x] ➕ Задача 11: удаление и переименование из индекса в `task commit`
+  - [x] Приёмка
+  - [x] Документация
 - PR 2: план не попадает в `dev`
   - [ ] Задача 4: основная папка, добавленные пути, удаление в `Git`
   - [ ] Задача 5: `PlanArchive`
@@ -146,7 +147,7 @@
   - [ ] Документация
 
 **После завершения** (внешнее, без чекбоксов):
-- После слияния и `git pull` в основной папке: временные блоки убраны, вызовы переписаны на `task plan … --issue-parts`, `task commit --message-file`, шаг «убери план перед PR» удалён — в `drafts/plan/SKILL.md`, `drafts/execute/SKILL.md`, `drafts/agents/plan-executor.md`, копии в `.claude/`; `grep -rn "пока нет (временно)" drafts .claude` пуст.
+- После слияния и `git pull` в основной папке: временные блоки убраны, вызовы переписаны на `task plan … --issue-parts`, `task commit --message-file` (переименование — оба пути в «Файлах»), шаг «убери план перед PR» удалён — в `drafts/plan/SKILL.md`, `drafts/execute/SKILL.md`, `drafts/agents/plan-executor.md`, копии в `.claude/`; `grep -rn "пока нет (временно)" drafts .claude` пуст.
 - Живой прогон на первой задаче, которую ведём через план (скорее всего #52).
 
 ## PR 1: исполнитель коммитит по шаблону командой `task commit`
@@ -157,7 +158,7 @@
 - Изменить: `git/GitSpecData.kt` — `makeCloneWithChanges()`, `makeMessageFile(directory)`
 - Изменить: `git/GitSpec.kt` — два случая
 
-- [ ] 1. Падающий тест: изменённые пути и коммит только перечисленных.
+- [x] 1. Падающий тест: изменённые пути и коммит только перечисленных.
   В `GitSpecData.kt` (рядом с `makeCloneBehindOrigin`):
   ```kotlin
   /** Клон с личностью в настройке: `a.txt` изменён, `b.txt` удалён, `c.txt` и `plans/x.md` — новые. */
@@ -204,8 +205,8 @@
       readHeadSubject(directory = clone)
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'changedPaths'`
-- [ ] 3. Минимальный код в `Git.kt` (после `firstCommit`, константы — в `companion object`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'changedPaths'`
+- [x] 3. Минимальный код в `Git.kt` (после `firstCommit`, константы — в `companion object`):
   ```kotlin
   /** Изменённые пути рабочей папки: изменённые, удалённые, новые; переименование — новым путём. */
   fun changedPaths(): List<String> {
@@ -245,14 +246,14 @@
   const val COPIED = 'C'
   const val FROM_ROOT = ":/"
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 2: разбор сообщения `CommitMessage`
 - Создать: `command/CommitMessage.kt` — разбор и проверка шаблона
 - Создать: `command/CommitMessageSpec.kt`, `CommitMessageSpecData.kt` — случаи шаблона
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `CommitMessageSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -312,8 +313,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — падает: `Unresolved reference 'CommitMessage'`
-- [ ] 3. Минимальный код, `command/CommitMessage.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — падает: `Unresolved reference 'CommitMessage'`
+- [x] 3. Минимальный код, `command/CommitMessage.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -358,15 +359,15 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: команда `task commit`
 - Создать: `command/CommitCommand.kt` — `task commit`
 - Создать: `command/CommitCommandSpec.kt`, `CommitCommandSpecData.kt` — пути из «Файлов» + план, отказы
 - Изменить: `cli/Main.kt:48` — `"commit" to CommitCommand(…)`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `CommitCommandSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -445,8 +446,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — падает: `Unresolved reference 'CommitCommand'`
-- [ ] 3. Минимальный код, `command/CommitCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — падает: `Unresolved reference 'CommitCommand'`
+- [x] 3. Минимальный код, `command/CommitCommand.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -501,18 +502,83 @@
   ```kotlin
   "commit" to CommitCommand(git = git, directory = directory),
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
+
+### ➕ Задача 11: удаление и переименование из индекса в `task commit`
+Добавлена с согласия пользователя после приёмки PR 1: `git rm` — сбой `git add` (pathspec не найден), `git mv` — коммит наполовину.
+- Изменить: `git/Git.kt` — `changedPaths()` с `--no-renames`; `commitPaths` добавляет в индекс только пути, которые есть в рабочей папке
+- Изменить: `git/GitSpecData.kt` — `makeCloneWithIndexChanges()`
+- Изменить: `git/GitSpec.kt` — три случая
+
+- [x] 1. Падающий тест.
+  `GitSpecData.kt`:
+  ```kotlin
+  /** Клон с личностью: `a.txt` удалён через `git rm`, `r.txt` переименован через `git mv` в `r2.txt`. */
+  fun makeCloneWithIndexChanges(): File {
+      val clone = makeClone()
+      git(directory = clone, args = listOf("config", "user.name", "task"))
+      git(directory = clone, args = listOf("config", "user.email", "task@example.invalid"))
+      File(clone, "a.txt").writeText("1\n")
+      File(clone, "r.txt").writeText("1\n")
+      git(directory = clone, args = listOf("add", "a.txt", "r.txt"))
+      git(directory = clone, args = listOf("commit", "--quiet", "--message", "файлы"))
+      git(directory = clone, args = listOf("rm", "--quiet", "a.txt"))
+      git(directory = clone, args = listOf("mv", "r.txt", "r2.txt"))
+      return clone
+  }
+  ```
+  `GitSpec.kt`:
+  ```kotlin
+  shouldReturnTest(
+      listOf("a.txt", "r.txt", "r2.txt"),
+      options = TestOptions(name = "изменённые пути: git rm и git mv — каждый путь"),
+  ) {
+      Git(shell = ProcessShell(directory = makeCloneWithIndexChanges())).changedPaths().sorted()
+  }
+
+  shouldReturnTest(emptyList<String>(), options = TestOptions(name = "коммит удаления и переименования из индекса")) {
+      val clone = makeCloneWithIndexChanges()
+      val git = Git(shell = ProcessShell(directory = clone))
+      git.commitPaths(paths = listOf("a.txt", "r.txt", "r2.txt"), messageFile = makeMessageFile(directory = clone))
+      git.changedPaths()
+  }
+
+  shouldReturnTest(listOf("c.txt", "plans/x.md"), options = TestOptions(name = "коммит удаления без git rm")) {
+      val clone = makeCloneWithChanges()
+      val git = Git(shell = ProcessShell(directory = clone))
+      git.commitPaths(paths = listOf("a.txt", "b.txt"), messageFile = makeMessageFile(directory = clone))
+      git.changedPaths().sorted()
+  }
+  ```
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: первый случай — `r2.txt` вместо `r.txt, r2.txt`; второй — `TaskError.Failure: git add: fatal: pathspec ':/a.txt' did not match any files`
+- [x] 3. Минимальный код в `Git.kt`. В `changedPaths` — `listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")`, KDoc: «…; переименование — двумя путями: старый удалён, новый добавлен». `commitPaths`:
+  ```kotlin
+  fun commitPaths(
+      paths: List<String>,
+      messageFile: String,
+  ) {
+      val root = File(root())
+      val present = paths.filter { path -> File(root, path).exists() }.map { path -> "$FROM_ROOT$path" }
+      if (present.isNotEmpty()) {
+          read(args = listOf("add", "--") + present)
+      }
+      read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + paths.map { path -> "$FROM_ROOT$path" })
+  }
+  ```
+  KDoc `commitPaths` дополнить: «В индекс добавляются только пути, которые есть в рабочей папке; удалённые (и через `git rm`) коммит берёт сам».
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `scripts/task commit --message-file <файл>` в черновой ветке коммитит только перечисленное
-- [ ] Крайние случаи обработаны: файл не изменён, удалённый файл, новый файл, план в подпапке `plans/done/` не добавляется
-- [ ] Полный набор тестов зелёный
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам (не этот блок)
+- [x] Что даёт этот PR — проверено: `scripts/task commit --message-file <файл>` в черновой ветке коммитит только перечисленное
+- [x] Крайние случаи обработаны: файл не изменён, удалённый файл, новый файл, план в подпапке `plans/done/` не добавляется
+- [x] Полный набор тестов зелёный
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам (не этот блок)
 
 ### Документация
-- [ ] README, `docs/` — не нужно: команды описывает #34
-- [ ] Новые паттерны — в файл проекта и карту: нет
+- [x] README, `docs/` — не нужно: команды описывает #34
+- [x] Новые паттерны — в файл проекта и карту: нет
 
 ## PR 2: план не попадает в `dev`
 **Объём:** `git/Git.kt`, `GitSpec.kt`, `GitSpecData.kt`, `command/PlanArchive.kt` + Spec + SpecData, `command/Publisher.kt`, `PublisherSpec.kt`, `PublisherSpecData.kt`, `cli/Main.kt`; ≈ 10 файлов

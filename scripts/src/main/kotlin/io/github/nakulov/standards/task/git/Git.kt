@@ -3,6 +3,7 @@ package io.github.nakulov.standards.task.git
 import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.shell.Shell
 import io.github.nakulov.standards.task.shell.ShellResult
+import java.io.File
 
 /**
  * Операции `git`, нужные командам процесса. Ошибка `git` — [TaskError.Failure] с первой строкой его stderr.
@@ -106,6 +107,44 @@ class Git(
         read(args = listOf("commit", "--quiet", "--message", message))
     }
 
+    /**
+     * Изменённые пути рабочей папки: изменённые, удалённые, новые; переименование — двумя путями: старый удалён,
+     * новый добавлен.
+     */
+    fun changedPaths(): List<String> {
+        val args = listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")
+        val result = run(args = args)
+        if (result.code != 0) {
+            throw TaskError.Failure(message = "git status: ${result.err.trim().lineSequence().first()}")
+        }
+        val entries = result.out.split(NUL).filter { entry -> entry.isNotEmpty() }
+        val paths = mutableListOf<String>()
+        var index = 0
+        while (index < entries.size) {
+            val entry = entries[index]
+            paths += entry.substring(startIndex = STATUS_PREFIX)
+            index += if (entry.first() == RENAMED || entry.first() == COPIED) 2 else 1
+        }
+        return paths
+    }
+
+    /**
+     * Коммит только [paths] с сообщением из [messageFile]: чужое из индекса в коммит не попадает. Пути — от корня
+     * репозитория (`:/`, как в `git status --porcelain`): команда работает и из подпапки. В индекс добавляются только
+     * пути, которые есть в рабочей папке; удалённые (и через `git rm`) коммит берёт сам.
+     */
+    fun commitPaths(
+        paths: List<String>,
+        messageFile: String,
+    ) {
+        val root = File(root())
+        val present = paths.filter { path -> File(root, path).exists() }.map { path -> "$FROM_ROOT$path" }
+        if (present.isNotEmpty()) {
+            read(args = listOf("add", "--") + present)
+        }
+        read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + paths.map { path -> "$FROM_ROOT$path" })
+    }
+
     private fun exists(ref: String): Boolean {
         return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
     }
@@ -124,5 +163,10 @@ class Git(
 
     private companion object {
         const val BASE_KEY = "task-base"
+        const val NUL = '\u0000'
+        const val STATUS_PREFIX = 3
+        const val RENAMED = 'R'
+        const val COPIED = 'C'
+        const val FROM_ROOT = ":/"
     }
 }

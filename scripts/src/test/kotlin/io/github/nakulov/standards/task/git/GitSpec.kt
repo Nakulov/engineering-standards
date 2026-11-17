@@ -121,4 +121,55 @@ class GitSpec :
             git.firstCommit(branch = "dev", message = "Начальная настройка", paths = listOf(".gitignore", ".github"))
             listOf(git.currentBranch(), readHeadSubject(directory = repository)) + readHeadFiles(directory = repository)
         }
+
+        shouldReturnTest(
+            listOf("a.txt", "b.txt", "c.txt", "plans/x.md"),
+            options = TestOptions(name = "изменённые пути"),
+        ) {
+            Git(shell = ProcessShell(directory = makeCloneWithChanges())).changedPaths().sorted()
+        }
+
+        shouldReturnTest(
+            listOf("Добавить c", "b.txt", "plans/x.md"),
+            options = TestOptions(name = "коммит только путей"),
+        ) {
+            val clone = makeCloneWithChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(paths = listOf("a.txt", "c.txt"), messageFile = makeMessageFile(directory = clone))
+            listOf(readHeadSubject(directory = clone)) + git.changedPaths().sorted()
+        }
+
+        shouldReturnTest("Добавить c", options = TestOptions(name = "коммит путей из подпапки")) {
+            val clone = makeCloneWithChanges()
+            Git(shell = ProcessShell(directory = File(clone, "plans")))
+                .commitPaths(paths = listOf("a.txt", "c.txt"), messageFile = makeMessageFile(directory = clone))
+            readHeadSubject(directory = clone)
+        }
+
+        shouldReturnTest(
+            listOf("a.txt", "r.txt", "r2.txt"),
+            options = TestOptions(name = "изменённые пути: git rm и git mv — каждый путь"),
+        ) {
+            Git(shell = ProcessShell(directory = makeCloneWithIndexChanges())).changedPaths().sorted()
+        }
+
+        shouldReturnTest(
+            emptyList<String>(),
+            options = TestOptions(name = "коммит удаления и переименования из индекса"),
+        ) {
+            val clone = makeCloneWithIndexChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(
+                paths = listOf("a.txt", "r.txt", "r2.txt"),
+                messageFile = makeMessageFile(directory = clone),
+            )
+            git.changedPaths()
+        }
+
+        shouldReturnTest(listOf("c.txt", "plans/x.md"), options = TestOptions(name = "коммит удаления без git rm")) {
+            val clone = makeCloneWithChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(paths = listOf("a.txt", "b.txt"), messageFile = makeMessageFile(directory = clone))
+            git.changedPaths().sorted()
+        }
     })
