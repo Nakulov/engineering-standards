@@ -136,7 +136,7 @@
   - [x] Приёмка
   - [x] Документация
 - PR 3: части плана записываются в тело задачи без дублей
-  - [ ] Задача 7: `IssueParts`
+  - [x] Задача 7: `IssueParts`
   - [ ] Задача 8: тело задачи в `Issues`
   - [ ] Приёмка
   - [ ] Документация
@@ -879,7 +879,7 @@
 - Создать: `github/IssueParts.kt` — раскладка частей между метками
 - Создать: `github/IssuePartsSpec.kt`, `IssuePartsSpecData.kt` — дописать, заменить, вне меток, отказы
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `IssuePartsSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.github
@@ -956,8 +956,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — падает: `Unresolved reference 'IssueParts'`
-- [ ] 3. Минимальный код, `github/IssueParts.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — падает: `Unresolved reference 'IssueParts'`
+- [x] 3. Минимальный код, `github/IssueParts.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.github
 
@@ -1040,8 +1040,8 @@
   }
   ```
   Образец `makeMergedBody` выведен по коду: новый блок встаёт после последней непустой строки раздела, перед ним — пустая строка; пустые строки раздела после блока сохраняются.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*IssuePartsSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 8: тело задачи в `Issues`
 - Изменить: `github/Issues.kt` — `body(number)`, `editBody(number, body)`
