@@ -54,6 +54,14 @@ fun makeCloneBehindOrigin(): File {
     return clone
 }
 
+/** Клон с личностью в настройке — для коммитов во временном worktree. */
+fun makeIdentityClone(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("config", "user.name", "task"))
+    git(directory = clone, args = listOf("config", "user.email", "task@example.invalid"))
+    return clone
+}
+
 /** Клон с личностью на ветке `task/7-p`: в ней добавлен `plans/p.md` («# План П»). */
 fun makeCloneWithPlanBranch(): File {
     val clone = makeClone()

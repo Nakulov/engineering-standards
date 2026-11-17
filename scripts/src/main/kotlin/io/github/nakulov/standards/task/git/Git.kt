@@ -171,12 +171,91 @@ class Git(
         read(args = listOf("commit", "--quiet", "--message", message))
     }
 
+    /** Папка, где открыта ветка [branch] — основная или worktree; не открыта — `null`. */
+    fun openedAt(branch: String): String? {
+        var path: String? = null
+        for (line in read(args = listOf("worktree", "list", "--porcelain")).lines()) {
+            if (line.startsWith(prefix = WORKTREE)) {
+                path = line.removePrefix(prefix = WORKTREE)
+            } else if (line == "branch refs/heads/$branch") {
+                return path
+            }
+        }
+        return null
+    }
+
+    fun isAncestor(
+        ancestor: String,
+        descendant: String,
+    ): Boolean {
+        return run(args = listOf("merge-base", "--is-ancestor", ancestor, descendant)).code == 0
+    }
+
+    /** Временный worktree без ветки на [ref]: в нём `task plan` коммитит, не трогая рабочую папку (#53). */
+    fun addWorktree(
+        path: String,
+        ref: String,
+    ) {
+        read(args = listOf("worktree", "add", "--quiet", "--detach", path, ref))
+    }
+
+    fun removeWorktree(path: String) {
+        read(args = listOf("worktree", "remove", "--force", path))
+    }
+
+    fun hasChanges(path: String): Boolean {
+        return readIn(path = path, args = listOf("status", "--porcelain")).isNotEmpty()
+    }
+
+    fun commitAll(
+        path: String,
+        message: String,
+    ) {
+        readIn(path = path, args = listOf("add", "--all"))
+        readIn(path = path, args = listOf("commit", "--quiet", "--message", message))
+    }
+
+    /** Коммит worktree [path] — в ветку [branch] в `origin`, без локальной ветки. */
+    fun pushHead(
+        path: String,
+        branch: String,
+    ) {
+        readIn(path = path, args = listOf("push", "--quiet", "origin", "HEAD:refs/heads/$branch"))
+    }
+
+    fun head(path: String): String {
+        return readIn(path = path, args = listOf("rev-parse", "HEAD"))
+    }
+
+    /**
+     * Локальная ветка — на [commit] (хеш или ссылка); вызывающий проверил, что это перемотка и ветка нигде не
+     * открыта.
+     */
+    fun moveBranch(
+        branch: String,
+        commit: String,
+    ) {
+        read(args = listOf("update-ref", "refs/heads/$branch", commit))
+    }
+
     private fun exists(ref: String): Boolean {
         return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
     }
 
     private fun read(args: List<String>): String {
         val result = run(args = args)
+        if (result.code != 0) {
+            throw TaskError.Failure(message = "git ${args.first()}: ${result.err.trim().lineSequence().first()}")
+        }
+        return result.out.trim()
+    }
+
+    /** `git -C [path]`: ошибка называет команду, а не `-C`. */
+    private fun readIn(
+        path: String,
+        args: List<String>,
+    ): String {
+        val result = run(args = listOf("-C", path) + args)
         if (result.code != 0) {
             throw TaskError.Failure(message = "git ${args.first()}: ${result.err.trim().lineSequence().first()}")
         }
@@ -194,5 +273,6 @@ class Git(
         const val RENAMED = 'R'
         const val COPIED = 'C'
         const val FROM_ROOT = ":/"
+        const val WORKTREE = "worktree "
     }
 }

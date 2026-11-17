@@ -141,7 +141,7 @@
   - [x] Приёмка
   - [x] Документация
 - PR 4: утверждённый план сохраняется командой `task plan`
-  - [ ] Задача 9: ворктри, push ссылки, перемотка в `Git`
+  - [x] Задача 9: ворктри, push ссылки, перемотка в `Git`
   - [ ] Задача 10: команда `task plan`
   - [ ] Приёмка
   - [ ] Документация
@@ -1106,7 +1106,7 @@
 - Изменить: `git/GitSpecData.kt` — `makeIdentityClone()`
 - Изменить: `git/GitSpec.kt` — четыре случая
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `GitSpecData.kt`:
   ```kotlin
   /** Клон с личностью в настройке — для коммитов во временном worktree. */
@@ -1160,8 +1160,8 @@
       readHeadSubject(directory = clone)
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'openedAt'`
-- [ ] 3. Минимальный код в `Git.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'openedAt'`
+- [x] 3. Минимальный код в `Git.kt`:
   ```kotlin
   /** Папка, где открыта ветка [branch] — основная или worktree; не открыта — `null`. */
   fun openedAt(branch: String): String? {
@@ -1240,8 +1240,8 @@
   }
   ```
   В `companion object`: `const val WORKTREE = "worktree "`.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 10: команда `task plan`
 - Создать: `command/PlanCommand.kt` — `task plan`
