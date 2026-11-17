@@ -142,7 +142,7 @@
   - [x] Документация
 - PR 4: утверждённый план сохраняется командой `task plan`
   - [x] Задача 9: ворктри, push ссылки, перемотка в `Git`
-  - [ ] Задача 10: команда `task plan`
+  - [x] Задача 10: команда `task plan`
   - [ ] Приёмка
   - [ ] Документация
 
@@ -1248,7 +1248,7 @@
 - Создать: `command/PlanCommandSpec.kt`, `PlanCommandSpecData.kt` — поток, повтор, отказы, уборка
 - Изменить: `cli/Main.kt` — `"plan" to PlanCommand(…)`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PlanCommandSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
@@ -1484,8 +1484,8 @@
       })
   ```
   (`makeTaskInfo`, `makeClosedInfo`, `makeEpicInfo` — `StartCommandSpecData.kt:6-20`, номер 13 → `copy(number = 53)`.)
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PlanCommandSpec*'` — падает: `Unresolved reference 'PlanCommand'`
-- [ ] 3. Минимальный код, `command/PlanCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PlanCommandSpec*'` — падает: `Unresolved reference 'PlanCommand'`
+- [x] 3. Минимальный код, `command/PlanCommand.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -1626,8 +1626,8 @@
   ```kotlin
   "plan" to PlanCommand(git = git, issues = issues, directory = directory),
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PlanCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PlanCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `scripts/task --help` показывает `plan` и `commit`
