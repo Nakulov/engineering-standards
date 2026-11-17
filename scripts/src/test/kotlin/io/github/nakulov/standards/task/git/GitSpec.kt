@@ -145,4 +145,31 @@ class GitSpec :
                 .commitPaths(paths = listOf("a.txt", "c.txt"), messageFile = makeMessageFile(directory = clone))
             readHeadSubject(directory = clone)
         }
+
+        shouldReturnTest(
+            listOf("a.txt", "r.txt", "r2.txt"),
+            options = TestOptions(name = "изменённые пути: git rm и git mv — каждый путь"),
+        ) {
+            Git(shell = ProcessShell(directory = makeCloneWithIndexChanges())).changedPaths().sorted()
+        }
+
+        shouldReturnTest(
+            emptyList<String>(),
+            options = TestOptions(name = "коммит удаления и переименования из индекса"),
+        ) {
+            val clone = makeCloneWithIndexChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(
+                paths = listOf("a.txt", "r.txt", "r2.txt"),
+                messageFile = makeMessageFile(directory = clone),
+            )
+            git.changedPaths()
+        }
+
+        shouldReturnTest(listOf("c.txt", "plans/x.md"), options = TestOptions(name = "коммит удаления без git rm")) {
+            val clone = makeCloneWithChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(paths = listOf("a.txt", "b.txt"), messageFile = makeMessageFile(directory = clone))
+            git.changedPaths().sorted()
+        }
     })

@@ -71,6 +71,20 @@ fun makeCloneWithChanges(): File {
     return clone
 }
 
+/** Клон с личностью: `a.txt` удалён через `git rm`, `r.txt` переименован через `git mv` в `r2.txt`. */
+fun makeCloneWithIndexChanges(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("config", "user.name", "task"))
+    git(directory = clone, args = listOf("config", "user.email", "task@example.invalid"))
+    File(clone, "a.txt").writeText("1\n")
+    File(clone, "r.txt").writeText("1\n")
+    git(directory = clone, args = listOf("add", "a.txt", "r.txt"))
+    git(directory = clone, args = listOf("commit", "--quiet", "--message", "файлы"))
+    git(directory = clone, args = listOf("rm", "--quiet", "a.txt"))
+    git(directory = clone, args = listOf("mv", "r.txt", "r2.txt"))
+    return clone
+}
+
 /** Файл сообщения коммита рядом с клоном. */
 fun makeMessageFile(directory: File): String {
     val file = File(directory.parentFile, "message.txt")

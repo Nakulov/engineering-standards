@@ -3,6 +3,7 @@ package io.github.nakulov.standards.task.git
 import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.shell.Shell
 import io.github.nakulov.standards.task.shell.ShellResult
+import java.io.File
 
 /**
  * Операции `git`, нужные командам процесса. Ошибка `git` — [TaskError.Failure] с первой строкой его stderr.
@@ -106,9 +107,12 @@ class Git(
         read(args = listOf("commit", "--quiet", "--message", message))
     }
 
-    /** Изменённые пути рабочей папки: изменённые, удалённые, новые; переименование — новым путём. */
+    /**
+     * Изменённые пути рабочей папки: изменённые, удалённые, новые; переименование — двумя путями: старый удалён,
+     * новый добавлен.
+     */
     fun changedPaths(): List<String> {
-        val args = listOf("status", "--porcelain", "-z", "--untracked-files=all")
+        val args = listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")
         val result = run(args = args)
         if (result.code != 0) {
             throw TaskError.Failure(message = "git status: ${result.err.trim().lineSequence().first()}")
@@ -126,15 +130,19 @@ class Git(
 
     /**
      * Коммит только [paths] с сообщением из [messageFile]: чужое из индекса в коммит не попадает. Пути — от корня
-     * репозитория (`:/`, как в `git status --porcelain`): команда работает и из подпапки.
+     * репозитория (`:/`, как в `git status --porcelain`): команда работает и из подпапки. В индекс добавляются только
+     * пути, которые есть в рабочей папке; удалённые (и через `git rm`) коммит берёт сам.
      */
     fun commitPaths(
         paths: List<String>,
         messageFile: String,
     ) {
-        val fromRoot = paths.map { path -> "$FROM_ROOT$path" }
-        read(args = listOf("add", "--") + fromRoot)
-        read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + fromRoot)
+        val root = File(root())
+        val present = paths.filter { path -> File(root, path).exists() }.map { path -> "$FROM_ROOT$path" }
+        if (present.isNotEmpty()) {
+            read(args = listOf("add", "--") + present)
+        }
+        read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + paths.map { path -> "$FROM_ROOT$path" })
     }
 
     private fun exists(ref: String): Boolean {

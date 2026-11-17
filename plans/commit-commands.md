@@ -126,7 +126,7 @@
   - [x] Задача 1: изменённые пути и коммит путей в `Git`
   - [x] Задача 2: разбор сообщения `CommitMessage`
   - [x] Задача 3: команда `task commit`
-  - [ ] ➕ Задача 11: удаление и переименование из индекса в `task commit`
+  - [x] ➕ Задача 11: удаление и переименование из индекса в `task commit`
   - [ ] Приёмка
   - [ ] Документация
 - PR 2: план не попадает в `dev`
@@ -511,7 +511,7 @@
 - Изменить: `git/GitSpecData.kt` — `makeCloneWithIndexChanges()`
 - Изменить: `git/GitSpec.kt` — три случая
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `GitSpecData.kt`:
   ```kotlin
   /** Клон с личностью: `a.txt` удалён через `git rm`, `r.txt` переименован через `git mv` в `r2.txt`. */
@@ -551,8 +551,8 @@
       git.changedPaths().sorted()
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: первый случай — `r2.txt` вместо `r.txt, r2.txt`; второй — `TaskError.Failure: git add: fatal: pathspec ':/a.txt' did not match any files`
-- [ ] 3. Минимальный код в `Git.kt`. В `changedPaths` — `listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")`, KDoc: «…; переименование — двумя путями: старый удалён, новый добавлен». `commitPaths`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: первый случай — `r2.txt` вместо `r.txt, r2.txt`; второй — `TaskError.Failure: git add: fatal: pathspec ':/a.txt' did not match any files`
+- [x] 3. Минимальный код в `Git.kt`. В `changedPaths` — `listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")`, KDoc: «…; переименование — двумя путями: старый удалён, новый добавлен». `commitPaths`:
   ```kotlin
   fun commitPaths(
       paths: List<String>,
@@ -567,8 +567,8 @@
   }
   ```
   KDoc `commitPaths` дополнить: «В индекс добавляются только пути, которые есть в рабочей папке; удалённые (и через `git rm`) коммит берёт сам».
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [x] Что даёт этот PR — проверено: `scripts/task commit --message-file <файл>` в черновой ветке коммитит только перечисленное
