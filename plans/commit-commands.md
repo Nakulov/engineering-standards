@@ -123,7 +123,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: исполнитель коммитит по шаблону командой `task commit`
-  - [ ] Задача 1: изменённые пути и коммит путей в `Git`
+  - [x] Задача 1: изменённые пути и коммит путей в `Git`
   - [ ] Задача 2: разбор сообщения `CommitMessage`
   - [ ] Задача 3: команда `task commit`
   - [ ] Приёмка
@@ -157,7 +157,7 @@
 - Изменить: `git/GitSpecData.kt` — `makeCloneWithChanges()`, `makeMessageFile(directory)`
 - Изменить: `git/GitSpec.kt` — два случая
 
-- [ ] 1. Падающий тест: изменённые пути и коммит только перечисленных.
+- [x] 1. Падающий тест: изменённые пути и коммит только перечисленных.
   В `GitSpecData.kt` (рядом с `makeCloneBehindOrigin`):
   ```kotlin
   /** Клон с личностью в настройке: `a.txt` изменён, `b.txt` удалён, `c.txt` и `plans/x.md` — новые. */
@@ -204,8 +204,8 @@
       readHeadSubject(directory = clone)
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'changedPaths'`
-- [ ] 3. Минимальный код в `Git.kt` (после `firstCommit`, константы — в `companion object`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'changedPaths'`
+- [x] 3. Минимальный код в `Git.kt` (после `firstCommit`, константы — в `companion object`):
   ```kotlin
   /** Изменённые пути рабочей папки: изменённые, удалённые, новые; переименование — новым путём. */
   fun changedPaths(): List<String> {
@@ -245,8 +245,8 @@
   const val COPIED = 'C'
   const val FROM_ROOT = ":/"
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 2: разбор сообщения `CommitMessage`
 - Создать: `command/CommitMessage.kt` — разбор и проверка шаблона

@@ -54,6 +54,30 @@ fun makeCloneBehindOrigin(): File {
     return clone
 }
 
+/** Клон с личностью в настройке: `a.txt` изменён, `b.txt` удалён, `c.txt` и `plans/x.md` — новые. */
+fun makeCloneWithChanges(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("config", "user.name", "task"))
+    git(directory = clone, args = listOf("config", "user.email", "task@example.invalid"))
+    File(clone, "a.txt").writeText("1\n")
+    File(clone, "b.txt").writeText("1\n")
+    git(directory = clone, args = listOf("add", "a.txt", "b.txt"))
+    git(directory = clone, args = listOf("commit", "--quiet", "--message", "файлы"))
+    File(clone, "a.txt").writeText("2\n")
+    File(clone, "b.txt").delete()
+    File(clone, "c.txt").writeText("новый\n")
+    File(clone, "plans").mkdirs()
+    File(clone, "plans/x.md").writeText("# План X\n")
+    return clone
+}
+
+/** Файл сообщения коммита рядом с клоном. */
+fun makeMessageFile(directory: File): String {
+    val file = File(directory.parentFile, "message.txt")
+    file.writeText("Добавить c\n\nЗадача плана: Задача 1\nФайлы:\n- `a.txt` — изменён\n- `c.txt` — создан\n")
+    return file.path
+}
+
 fun readHeadSubject(directory: File): String {
     val process = ProcessBuilder(listOf("git", "log", "-1", "--format=%s")).directory(directory).start()
     return process.inputStream.bufferedReader().readText().trim()
