@@ -172,4 +172,22 @@ class GitSpec :
             git.commitPaths(paths = listOf("a.txt", "b.txt"), messageFile = makeMessageFile(directory = clone))
             git.changedPaths().sorted()
         }
+
+        shouldReturnTest(true, options = TestOptions(name = "основная папка из worktree")) {
+            val worktree = makeWorktree()
+            val main = Git(shell = ProcessShell(directory = worktree)).mainRoot()
+            File(main).canonicalPath == File(worktree.parentFile, "clone").canonicalPath
+        }
+
+        shouldReturnTest(listOf("plans/p.md"), options = TestOptions(name = "добавленные в ветке пути")) {
+            Git(shell = ProcessShell(directory = makeCloneWithPlanBranch())).addedPaths(base = "origin/dev")
+        }
+
+        shouldReturnTest(listOf("Убрать план: П"), options = TestOptions(name = "удаление и коммит")) {
+            val clone = makeCloneWithPlanBranch()
+            Git(shell = ProcessShell(directory = clone))
+                .removeAndCommit(paths = listOf("plans/p.md"), message = "Убрать план: П")
+            listOf(readHeadSubject(directory = clone)) +
+                readHeadFiles(directory = clone).filter { path -> path.startsWith(prefix = "plans/") }
+        }
     })

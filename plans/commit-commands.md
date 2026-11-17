@@ -130,7 +130,7 @@
   - [x] Приёмка
   - [x] Документация
 - PR 2: план не попадает в `dev`
-  - [ ] Задача 4: основная папка, добавленные пути, удаление в `Git`
+  - [x] Задача 4: основная папка, добавленные пути, удаление в `Git`
   - [ ] Задача 5: `PlanArchive`
   - [ ] Задача 6: архив в `Publisher`
   - [ ] Приёмка
@@ -588,7 +588,7 @@
 - Изменить: `git/GitSpecData.kt` — `makeCloneWithPlanBranch()`
 - Изменить: `git/GitSpec.kt` — три случая
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `GitSpecData.kt`:
   ```kotlin
   /** Клон с личностью на ветке `task/7-p`: в ней добавлен `plans/p.md` («# План П»). */
@@ -622,8 +622,8 @@
       listOf(readHeadSubject(directory = clone)) + readHeadFiles(directory = clone).filter { path -> path.startsWith(prefix = "plans/") }
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'mainRoot'`
-- [ ] 3. Минимальный код в `Git.kt` (`import java.io.File`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'mainRoot'`
+- [x] 3. Минимальный код в `Git.kt` (`import java.io.File`):
   ```kotlin
   /** Общий `.git` — у основной папки и всех её worktree один. */
   fun commonDir(): String {
@@ -651,8 +651,8 @@
       read(args = listOf("commit", "--quiet", "--message", message))
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 5: `PlanArchive`
 - Создать: `command/PlanArchive.kt` — «Убрать план»

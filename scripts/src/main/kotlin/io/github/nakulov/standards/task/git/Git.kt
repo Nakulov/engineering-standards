@@ -145,6 +145,32 @@ class Git(
         read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + paths.map { path -> "$FROM_ROOT$path" })
     }
 
+    /** Общий `.git` — у основной папки и всех её worktree один. */
+    fun commonDir(): String {
+        return read(args = listOf("rev-parse", "--path-format=absolute", "--git-common-dir"))
+    }
+
+    /** Основная папка проекта — и из worktree: там лежат `plans/done/` и `plans/journal/`. */
+    fun mainRoot(): String {
+        return File(commonDir()).parentFile.path
+    }
+
+    /** Файлы, добавленные в ветке относительно общего предка с [base]. */
+    fun addedPaths(base: String): List<String> {
+        return read(args = listOf("diff", "--name-only", "--diff-filter=A", "$base...HEAD"))
+            .lines()
+            .filter { line -> line.isNotBlank() }
+    }
+
+    /** Удалить [paths] из ветки и закоммитить с [message]. */
+    fun removeAndCommit(
+        paths: List<String>,
+        message: String,
+    ) {
+        read(args = listOf("rm", "--quiet", "--") + paths)
+        read(args = listOf("commit", "--quiet", "--message", message))
+    }
+
     private fun exists(ref: String): Boolean {
         return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
     }
