@@ -53,6 +53,18 @@ class Issues(
         return gitHub.read(args = listOf("issue", "view", "$number", "--json", "id", "--jq", ".id"))
     }
 
+    /** Тело задачи — для частей плана (#53). */
+    fun body(number: Int): String {
+        return gitHub.read(args = listOf("issue", "view", "$number", "--json", "body", "--jq", ".body"))
+    }
+
+    fun editBody(
+        number: Int,
+        body: String,
+    ) {
+        gitHub.write(args = listOf("issue", "edit", "$number", "--body", body))
+    }
+
     /** Последний PR ветки или `null`, если PR нет. */
     fun pullRequest(branch: String): PullRequest? {
         val fields = readPullRequest(branch = branch) ?: return null

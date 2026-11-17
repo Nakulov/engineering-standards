@@ -2,9 +2,12 @@ package io.github.nakulov.standards.task.cli
 
 import io.github.nakulov.standards.task.board.Board
 import io.github.nakulov.standards.task.command.CheckRunner
+import io.github.nakulov.standards.task.command.CommitCommand
 import io.github.nakulov.standards.task.command.DoneCommand
 import io.github.nakulov.standards.task.command.FinalCommand
 import io.github.nakulov.standards.task.command.NewCommand
+import io.github.nakulov.standards.task.command.PlanArchive
+import io.github.nakulov.standards.task.command.PlanCommand
 import io.github.nakulov.standards.task.command.PrCommand
 import io.github.nakulov.standards.task.command.Publisher
 import io.github.nakulov.standards.task.command.StageCommand
@@ -22,7 +25,8 @@ import kotlin.system.exitProcess
  * Команды работают в текущей папке.
  */
 fun main(args: Array<String>) {
-    val shell = ProcessShell(directory = File(System.getProperty("user.dir")))
+    val directory = File(System.getProperty("user.dir"))
+    val shell = ProcessShell(directory = directory)
     val pause = { millis: Long -> Thread.sleep(millis) }
     val gitHub = GitHub(shell = shell, pause = pause)
     val pluginRoot = File(System.getenv("TASK_PLUGIN_ROOT") ?: ".")
@@ -31,7 +35,13 @@ fun main(args: Array<String>) {
     val board = Board(gitHub = gitHub, pause = pause)
     val pullRequests = PullRequests(gitHub = gitHub)
     val checks = CheckRunner(shell = shell)
-    val publisher = Publisher(git = git, issues = issues, pullRequests = pullRequests, checks = checks)
+    val publisher = Publisher(
+        git = git,
+        issues = issues,
+        pullRequests = pullRequests,
+        checks = checks,
+        archive = PlanArchive(git = git),
+    )
     val task = Task(
         commands = mapOf(
             "start" to StartCommand(git = git, issues = issues, board = board),
@@ -46,6 +56,8 @@ fun main(args: Array<String>) {
             "final" to FinalCommand(git = git, issues = issues, board = board, publisher = publisher),
             "stage" to StageCommand(gitHub = gitHub, template = File(pluginRoot, "templates/github/stage.md")),
             "new" to NewCommand(git = git, issues = issues, board = board),
+            "commit" to CommitCommand(git = git, directory = directory),
+            "plan" to PlanCommand(git = git, issues = issues, directory = directory),
         ),
         console = SystemConsole,
         debug = System.getenv("TASK_DEBUG") == "1",

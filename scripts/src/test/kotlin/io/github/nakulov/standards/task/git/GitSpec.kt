@@ -121,4 +121,120 @@ class GitSpec :
             git.firstCommit(branch = "dev", message = "Начальная настройка", paths = listOf(".gitignore", ".github"))
             listOf(git.currentBranch(), readHeadSubject(directory = repository)) + readHeadFiles(directory = repository)
         }
+
+        shouldReturnTest(
+            listOf("a.txt", "b.txt", "c.txt", "plans/x.md"),
+            options = TestOptions(name = "изменённые пути"),
+        ) {
+            Git(shell = ProcessShell(directory = makeCloneWithChanges())).changedPaths().sorted()
+        }
+
+        shouldReturnTest(
+            listOf("Добавить c", "b.txt", "plans/x.md"),
+            options = TestOptions(name = "коммит только путей"),
+        ) {
+            val clone = makeCloneWithChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(paths = listOf("a.txt", "c.txt"), messageFile = makeMessageFile(directory = clone))
+            listOf(readHeadSubject(directory = clone)) + git.changedPaths().sorted()
+        }
+
+        shouldReturnTest("Добавить c", options = TestOptions(name = "коммит путей из подпапки")) {
+            val clone = makeCloneWithChanges()
+            Git(shell = ProcessShell(directory = File(clone, "plans")))
+                .commitPaths(paths = listOf("a.txt", "c.txt"), messageFile = makeMessageFile(directory = clone))
+            readHeadSubject(directory = clone)
+        }
+
+        shouldReturnTest(
+            listOf("a.txt", "r.txt", "r2.txt"),
+            options = TestOptions(name = "изменённые пути: git rm и git mv — каждый путь"),
+        ) {
+            Git(shell = ProcessShell(directory = makeCloneWithIndexChanges())).changedPaths().sorted()
+        }
+
+        shouldReturnTest(
+            emptyList<String>(),
+            options = TestOptions(name = "коммит удаления и переименования из индекса"),
+        ) {
+            val clone = makeCloneWithIndexChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(
+                paths = listOf("a.txt", "r.txt", "r2.txt"),
+                messageFile = makeMessageFile(directory = clone),
+            )
+            git.changedPaths()
+        }
+
+        shouldReturnTest(listOf("c.txt", "plans/x.md"), options = TestOptions(name = "коммит удаления без git rm")) {
+            val clone = makeCloneWithChanges()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.commitPaths(paths = listOf("a.txt", "b.txt"), messageFile = makeMessageFile(directory = clone))
+            git.changedPaths().sorted()
+        }
+
+        shouldReturnTest(true, options = TestOptions(name = "основная папка из worktree")) {
+            val worktree = makeWorktree()
+            val main = Git(shell = ProcessShell(directory = worktree)).mainRoot()
+            File(main).canonicalPath == File(worktree.parentFile, "clone").canonicalPath
+        }
+
+        shouldReturnTest(listOf("plans/p.md"), options = TestOptions(name = "добавленные в ветке пути")) {
+            Git(shell = ProcessShell(directory = makeCloneWithPlanBranch())).addedPaths(base = "origin/dev")
+        }
+
+        shouldReturnTest(listOf("Убрать план: П"), options = TestOptions(name = "удаление и коммит")) {
+            val clone = makeCloneWithPlanBranch()
+            Git(shell = ProcessShell(directory = clone))
+                .removeAndCommit(paths = listOf("plans/p.md"), message = "Убрать план: П")
+            listOf(readHeadSubject(directory = clone)) +
+                readHeadFiles(directory = clone).filter { path -> path.startsWith(prefix = "plans/") }
+        }
+
+        shouldReturnTest(true, options = TestOptions(name = "где открыта ветка")) {
+            val worktree = makeWorktree()
+            val clone = File(worktree.parentFile, "clone")
+            val opened = Git(shell = ProcessShell(directory = clone)).openedAt(branch = "task/1-x")
+            File(checkNotNull(opened)).canonicalPath == worktree.canonicalPath
+        }
+
+        shouldReturnTest(listOf(true, false), options = TestOptions(name = "предок ветки")) {
+            val git = Git(shell = ProcessShell(directory = makeCloneWithPlanBranch()))
+            listOf(
+                git.isAncestor(ancestor = "origin/dev", descendant = "task/7-p"),
+                git.isAncestor(ancestor = "task/7-p", descendant = "origin/dev"),
+            )
+        }
+
+        shouldReturnTest(
+            listOf(true, true, false),
+            options = TestOptions(name = "коммит во временном worktree и push"),
+        ) {
+            val clone = makeIdentityClone()
+            val git = Git(shell = ProcessShell(directory = clone))
+            val temp = File(git.commonDir(), "task-plan/q").path
+            git.addWorktree(path = temp, ref = "origin/dev")
+            File(temp, "plans").mkdirs()
+            File(temp, "plans/q.md").writeText("# План Q\n")
+            val changed = git.hasChanges(path = temp)
+            git.commitAll(path = temp, message = "Добавить план: Q")
+            git.pushHead(path = temp, branch = "task/8-q")
+            git.removeWorktree(path = temp)
+            git.fetch()
+            listOf(changed, git.hasRemoteBranch(name = "task/8-q"), File(temp).exists())
+        }
+
+        shouldReturnTest("Добавить план: Q", options = TestOptions(name = "локальная ветка перематывается на коммит")) {
+            val clone = makeIdentityClone()
+            val git = Git(shell = ProcessShell(directory = clone))
+            val temp = File(git.commonDir(), "task-plan/q").path
+            git.addWorktree(path = temp, ref = "origin/dev")
+            File(temp, "q.md").writeText("q\n")
+            git.commitAll(path = temp, message = "Добавить план: Q")
+            val commit = git.head(path = temp)
+            git.removeWorktree(path = temp)
+            git.moveBranch(branch = "task/8-q", commit = commit)
+            git.switchTo(name = "task/8-q")
+            readHeadSubject(directory = clone)
+        }
     })

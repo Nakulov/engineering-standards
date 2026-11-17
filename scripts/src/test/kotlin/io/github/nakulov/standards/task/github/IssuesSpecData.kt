@@ -62,3 +62,11 @@ fun makeCreateIssueArgs(): List<String> {
 fun makeCreatePlainIssueArgs(): List<String> {
     return listOf("issue", "create", "--title", "Задача", "--body", "Тело", "--label", "type:bug")
 }
+
+fun makeBodyArgs(): List<String> {
+    return listOf("issue", "view", "13", "--json", "body", "--jq", ".body")
+}
+
+fun makeEditBodyArgs(): List<String> {
+    return listOf("issue", "edit", "13", "--body", "Новое тело")
+}

@@ -3,6 +3,7 @@ package io.github.nakulov.standards.task.git
 import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.shell.Shell
 import io.github.nakulov.standards.task.shell.ShellResult
+import java.io.File
 
 /**
  * Операции `git`, нужные командам процесса. Ошибка `git` — [TaskError.Failure] с первой строкой его stderr.
@@ -106,6 +107,137 @@ class Git(
         read(args = listOf("commit", "--quiet", "--message", message))
     }
 
+    /**
+     * Изменённые пути рабочей папки: изменённые, удалённые, новые; переименование — двумя путями: старый удалён,
+     * новый добавлен.
+     */
+    fun changedPaths(): List<String> {
+        val args = listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")
+        val result = run(args = args)
+        if (result.code != 0) {
+            throw TaskError.Failure(message = "git status: ${result.err.trim().lineSequence().first()}")
+        }
+        val entries = result.out.split(NUL).filter { entry -> entry.isNotEmpty() }
+        val paths = mutableListOf<String>()
+        var index = 0
+        while (index < entries.size) {
+            val entry = entries[index]
+            paths += entry.substring(startIndex = STATUS_PREFIX)
+            index += if (entry.first() == RENAMED || entry.first() == COPIED) 2 else 1
+        }
+        return paths
+    }
+
+    /**
+     * Коммит только [paths] с сообщением из [messageFile]: чужое из индекса в коммит не попадает. Пути — от корня
+     * репозитория (`:/`, как в `git status --porcelain`): команда работает и из подпапки. В индекс добавляются только
+     * пути, которые есть в рабочей папке; удалённые (и через `git rm`) коммит берёт сам.
+     */
+    fun commitPaths(
+        paths: List<String>,
+        messageFile: String,
+    ) {
+        val root = File(root())
+        val present = paths.filter { path -> File(root, path).exists() }.map { path -> "$FROM_ROOT$path" }
+        if (present.isNotEmpty()) {
+            read(args = listOf("add", "--") + present)
+        }
+        read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + paths.map { path -> "$FROM_ROOT$path" })
+    }
+
+    /** Общий `.git` — у основной папки и всех её worktree один. */
+    fun commonDir(): String {
+        return read(args = listOf("rev-parse", "--path-format=absolute", "--git-common-dir"))
+    }
+
+    /** Основная папка проекта — и из worktree: там лежат `plans/done/` и `plans/journal/`. */
+    fun mainRoot(): String {
+        return File(commonDir()).parentFile.path
+    }
+
+    /** Файлы, добавленные в ветке относительно общего предка с [base]. */
+    fun addedPaths(base: String): List<String> {
+        return read(args = listOf("diff", "--name-only", "--diff-filter=A", "$base...HEAD"))
+            .lines()
+            .filter { line -> line.isNotBlank() }
+    }
+
+    /** Удалить [paths] из ветки и закоммитить с [message]. */
+    fun removeAndCommit(
+        paths: List<String>,
+        message: String,
+    ) {
+        read(args = listOf("rm", "--quiet", "--") + paths)
+        read(args = listOf("commit", "--quiet", "--message", message))
+    }
+
+    /** Папка, где открыта ветка [branch] — основная или worktree; не открыта — `null`. */
+    fun openedAt(branch: String): String? {
+        var path: String? = null
+        for (line in read(args = listOf("worktree", "list", "--porcelain")).lines()) {
+            if (line.startsWith(prefix = WORKTREE)) {
+                path = line.removePrefix(prefix = WORKTREE)
+            } else if (line == "branch refs/heads/$branch") {
+                return path
+            }
+        }
+        return null
+    }
+
+    fun isAncestor(
+        ancestor: String,
+        descendant: String,
+    ): Boolean {
+        return run(args = listOf("merge-base", "--is-ancestor", ancestor, descendant)).code == 0
+    }
+
+    /** Временный worktree без ветки на [ref]: в нём `task plan` коммитит, не трогая рабочую папку (#53). */
+    fun addWorktree(
+        path: String,
+        ref: String,
+    ) {
+        read(args = listOf("worktree", "add", "--quiet", "--detach", path, ref))
+    }
+
+    fun removeWorktree(path: String) {
+        read(args = listOf("worktree", "remove", "--force", path))
+    }
+
+    fun hasChanges(path: String): Boolean {
+        return readIn(path = path, args = listOf("status", "--porcelain")).isNotEmpty()
+    }
+
+    fun commitAll(
+        path: String,
+        message: String,
+    ) {
+        readIn(path = path, args = listOf("add", "--all"))
+        readIn(path = path, args = listOf("commit", "--quiet", "--message", message))
+    }
+
+    /** Коммит worktree [path] — в ветку [branch] в `origin`, без локальной ветки. */
+    fun pushHead(
+        path: String,
+        branch: String,
+    ) {
+        readIn(path = path, args = listOf("push", "--quiet", "origin", "HEAD:refs/heads/$branch"))
+    }
+
+    fun head(path: String): String {
+        return readIn(path = path, args = listOf("rev-parse", "HEAD"))
+    }
+
+    /**
+     * Локальная ветка — на [commit] (хеш или ссылка); вызывающий проверил, что это перемотка и ветка нигде не
+     * открыта.
+     */
+    fun moveBranch(
+        branch: String,
+        commit: String,
+    ) {
+        read(args = listOf("update-ref", "refs/heads/$branch", commit))
+    }
+
     private fun exists(ref: String): Boolean {
         return run(args = listOf("rev-parse", "--verify", "--quiet", ref)).code == 0
     }
@@ -118,11 +250,29 @@ class Git(
         return result.out.trim()
     }
 
+    /** `git -C [path]`: ошибка называет команду, а не `-C`. */
+    private fun readIn(
+        path: String,
+        args: List<String>,
+    ): String {
+        val result = run(args = listOf("-C", path) + args)
+        if (result.code != 0) {
+            throw TaskError.Failure(message = "git ${args.first()}: ${result.err.trim().lineSequence().first()}")
+        }
+        return result.out.trim()
+    }
+
     private fun run(args: List<String>): ShellResult {
         return shell.run(command = listOf("git") + args)
     }
 
     private companion object {
         const val BASE_KEY = "task-base"
+        const val NUL = '\u0000'
+        const val STATUS_PREFIX = 3
+        const val RENAMED = 'R'
+        const val COPIED = 'C'
+        const val FROM_ROOT = ":/"
+        const val WORKTREE = "worktree "
     }
 }

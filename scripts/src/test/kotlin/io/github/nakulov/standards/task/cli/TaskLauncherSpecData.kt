@@ -21,7 +21,10 @@ fun makeHelpRun(): LauncherRun {
             "  task final <N> --title «…» --body-file <файл> [--check «команда»]… — итоговый PR long/<N>-… → dev\n" +
             "  task stage create --title «…» --body-file <файл> [--due ГГГГ-ММ-ДД] — веха этапа по шаблону\n" +
             "  task new <тип> --title «…» --body-file <файл> [--parent N] [--blocked-by N,N] — " +
-            "задача по шаблону типа в Backlog\n",
+            "задача по шаблону типа в Backlog\n" +
+            "  task commit --message-file <файл> — коммит по шаблону задачи плана: файлы — из раздела «Файлы:»\n" +
+            "  task plan <N> <slug> [--long] --issue-parts <файл> — " +
+            "план plans/<slug>.md в ветку задачи без смены статуса\n",
         err = "",
     )
 }
