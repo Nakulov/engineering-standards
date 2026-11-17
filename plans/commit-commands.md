@@ -126,6 +126,7 @@
   - [x] Задача 1: изменённые пути и коммит путей в `Git`
   - [x] Задача 2: разбор сообщения `CommitMessage`
   - [x] Задача 3: команда `task commit`
+  - [ ] ➕ Задача 11: удаление и переименование из индекса в `task commit`
   - [ ] Приёмка
   - [ ] Документация
 - PR 2: план не попадает в `dev`
@@ -146,7 +147,7 @@
   - [ ] Документация
 
 **После завершения** (внешнее, без чекбоксов):
-- После слияния и `git pull` в основной папке: временные блоки убраны, вызовы переписаны на `task plan … --issue-parts`, `task commit --message-file`, шаг «убери план перед PR» удалён — в `drafts/plan/SKILL.md`, `drafts/execute/SKILL.md`, `drafts/agents/plan-executor.md`, копии в `.claude/`; `grep -rn "пока нет (временно)" drafts .claude` пуст.
+- После слияния и `git pull` в основной папке: временные блоки убраны, вызовы переписаны на `task plan … --issue-parts`, `task commit --message-file` (переименование — оба пути в «Файлах»), шаг «убери план перед PR» удалён — в `drafts/plan/SKILL.md`, `drafts/execute/SKILL.md`, `drafts/agents/plan-executor.md`, копии в `.claude/`; `grep -rn "пока нет (временно)" drafts .claude` пуст.
 - Живой прогон на первой задаче, которую ведём через план (скорее всего #52).
 
 ## PR 1: исполнитель коммитит по шаблону командой `task commit`
@@ -503,6 +504,71 @@
   ```
 - [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
 - [x] 5. Коммит — тест и код вместе
+
+### ➕ Задача 11: удаление и переименование из индекса в `task commit`
+Добавлена с согласия пользователя после приёмки PR 1: `git rm` — сбой `git add` (pathspec не найден), `git mv` — коммит наполовину.
+- Изменить: `git/Git.kt` — `changedPaths()` с `--no-renames`; `commitPaths` добавляет в индекс только пути, которые есть в рабочей папке
+- Изменить: `git/GitSpecData.kt` — `makeCloneWithIndexChanges()`
+- Изменить: `git/GitSpec.kt` — три случая
+
+- [ ] 1. Падающий тест.
+  `GitSpecData.kt`:
+  ```kotlin
+  /** Клон с личностью: `a.txt` удалён через `git rm`, `r.txt` переименован через `git mv` в `r2.txt`. */
+  fun makeCloneWithIndexChanges(): File {
+      val clone = makeClone()
+      git(directory = clone, args = listOf("config", "user.name", "task"))
+      git(directory = clone, args = listOf("config", "user.email", "task@example.invalid"))
+      File(clone, "a.txt").writeText("1\n")
+      File(clone, "r.txt").writeText("1\n")
+      git(directory = clone, args = listOf("add", "a.txt", "r.txt"))
+      git(directory = clone, args = listOf("commit", "--quiet", "--message", "файлы"))
+      git(directory = clone, args = listOf("rm", "--quiet", "a.txt"))
+      git(directory = clone, args = listOf("mv", "r.txt", "r2.txt"))
+      return clone
+  }
+  ```
+  `GitSpec.kt`:
+  ```kotlin
+  shouldReturnTest(
+      listOf("a.txt", "r.txt", "r2.txt"),
+      options = TestOptions(name = "изменённые пути: git rm и git mv — каждый путь"),
+  ) {
+      Git(shell = ProcessShell(directory = makeCloneWithIndexChanges())).changedPaths().sorted()
+  }
+
+  shouldReturnTest(emptyList<String>(), options = TestOptions(name = "коммит удаления и переименования из индекса")) {
+      val clone = makeCloneWithIndexChanges()
+      val git = Git(shell = ProcessShell(directory = clone))
+      git.commitPaths(paths = listOf("a.txt", "r.txt", "r2.txt"), messageFile = makeMessageFile(directory = clone))
+      git.changedPaths()
+  }
+
+  shouldReturnTest(listOf("c.txt", "plans/x.md"), options = TestOptions(name = "коммит удаления без git rm")) {
+      val clone = makeCloneWithChanges()
+      val git = Git(shell = ProcessShell(directory = clone))
+      git.commitPaths(paths = listOf("a.txt", "b.txt"), messageFile = makeMessageFile(directory = clone))
+      git.changedPaths().sorted()
+  }
+  ```
+- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: первый случай — `r2.txt` вместо `r.txt, r2.txt`; второй — `TaskError.Failure: git add: fatal: pathspec ':/a.txt' did not match any files`
+- [ ] 3. Минимальный код в `Git.kt`. В `changedPaths` — `listOf("status", "--porcelain", "-z", "--no-renames", "--untracked-files=all")`, KDoc: «…; переименование — двумя путями: старый удалён, новый добавлен». `commitPaths`:
+  ```kotlin
+  fun commitPaths(
+      paths: List<String>,
+      messageFile: String,
+  ) {
+      val root = File(root())
+      val present = paths.filter { path -> File(root, path).exists() }.map { path -> "$FROM_ROOT$path" }
+      if (present.isNotEmpty()) {
+          read(args = listOf("add", "--") + present)
+      }
+      read(args = listOf("commit", "--quiet", "--file", messageFile, "--") + paths.map { path -> "$FROM_ROOT$path" })
+  }
+  ```
+  KDoc `commitPaths` дополнить: «В индекс добавляются только пути, которые есть в рабочей папке; удалённые (и через `git rm`) коммит берёт сам».
+- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — зелёный; `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [ ] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [x] Что даёт этот PR — проверено: `scripts/task commit --message-file <файл>` в черновой ветке коммитит только перечисленное
