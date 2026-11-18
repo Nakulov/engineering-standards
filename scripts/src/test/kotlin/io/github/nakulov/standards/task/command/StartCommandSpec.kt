@@ -26,8 +26,10 @@ class StartCommandSpec :
         val issues = mockk<Issues>()
         val board = mockk<Board>()
         val console = mockk<Console>()
-        val command = StartCommand(git = git, issues = issues, board = board)
+        val files = mockk<WorktreeFiles>()
+        val command = StartCommand(git = git, issues = issues, board = board, files = files)
         justRun { console.line(text = any()) }
+        justRun { files.copyInto(copy = any(), console = any()) }
         justRun { board.move(item = any(), status = any()) }
         justRun { git.fetch() }
         justRun { git.createBranch(name = any(), base = any()) }
@@ -336,6 +338,7 @@ class StartCommandSpec :
                         git.hasRemoteBranch(name = "task/13-task-scripts")
                         git.addBranchWorktree(path = makeCopyPath(), name = "task/13-task-scripts", base = "origin/dev")
                         console.line(text = "ветка task/13-task-scripts от origin/dev — копия ${makeCopyPath()}")
+                        files.copyInto(copy = makeCopyPath(), console = console)
                         board.move(item = makeGroomedItem(), status = "In progress")
                         console.line(text = "#13 → In progress")
                         console.line(text = makeCopyPath())
@@ -363,6 +366,7 @@ class StartCommandSpec :
                         git.hasRemoteBranch(name = "task/13-task-scripts")
                         git.addWorktreeOn(path = makeCopyPath(), name = "task/13-task-scripts")
                         console.line(text = "ветка task/13-task-scripts уже есть — копия ${makeCopyPath()}")
+                        files.copyInto(copy = makeCopyPath(), console = console)
                         console.line(text = "#13 уже In progress")
                         console.line(text = makeCopyPath())
                     }
@@ -431,6 +435,7 @@ class StartCommandSpec :
                         git.hasRemoteBranch(name = "long/13-big")
                         git.addBranchWorktree(path = "/repo/.claude/worktrees/big", name = "long/13-big", base = "origin/dev")
                         console.line(text = "ветка long/13-big от origin/dev — копия /repo/.claude/worktrees/big")
+                        files.copyInto(copy = "/repo/.claude/worktrees/big", console = console)
                         git.push(name = "long/13-big")
                         console.line(text = "ветка long/13-big отправлена в origin")
                         board.move(item = makeGroomedItem(), status = "In progress")
@@ -478,6 +483,7 @@ class StartCommandSpec :
                             text = "ветка task/13-task-scripts уже есть — копия ${makeCopyPath()} перемотана до " +
                                 "origin/task/13-task-scripts",
                         )
+                        files.copyInto(copy = makeCopyPath(), console = console)
                         console.line(text = "#13 уже In progress")
                         console.line(text = makeCopyPath())
                     }
@@ -514,6 +520,7 @@ class StartCommandSpec :
                         console.line(
                             text = "ветка task/13-part-a от origin/long/13-big — копия /repo/.claude/worktrees/part-a",
                         )
+                        files.copyInto(copy = "/repo/.claude/worktrees/part-a", console = console)
                         console.line(text = "#13 уже In progress")
                         console.line(text = "/repo/.claude/worktrees/part-a")
                     }

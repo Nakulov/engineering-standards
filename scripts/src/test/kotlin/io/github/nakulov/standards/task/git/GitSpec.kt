@@ -305,4 +305,15 @@ class GitSpec :
             )
             Git(shell = ProcessShell(directory = worktree)).currentBranch()
         }
+
+        shouldReturnTest(
+            listOf("conf/a.xml", "local.properties"),
+            options = TestOptions(name = "файлы по списку — только игнорируемые git"),
+        ) {
+            val clone = makeCloneWithIgnoredFiles()
+            Git(shell = ProcessShell(directory = clone)).includedPaths(
+                path = clone.path,
+                listFile = File(clone.parentFile, "include").path,
+            )
+        }
     })

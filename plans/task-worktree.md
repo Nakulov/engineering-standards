@@ -98,10 +98,10 @@
   - [x] Задача 2a: справка `task --help` с `--worktree` (➕)
   - [x] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
-  - [ ] Задача 4: Git — файлы основной папки по `.worktreeinclude`
-  - [ ] Задача 5: `WorktreeFiles` копирует файлы в копию
-  - [ ] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
-  - [ ] Приёмка
+  - [x] Задача 4: Git — файлы основной папки по `.worktreeinclude`
+  - [x] Задача 5: `WorktreeFiles` копирует файлы в копию
+  - [x] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
+  - [x] Приёмка
 - PR 3: `task done` удаляет свою копию
   - [ ] Задача 7: удаление своей копии в `task done`
   - [ ] Приёмка
@@ -878,7 +878,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpecData.kt` — `makeCloneWithIgnoredFiles`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpec.kt` — случай в конце
 
-- [ ] 1. Падающий тест. В `GitSpecData.kt` (после `makeCloneWithPlanBranch`):
+- [x] 1. Падающий тест. В `GitSpecData.kt` (после `makeCloneWithPlanBranch`):
   ```kotlin
   /**
    * Клон с неотслеживаемыми файлами: `.gitignore` игнорирует `local.properties`, `conf/` и `build/`; `notes.txt` не
@@ -911,8 +911,8 @@
             )
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'includedPaths'`
-- [ ] 3. Минимальный код: в `Git.kt` после `copyPath`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'includedPaths'`
+- [x] 3. Минимальный код: в `Git.kt` после `copyPath`
   ```kotlin
     /**
      * Неотслеживаемые файлы папки [path], которые игнорирует git и которые подходят под шаблоны файла [listFile] — так
@@ -935,15 +935,15 @@
     }
   ```
   Порядок вызовов — короткий список по `.worktreeinclude` первым, проверка игнорирования только его путей: не перечислять все игнорируемые файлы основной папки (`build/`, `.gradle/`, сборки копий) — ревью плана, В1.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`. Упал на `conf/a.xml` (git выдал `conf/` вместо файла) — ⚠️ в план и сообщить: разбор папок расходится с ожиданием, не подгонять тест молча
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`. Упал на `conf/a.xml` (git выдал `conf/` вместо файла) — ⚠️ в план и сообщить: разбор папок расходится с ожиданием, не подгонять тест молча
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 5: `WorktreeFiles` копирует файлы в копию
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/WorktreeFiles.kt` — копирует в копию файлы основной папки по `.worktreeinclude`; вход: `copyInto(copy: String, console: Console)`
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/WorktreeFilesSpec.kt` — три случая
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/WorktreeFilesSpecData.kt` — временные папки
 
-- [ ] 1. Падающий тест. `WorktreeFilesSpecData.kt`:
+- [x] 1. Падающий тест. `WorktreeFilesSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -1056,8 +1056,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — падает: `Unresolved reference 'WorktreeFiles'`
-- [ ] 3. Минимальный код: `WorktreeFiles.kt`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — падает: `Unresolved reference 'WorktreeFiles'`
+- [x] 3. Минимальный код: `WorktreeFiles.kt`
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -1113,8 +1113,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/StartCommand.kt` — параметр `files`, вызов после создания копии
@@ -1122,13 +1122,13 @@
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/cli/Main.kt:44` — `files = WorktreeFiles(git = git)`
 - Создать: `.worktreeinclude` — `local.properties`
 
-- [ ] 1. Падающий тест. В `StartCommandSpec.kt`:
+- [x] 1. Падающий тест. В `StartCommandSpec.kt`:
   - после `val console = mockk<Console>()` — `val files = mockk<WorktreeFiles>()`; конструктор — `StartCommand(git = git, issues = issues, board = board, files = files)`; к заглушкам — `justRun { files.copyInto(copy = any(), console = any()) }`;
   - в случаях «--worktree, ветки нет, основная папка грязная», «--long --worktree: новая long-ветка в копии» и «--from long/… --worktree…» сразу после строки `console.line(text = "ветка … от origin/… — копия …")` вставить `files.copyInto(copy = <путь копии случая>, console = console)` (до `git.push` в long-случае);
   - в случаях «--worktree, ветка есть только в origin» и «--worktree, локальная ветка отстала…» после строки `console.line(text = "ветка task/13-task-scripts уже есть — копия …")` вставить `files.copyInto(copy = makeCopyPath(), console = console)`;
   - в случаях «--worktree повторно…» и «…своя копия long-ветки отсоединена…» — без вызова (`verifySequence` подтверждает, что существующая копия файлы не получает).
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: `No parameter with name 'files' found`
-- [ ] 3. Минимальный код в `StartCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: `No parameter with name 'files' found`
+- [x] 3. Минимальный код в `StartCommand.kt`:
   - конструктор: после `private val board: Board,` — `private val files: WorktreeFiles,`
   - KDoc класса: в фразу про `--worktree` после «основной папки:» добавить «файлы из `.worktreeinclude` копируются при создании,»
   - в `openCopy`, ветка «существующая»: после `if (behind) { … } else { … }` добавить
@@ -1145,13 +1145,13 @@
     ```
   В `Main.kt:44`: `"start" to StartCommand(git = git, issues = issues, board = board, files = WorktreeFiles(git = git)),` и импорт `io.github.nakulov.standards.task.command.WorktreeFiles`.
   Файл `.worktreeinclude` в корне репозитория — одна строка `local.properties`.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*WorktreeFilesSpec*' --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
-- [ ] Крайние случаи обработаны: нет `.worktreeinclude`, путь из списка отсутствует, шаблоны / комментарии / исключения не дают ложных строк, повтор не копирует
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*WorktreeFilesSpec*' --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
+- [x] Крайние случаи обработаны: нет `.worktreeinclude`, путь из списка отсутствует, шаблоны / комментарии / исключения не дают ложных строк, повтор не копирует
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
 
 ## PR 3: `task done` удаляет свою копию
 **Объём:** `DoneCommand.kt`, `DoneCommandSpec.kt`, `GitSpec.kt`; ≈ 3 файла
