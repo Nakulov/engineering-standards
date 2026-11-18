@@ -12,4 +12,5 @@ hs_err_pid*
 __pycache__/
 .venv/
 node_modules/
+.claude/worktrees/
 # <<< engineering-standards

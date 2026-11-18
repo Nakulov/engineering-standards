@@ -94,7 +94,7 @@
 - PR 1: `task start --worktree` создаёт копию задачи на ветке
   - [x] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
   - [x] Задача 2: `task start --worktree` и отказ «ветка открыта»
-  - [ ] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
+  - [x] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
   - [ ] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
   - [ ] Задача 4: Git — файлы основной папки по `.worktreeinclude`
@@ -850,10 +850,10 @@
 - Изменить: `.gitignore` — та же строка в блоке `# >>> engineering-standards` … `# <<< engineering-standards`, после `node_modules/`
 
 Тест: не применим — шаблон без логики; проверка формата — `scripts/setup --check` (сверяет блок `.gitignore` с шаблоном).
-- [ ] 1. В `templates/project/gitignore` после строки `node_modules/` добавить строку `.claude/worktrees/`
-- [ ] 2. В `.gitignore` после `node_modules/` внутри блока (перед `# <<< engineering-standards`) добавить `.claude/worktrees/`
-- [ ] 3. Запустить `scripts/setup --check` — код выхода 0, в выводе нет расхождения по `.gitignore`
-- [ ] 4. Коммит
+- [x] 1. В `templates/project/gitignore` после строки `node_modules/` добавить строку `.claude/worktrees/`
+- [x] 2. В `.gitignore` после `node_modules/` внутри блока (перед `# <<< engineering-standards`) добавить `.claude/worktrees/`
+- [x] 3. Запустить `scripts/setup --check` — код выхода 0, в выводе нет расхождения по `.gitignore`
+- [x] 4. Коммит
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
