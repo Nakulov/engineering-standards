@@ -101,7 +101,7 @@
   - [x] Задача 4: Git — файлы основной папки по `.worktreeinclude`
   - [x] Задача 5: `WorktreeFiles` копирует файлы в копию
   - [x] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 3: `task done` удаляет свою копию
   - [ ] Задача 7: удаление своей копии в `task done`
   - [ ] Приёмка
@@ -1149,9 +1149,9 @@
 - [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*WorktreeFilesSpec*' --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
-- [ ] Крайние случаи обработаны: нет `.worktreeinclude`, путь из списка отсутствует, шаблоны / комментарии / исключения не дают ложных строк, повтор не копирует
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*WorktreeFilesSpec*' --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
+- [x] Крайние случаи обработаны: нет `.worktreeinclude`, путь из списка отсутствует, шаблоны / комментарии / исключения не дают ложных строк, повтор не копирует
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
 
 ## PR 3: `task done` удаляет свою копию
 **Объём:** `DoneCommand.kt`, `DoneCommandSpec.kt`, `GitSpec.kt`; ≈ 3 файла
