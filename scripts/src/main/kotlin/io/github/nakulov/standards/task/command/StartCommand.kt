@@ -13,6 +13,7 @@ import io.github.nakulov.standards.task.github.Issues
  * `task start <N> <slug> [--long | --from long/<M>-…]`: проверка готовности (#2, `take`, пункт 1 — статус и блокеры),
  * ветка от свежего `origin/dev` (или от long-ветки — для маленького PR в неё), статус In progress. Long-ветка сразу
  * отправляется в `origin`, чтобы от неё начинались части. Исследование — без ветки, эпик в работу не берётся.
+ * Существующая ветка, отставшая от `origin`, перематывается; разошедшаяся — отказ до переключения (#61).
  * Повторный запуск безопасен.
  */
 class StartCommand(
@@ -88,12 +89,40 @@ class StartCommand(
     ) {
         val name = request.branch.toString()
         git.fetch()
-        if (git.hasLocalBranch(name = name) || git.hasRemoteBranch(name = name)) {
-            git.switchTo(name = name)
-            console.line(text = "ветка $name уже есть — переключился на неё")
+        val local = git.hasLocalBranch(name = name)
+        val remote = git.hasRemoteBranch(name = name)
+        if (local || remote) {
+            switchToExisting(name = name, behind = local && remote && isBehind(name = name), console = console)
         } else {
             createBranch(request = request, console = console)
         }
+    }
+
+    private fun switchToExisting(
+        name: String,
+        behind: Boolean,
+        console: Console,
+    ) {
+        git.switchTo(name = name)
+        if (behind) {
+            git.fastForward(name = name)
+            console.line(text = "ветка $name уже есть — переключился и перемотал до origin/$name")
+        } else {
+            console.line(text = "ветка $name уже есть — переключился на неё")
+        }
+    }
+
+    /** Локальная [name] отстала от `origin/[name]`; совпадает или впереди — нет; разошлась — отказ (#61). */
+    private fun isBehind(name: String): Boolean {
+        val local = "refs/heads/$name"
+        val remote = "origin/$name"
+        if (git.isAncestor(ancestor = remote, descendant = local)) {
+            return false
+        }
+        if (!git.isAncestor(ancestor = local, descendant = remote)) {
+            throw TaskError.Refusal(message = "локальная $name расходится с origin/$name — сведите вручную")
+        }
+        return true
     }
 
     private fun createBranch(

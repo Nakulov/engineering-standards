@@ -237,4 +237,21 @@ class GitSpec :
             git.switchTo(name = "task/8-q")
             readHeadSubject(directory = clone)
         }
+
+        shouldReturnTest(
+            listOf("блок слит", true, true),
+            options = TestOptions(name = "открытая ветка перематывается до origin вместе с файлами"),
+        ) {
+            val clone = makeCloneOnBranchBehindOrigin()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.fastForward(name = "task/9-f")
+            listOf(readHeadSubject(directory = clone), File(clone, "f.txt").exists(), git.isClean())
+        }
+
+        shouldThrowWithMessageTest<TaskError.Failure>(
+            makeNotFastForwardMessage(),
+            options = TestOptions(name = "разошедшаяся ветка не перематывается"),
+        ) {
+            Git(shell = ProcessShell(directory = makeCloneOnDivergedBranch())).fastForward(name = "task/9-f")
+        }
     })

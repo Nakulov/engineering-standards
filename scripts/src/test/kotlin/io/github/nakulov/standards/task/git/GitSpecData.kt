@@ -54,6 +54,32 @@ fun makeCloneBehindOrigin(): File {
     return clone
 }
 
+/** Клон на ветке `task/9-f`; в `origin/task/9-f` после `fetch` — коммит «блок слит» с файлом `f.txt` (#61). */
+fun makeCloneOnBranchBehindOrigin(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("switch", "--quiet", "--create", "task/9-f"))
+    git(directory = clone, args = listOf("push", "--quiet", "--set-upstream", "origin", "task/9-f"))
+    val other = File(clone.parentFile, "other")
+    git(directory = clone.parentFile, args = listOf("clone", "--quiet", "--branch", "task/9-f", "origin.git", "other"))
+    File(other, "f.txt").writeText("f\n")
+    git(directory = other, args = listOf("add", "f.txt"))
+    git(directory = other, args = listOf("commit", "--quiet", "--message", "блок слит"))
+    git(directory = other, args = listOf("push", "--quiet", "origin", "task/9-f"))
+    git(directory = clone, args = listOf("fetch", "--quiet", "origin"))
+    return clone
+}
+
+/** Как [makeCloneOnBranchBehindOrigin], но в локальной `task/9-f` ещё свой коммит: ветка разошлась с `origin`. */
+fun makeCloneOnDivergedBranch(): File {
+    val clone = makeCloneOnBranchBehindOrigin()
+    git(directory = clone, args = listOf("commit", "--quiet", "--allow-empty", "--message", "свой коммит"))
+    return clone
+}
+
+fun makeNotFastForwardMessage(): String {
+    return "git merge: fatal: Not possible to fast-forward, aborting."
+}
+
 /** Клон с личностью в настройке — для коммитов во временном worktree. */
 fun makeIdentityClone(): File {
     val clone = makeClone()
