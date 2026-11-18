@@ -241,6 +241,26 @@ class Git(
         return File(mainRoot(), "$WORKTREES/$slug").path
     }
 
+    /**
+     * Неотслеживаемые файлы папки [path], которые игнорирует git и которые подходят под шаблоны файла [listFile] — так
+     * отбирает `.worktreeinclude` Claude Code (#52). Шаблоны разбирает git.
+     */
+    fun includedPaths(
+        path: String,
+        listFile: String,
+    ): List<String> {
+        val listed = readIn(path = path, args = listOf("ls-files", "--others", "--ignored", "--exclude-from=$listFile"))
+            .lines()
+            .filter { line -> line.isNotBlank() }
+        if (listed.isEmpty()) {
+            return emptyList()
+        }
+        val ignoredArgs = listOf("ls-files", "--others", "--ignored", "--exclude-standard", "--")
+        return readIn(path = path, args = ignoredArgs + listed)
+            .lines()
+            .filter { line -> line.isNotBlank() }
+    }
+
     /** Папки всех копий репозитория, с основной (#52). */
     fun worktrees(): List<String> {
         return read(args = listOf("worktree", "list", "--porcelain"))

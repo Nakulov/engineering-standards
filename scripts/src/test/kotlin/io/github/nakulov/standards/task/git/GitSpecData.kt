@@ -101,6 +101,24 @@ fun makeCloneWithPlanBranch(): File {
     return clone
 }
 
+/**
+ * Клон с неотслеживаемыми файлами: `.gitignore` игнорирует `local.properties`, `conf/` и `build/`; `notes.txt` не
+ * игнорируется. Рядом с клоном — список `include` (`local.properties`, `conf/`, `notes.txt`) в формате
+ * `.worktreeinclude`.
+ */
+fun makeCloneWithIgnoredFiles(): File {
+    val clone = makeClone()
+    File(clone, ".gitignore").writeText("local.properties\nconf/\nbuild/\n")
+    File(clone, "local.properties").writeText("sdk.dir=/sdk\n")
+    File(clone, "conf").mkdirs()
+    File(clone, "conf/a.xml").writeText("<a/>\n")
+    File(clone, "build").mkdirs()
+    File(clone, "build/out.txt").writeText("out\n")
+    File(clone, "notes.txt").writeText("заметки\n")
+    File(clone.parentFile, "include").writeText("local.properties\nconf/\nnotes.txt\n")
+    return clone
+}
+
 /** Клон с личностью в настройке: `a.txt` изменён, `b.txt` удалён, `c.txt` и `plans/x.md` — новые. */
 fun makeCloneWithChanges(): File {
     val clone = makeClone()

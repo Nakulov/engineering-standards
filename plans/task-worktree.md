@@ -98,7 +98,7 @@
   - [x] Задача 2a: справка `task --help` с `--worktree` (➕)
   - [x] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
-  - [ ] Задача 4: Git — файлы основной папки по `.worktreeinclude`
+  - [x] Задача 4: Git — файлы основной папки по `.worktreeinclude`
   - [ ] Задача 5: `WorktreeFiles` копирует файлы в копию
   - [ ] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
   - [ ] Приёмка
@@ -878,7 +878,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpecData.kt` — `makeCloneWithIgnoredFiles`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpec.kt` — случай в конце
 
-- [ ] 1. Падающий тест. В `GitSpecData.kt` (после `makeCloneWithPlanBranch`):
+- [x] 1. Падающий тест. В `GitSpecData.kt` (после `makeCloneWithPlanBranch`):
   ```kotlin
   /**
    * Клон с неотслеживаемыми файлами: `.gitignore` игнорирует `local.properties`, `conf/` и `build/`; `notes.txt` не
@@ -911,8 +911,8 @@
             )
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'includedPaths'`
-- [ ] 3. Минимальный код: в `Git.kt` после `copyPath`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'includedPaths'`
+- [x] 3. Минимальный код: в `Git.kt` после `copyPath`
   ```kotlin
     /**
      * Неотслеживаемые файлы папки [path], которые игнорирует git и которые подходят под шаблоны файла [listFile] — так
@@ -935,8 +935,8 @@
     }
   ```
   Порядок вызовов — короткий список по `.worktreeinclude` первым, проверка игнорирования только его путей: не перечислять все игнорируемые файлы основной папки (`build/`, `.gradle/`, сборки копий) — ревью плана, В1.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`. Упал на `conf/a.xml` (git выдал `conf/` вместо файла) — ⚠️ в план и сообщить: разбор папок расходится с ожиданием, не подгонять тест молча
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`. Упал на `conf/a.xml` (git выдал `conf/` вместо файла) — ⚠️ в план и сообщить: разбор папок расходится с ожиданием, не подгонять тест молча
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 5: `WorktreeFiles` копирует файлы в копию
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/WorktreeFiles.kt` — копирует в копию файлы основной папки по `.worktreeinclude`; вход: `copyInto(copy: String, console: Console)`
