@@ -93,7 +93,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: `task start --worktree` создаёт копию задачи на ветке
   - [x] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
-  - [ ] Задача 2: `task start --worktree` и отказ «ветка открыта»
+  - [x] Задача 2: `task start --worktree` и отказ «ветка открыта»
   - [ ] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
   - [ ] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
@@ -228,7 +228,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/StartCommandSpec.kt` — заглушки по умолчанию, `openedAt` в старых последовательностях, новые случаи
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/StartCommandSpecData.kt` — usage и новые данные
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   В `StartCommandSpecData.kt` заменить `makeUsageMessage` и добавить функции:
   ```kotlin
   fun makeUsageMessage(): String {
@@ -554,8 +554,8 @@
             command.run(args = listOf("13", "task-scripts", "--worktree"), console = console)
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: новые случаи — `TaskError.Failure: использование: task start …` (старый `parse` не знает `--worktree` и считает его третьим позиционным аргументом); старые случаи с `git.fetch()` — лишний `git.openedAt` в ожидании; случай неверных аргументов — другое сообщение usage
-- [ ] 3. Минимальный код: `StartCommand.kt` целиком
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: новые случаи — `TaskError.Failure: использование: task start …` (старый `parse` не знает `--worktree` и считает его третьим позиционным аргументом); старые случаи с `git.fetch()` — лишний `git.openedAt` в ожидании; случай неверных аргументов — другое сообщение usage
+- [x] 3. Минимальный код: `StartCommand.kt` целиком
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -842,8 +842,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
 - Изменить: `templates/project/gitignore` — строка после `node_modules/`
