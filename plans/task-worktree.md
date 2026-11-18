@@ -92,7 +92,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: `task start --worktree` создаёт копию задачи на ветке
-  - [ ] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
+  - [x] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
   - [ ] Задача 2: `task start --worktree` и отказ «ветка открыта»
   - [ ] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
   - [ ] Приёмка
@@ -117,7 +117,7 @@
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/git/Git.kt:210` — после `removeWorktree` шесть методов; в `companion object` — `WORKTREES`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpec.kt` — шесть случаев в конце спеки
 
-- [ ] 1. Падающий тест: в конец `GitSpec` (перед закрывающим `})`) добавить
+- [x] 1. Падающий тест: в конец `GitSpec` (перед закрывающим `})`) добавить
   ```kotlin
         shouldReturnTest(listOf("task/5-c", true), options = TestOptions(name = "копия на новой ветке от origin/dev")) {
             val clone = makeClone()
@@ -170,8 +170,8 @@
             Git(shell = ProcessShell(directory = worktree)).currentBranch()
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'addBranchWorktree'`
-- [ ] 3. Минимальный код: в `Git.kt` после `removeWorktree` (:210–212)
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'addBranchWorktree'`
+- [x] 3. Минимальный код: в `Git.kt` после `removeWorktree` (:210–212)
   ```kotlin
     /** Копия [path] на новой ветке [name] от [base] без отслеживания — как [createBranch] (#52). */
     fun addBranchWorktree(
@@ -220,8 +220,8 @@
     }
   ```
   и в `companion object` (после `const val WORKTREE = "worktree "`): `const val WORKTREES = ".claude/worktrees"`
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе: `task commit --message-file <файл>`
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе: `task commit --message-file <файл>`
 
 ### Задача 2: `task start --worktree` и отказ «ветка открыта»
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/StartCommand.kt` — целиком (код ниже)
