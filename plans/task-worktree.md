@@ -99,7 +99,7 @@
   - [x] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
   - [x] Задача 4: Git — файлы основной папки по `.worktreeinclude`
-  - [ ] Задача 5: `WorktreeFiles` копирует файлы в копию
+  - [x] Задача 5: `WorktreeFiles` копирует файлы в копию
   - [ ] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
   - [ ] Приёмка
 - PR 3: `task done` удаляет свою копию
@@ -943,7 +943,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/WorktreeFilesSpec.kt` — три случая
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/WorktreeFilesSpecData.kt` — временные папки
 
-- [ ] 1. Падающий тест. `WorktreeFilesSpecData.kt`:
+- [x] 1. Падающий тест. `WorktreeFilesSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -1056,8 +1056,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — падает: `Unresolved reference 'WorktreeFiles'`
-- [ ] 3. Минимальный код: `WorktreeFiles.kt`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — падает: `Unresolved reference 'WorktreeFiles'`
+- [x] 3. Минимальный код: `WorktreeFiles.kt`
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -1113,8 +1113,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*WorktreeFilesSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/StartCommand.kt` — параметр `files`, вызов после создания копии
