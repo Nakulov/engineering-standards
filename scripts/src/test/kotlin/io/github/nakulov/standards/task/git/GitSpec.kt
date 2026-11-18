@@ -316,4 +316,10 @@ class GitSpec :
                 listFile = File(clone.parentFile, "include").path,
             )
         }
+
+        shouldReturnTest(false, options = TestOptions(name = "копия удаляет себя изнутри, без -C")) {
+            val worktree = makeWorktree()
+            Git(shell = ProcessShell(directory = worktree)).removeWorktree(path = worktree.path)
+            worktree.exists()
+        }
     })

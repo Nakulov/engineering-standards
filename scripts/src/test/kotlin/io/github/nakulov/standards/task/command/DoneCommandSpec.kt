@@ -35,6 +35,9 @@ class DoneCommandSpec :
         every { git.isClean() } returns true
         every { issues.pullRequest(branch = "task/13-task-scripts") } returns PullRequest(number = 30, merged = true)
         every { issues.nodeId(number = 13) } returns "I_issue13"
+        justRun { git.removeWorktree(path = any()) }
+        every { git.root() } returns "/repo/.claude/worktrees/task-scripts"
+        every { git.copyPath(slug = "task-scripts") } returns "/repo/.claude/worktrees/task-scripts"
 
         given("последний PR слит в основном клоне") {
             every { git.isWorktree() } returns false
@@ -81,6 +84,12 @@ class DoneCommandSpec :
                         console.line(text = "ветка task/13-task-scripts удалена")
                         issues.info(number = 13)
                         console.line(text = "#13 открыта — не последний PR задачи, статус остаётся")
+                        git.root()
+                        git.copyPath(slug = "task-scripts")
+                        git.removeWorktree(path = "/repo/.claude/worktrees/task-scripts")
+                        console.line(
+                            text = "копия /repo/.claude/worktrees/task-scripts удалена — текущей папки больше нет",
+                        )
                     }
                 }
             }
@@ -135,5 +144,34 @@ class DoneCommandSpec :
         shouldThrowWithMessageTest<TaskError.Refusal>(makeDirtyMessage()) {
             every { git.isClean() } returns false
             command.run(args = emptyList(), console = console)
+        }
+
+        given("ветка блока task/13-big-pr1 слита в копии long-ветки .claude/worktrees/big") {
+            every { git.currentBranch() } returns "task/13-big-pr1"
+            every { issues.pullRequest(branch = "task/13-big-pr1") } returns PullRequest(number = 40, merged = true)
+            every { git.isWorktree() } returns true
+            every { git.root() } returns "/repo/.claude/worktrees/big"
+            every { git.copyPath(slug = "big-pr1") } returns "/repo/.claude/worktrees/big-pr1"
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            `when` {
+                command.run(args = emptyList(), console = console)
+                then {
+                    verifySequence {
+                        git.currentBranch()
+                        git.isClean()
+                        issues.pullRequest(branch = "task/13-big-pr1")
+                        git.fetch()
+                        git.isWorktree()
+                        git.detach(ref = "origin/dev")
+                        console.line(text = "worktree отсоединён на origin/dev, dev не тронут")
+                        git.deleteBranch(name = "task/13-big-pr1")
+                        console.line(text = "ветка task/13-big-pr1 удалена")
+                        issues.info(number = 13)
+                        console.line(text = "#13 открыта — не последний PR задачи, статус остаётся")
+                        git.root()
+                        git.copyPath(slug = "big-pr1")
+                    }
+                }
+            }
         }
     })
