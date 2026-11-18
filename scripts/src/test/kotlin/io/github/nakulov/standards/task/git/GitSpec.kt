@@ -254,4 +254,55 @@ class GitSpec :
         ) {
             Git(shell = ProcessShell(directory = makeCloneOnDivergedBranch())).fastForward(name = "task/9-f")
         }
+
+        shouldReturnTest(listOf("task/5-c", true), options = TestOptions(name = "копия на новой ветке от origin/dev")) {
+            val clone = makeClone()
+            val git = Git(shell = ProcessShell(directory = clone))
+            val copy = File(clone.parentFile, "copy")
+            git.addBranchWorktree(path = copy.path, name = "task/5-c", base = "origin/dev")
+            val opened = git.openedAt(branch = "task/5-c")
+            listOf(
+                Git(shell = ProcessShell(directory = copy)).currentBranch(),
+                File(checkNotNull(opened)).canonicalPath == copy.canonicalPath,
+            )
+        }
+
+        shouldReturnTest("task/3-z", options = TestOptions(name = "копия на ветке, которая есть только в origin")) {
+            val clone = makeCloneWithRemoteBranch()
+            val copy = File(clone.parentFile, "copy")
+            Git(shell = ProcessShell(directory = clone)).addWorktreeOn(path = copy.path, name = "task/3-z")
+            Git(shell = ProcessShell(directory = copy)).currentBranch()
+        }
+
+        shouldReturnTest(true, options = TestOptions(name = "ветка в копии перематывается до origin")) {
+            val clone = makeCloneOnBranchBehindOrigin()
+            val git = Git(shell = ProcessShell(directory = clone))
+            git.switchTo(name = "dev")
+            val copy = File(clone.parentFile, "copy")
+            git.addWorktreeOn(path = copy.path, name = "task/9-f")
+            git.fastForwardIn(path = copy.path, name = "task/9-f")
+            File(copy, "f.txt").exists()
+        }
+
+        shouldReturnTest(true, options = TestOptions(name = "путь копии — в основной папке, и из другой копии")) {
+            val worktree = makeWorktree()
+            val path = Git(shell = ProcessShell(directory = worktree)).copyPath(slug = "x")
+            File(path).canonicalPath == File(worktree.parentFile, "clone/.claude/worktrees/x").canonicalPath
+        }
+
+        shouldReturnTest(true, options = TestOptions(name = "список копий — с основной папкой")) {
+            val worktree = makeWorktree()
+            val paths = Git(shell = ProcessShell(directory = worktree)).worktrees().map { path -> File(path).canonicalPath }
+            paths.containsAll(listOf(worktree.canonicalPath, File(worktree.parentFile, "clone").canonicalPath))
+        }
+
+        shouldReturnTest("task/1-x", options = TestOptions(name = "отсоединённая копия переключается на ветку")) {
+            val worktree = makeWorktree()
+            Git(shell = ProcessShell(directory = worktree)).detach(ref = "origin/dev")
+            Git(shell = ProcessShell(directory = File(worktree.parentFile, "clone"))).switchIn(
+                path = worktree.path,
+                name = "task/1-x",
+            )
+            Git(shell = ProcessShell(directory = worktree)).currentBranch()
+        }
     })

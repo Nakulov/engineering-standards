@@ -211,6 +211,52 @@ class Git(
         read(args = listOf("worktree", "remove", "--force", path))
     }
 
+    /** Копия [path] на новой ветке [name] от [base] без отслеживания — как [createBranch] (#52). */
+    fun addBranchWorktree(
+        path: String,
+        name: String,
+        base: String,
+    ) {
+        read(args = listOf("worktree", "add", "--quiet", "--no-track", "-b", name, path, base))
+    }
+
+    /** Копия [path] на существующей ветке [name]; есть только в `origin` — создаётся локальная с отслеживанием. */
+    fun addWorktreeOn(
+        path: String,
+        name: String,
+    ) {
+        read(args = listOf("worktree", "add", "--quiet", path, name))
+    }
+
+    /** [fastForward] в копии [path]: ветка открыта там, а не в текущей папке (#52). */
+    fun fastForwardIn(
+        path: String,
+        name: String,
+    ) {
+        readIn(path = path, args = listOf("merge", "--quiet", "--ff-only", "origin/$name"))
+    }
+
+    /** Копия задачи со [slug] — `.claude/worktrees/<slug>` основной папки, и при запуске из другой копии (#52). */
+    fun copyPath(slug: String): String {
+        return File(mainRoot(), "$WORKTREES/$slug").path
+    }
+
+    /** Папки всех копий репозитория, с основной (#52). */
+    fun worktrees(): List<String> {
+        return read(args = listOf("worktree", "list", "--porcelain"))
+            .lines()
+            .filter { line -> line.startsWith(prefix = WORKTREE) }
+            .map { line -> line.removePrefix(prefix = WORKTREE) }
+    }
+
+    /** Копию [path] — на существующую ветку [name]: копия long-ветки отсоединена после `task done` ветки блока (#52). */
+    fun switchIn(
+        path: String,
+        name: String,
+    ) {
+        readIn(path = path, args = listOf("switch", "--quiet", name))
+    }
+
     fun hasChanges(path: String): Boolean {
         return readIn(path = path, args = listOf("status", "--porcelain")).isNotEmpty()
     }
@@ -282,5 +328,6 @@ class Git(
         const val COPIED = 'C'
         const val FROM_ROOT = ":/"
         const val WORKTREE = "worktree "
+        const val WORKTREES = ".claude/worktrees"
     }
 }

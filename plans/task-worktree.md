@@ -92,10 +92,11 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: `task start --worktree` создаёт копию задачи на ветке
-  - [ ] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
-  - [ ] Задача 2: `task start --worktree` и отказ «ветка открыта»
-  - [ ] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
-  - [ ] Приёмка
+  - [x] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
+  - [x] Задача 2: `task start --worktree` и отказ «ветка открыта»
+  - [x] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
+  - [x] Задача 2a: справка `task --help` с `--worktree` (➕)
+  - [x] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
   - [ ] Задача 4: Git — файлы основной папки по `.worktreeinclude`
   - [ ] Задача 5: `WorktreeFiles` копирует файлы в копию
@@ -111,13 +112,13 @@
 - #53: ручной критерий «живой прогон» — отметить по итогам этого выполнения.
 
 ## PR 1: `task start --worktree` создаёт копию задачи на ветке
-**Объём:** `Git.kt`, `GitSpec.kt`, `StartCommand.kt`, `StartCommandSpec.kt`, `StartCommandSpecData.kt`, `templates/project/gitignore`, `.gitignore`; ≈ 7 файлов
+**Объём:** `Git.kt`, `GitSpec.kt`, `StartCommand.kt`, `StartCommandSpec.kt`, `StartCommandSpecData.kt`, `templates/project/gitignore`, `.gitignore`, `TaskLauncherSpecData.kt`; ≈ 8 файлов
 
 ### Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/git/Git.kt:210` — после `removeWorktree` шесть методов; в `companion object` — `WORKTREES`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpec.kt` — шесть случаев в конце спеки
 
-- [ ] 1. Падающий тест: в конец `GitSpec` (перед закрывающим `})`) добавить
+- [x] 1. Падающий тест: в конец `GitSpec` (перед закрывающим `})`) добавить
   ```kotlin
         shouldReturnTest(listOf("task/5-c", true), options = TestOptions(name = "копия на новой ветке от origin/dev")) {
             val clone = makeClone()
@@ -170,8 +171,8 @@
             Git(shell = ProcessShell(directory = worktree)).currentBranch()
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'addBranchWorktree'`
-- [ ] 3. Минимальный код: в `Git.kt` после `removeWorktree` (:210–212)
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'addBranchWorktree'`
+- [x] 3. Минимальный код: в `Git.kt` после `removeWorktree` (:210–212)
   ```kotlin
     /** Копия [path] на новой ветке [name] от [base] без отслеживания — как [createBranch] (#52). */
     fun addBranchWorktree(
@@ -220,15 +221,15 @@
     }
   ```
   и в `companion object` (после `const val WORKTREE = "worktree "`): `const val WORKTREES = ".claude/worktrees"`
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе: `task commit --message-file <файл>`
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе: `task commit --message-file <файл>`
 
 ### Задача 2: `task start --worktree` и отказ «ветка открыта»
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/StartCommand.kt` — целиком (код ниже)
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/StartCommandSpec.kt` — заглушки по умолчанию, `openedAt` в старых последовательностях, новые случаи
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/StartCommandSpecData.kt` — usage и новые данные
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   В `StartCommandSpecData.kt` заменить `makeUsageMessage` и добавить функции:
   ```kotlin
   fun makeUsageMessage(): String {
@@ -554,8 +555,8 @@
             command.run(args = listOf("13", "task-scripts", "--worktree"), console = console)
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: новые случаи — `TaskError.Failure: использование: task start …` (старый `parse` не знает `--worktree` и считает его третьим позиционным аргументом); старые случаи с `git.fetch()` — лишний `git.openedAt` в ожидании; случай неверных аргументов — другое сообщение usage
-- [ ] 3. Минимальный код: `StartCommand.kt` целиком
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: новые случаи — `TaskError.Failure: использование: task start …` (старый `parse` не знает `--worktree` и считает его третьим позиционным аргументом); старые случаи с `git.fetch()` — лишний `git.openedAt` в ожидании; случай неверных аргументов — другое сообщение usage
+- [x] 3. Минимальный код: `StartCommand.kt` целиком
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -842,23 +843,32 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
 - Изменить: `templates/project/gitignore` — строка после `node_modules/`
 - Изменить: `.gitignore` — та же строка в блоке `# >>> engineering-standards` … `# <<< engineering-standards`, после `node_modules/`
 
 Тест: не применим — шаблон без логики; проверка формата — `scripts/setup --check` (сверяет блок `.gitignore` с шаблоном).
-- [ ] 1. В `templates/project/gitignore` после строки `node_modules/` добавить строку `.claude/worktrees/`
-- [ ] 2. В `.gitignore` после `node_modules/` внутри блока (перед `# <<< engineering-standards`) добавить `.claude/worktrees/`
-- [ ] 3. Запустить `scripts/setup --check` — код выхода 0, в выводе нет расхождения по `.gitignore`
-- [ ] 4. Коммит
+- [x] 1. В `templates/project/gitignore` после строки `node_modules/` добавить строку `.claude/worktrees/`
+- [x] 2. В `.gitignore` после `node_modules/` внутри блока (перед `# <<< engineering-standards`) добавить `.claude/worktrees/`
+- [x] 3. Запустить `scripts/setup --check` — код выхода 0, в выводе нет расхождения по `.gitignore`
+- [x] 4. Коммит
+
+### Задача 2a: справка `task --help` с `--worktree`
+➕ Новая задача, согласована пользователем 2026-11-18. Причина — пробел плана: usage изменён в задаче 2 (`StartCommand.usage`), ожидаемая справка в `TaskLauncherSpecData.kt:16` не обновлена, `TaskLauncherSpec` падает.
+- Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/TaskLauncherSpecData.kt:16` — ожидаемая строка `start` в справке
+
+Тест: сама спека `TaskLauncherSpec` — проверка; кода нет.
+- [x] 1. Обновить ожидаемую строку `start` на новый usage из `StartCommand.kt`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — `BUILD SUCCESSFUL`
+- [x] 3. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
-- [ ] Крайние случаи обработаны: грязная основная папка с `--worktree`, повтор с перемоткой, отставшая локальная ветка без копии, `--from` с `--worktree`, отсоединённая своя копия переключается, чужая папка / занятый slug — отказ, ветка открыта в основной папке / в копии, исследование + `--worktree`, отказ `checkReady` с `--worktree`
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
+- [x] Крайние случаи обработаны: грязная основная папка с `--worktree`, повтор с перемоткой, отставшая локальная ветка без копии, `--from` с `--worktree`, отсоединённая своя копия переключается, чужая папка / занятый slug — отказ, ветка открыта в основной папке / в копии, исследование + `--worktree`, отказ `checkReady` с `--worktree`
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
 
 ## PR 2: копия настраивается по `.worktreeinclude`
 **Объём:** `Git.kt`, `GitSpec.kt`, `GitSpecData.kt`, `WorktreeFiles.kt`, `WorktreeFilesSpec.kt`, `WorktreeFilesSpecData.kt`, `StartCommand.kt`, `StartCommandSpec.kt`, `Main.kt`, `.worktreeinclude`; ≈ 10 файлов
