@@ -52,6 +52,14 @@ fun makeNoLongBranchMessage(): String {
     return "нет ветки origin/long/13-big — сначала task start <N> <slug> --long"
 }
 
+fun makeFastForwardLine(): String {
+    return "ветка long/13-task-scripts уже есть — переключился и перемотал до origin/long/13-task-scripts"
+}
+
+fun makeDivergedMessage(): String {
+    return "локальная task/13-task-scripts расходится с origin/task/13-task-scripts — сведите вручную"
+}
+
 private fun makeItem(status: String): BoardItem {
     return BoardItem(
         id = "PVTI_13",

@@ -11,6 +11,7 @@ import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.git.Git
 import io.github.nakulov.standards.task.github.Issues
 import io.kotest.core.spec.IsolationMode
+import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.justRun
@@ -61,10 +62,14 @@ class StartCommandSpec :
             }
         }
 
-        given("повторный запуск: long-ветка есть, задача уже In progress") {
+        given("повторный запуск: long-ветка есть и не отстала от origin, задача уже In progress") {
             every { issues.info(number = 13) } returns makeTaskInfo()
             every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
             every { git.hasLocalBranch(name = "long/13-task-scripts") } returns true
+            every { git.hasRemoteBranch(name = "long/13-task-scripts") } returns true
+            every {
+                git.isAncestor(ancestor = "origin/long/13-task-scripts", descendant = "refs/heads/long/13-task-scripts")
+            } returns true
             `when` {
                 command.run(args = listOf("13", "task-scripts", "--long"), console = console)
                 then {
@@ -75,9 +80,111 @@ class StartCommandSpec :
                         board.item(issue = 13, nodeId = "I_issue13")
                         git.fetch()
                         git.hasLocalBranch(name = "long/13-task-scripts")
+                        git.hasRemoteBranch(name = "long/13-task-scripts")
+                        git.isAncestor(
+                            ancestor = "origin/long/13-task-scripts",
+                            descendant = "refs/heads/long/13-task-scripts",
+                        )
                         git.switchTo(name = "long/13-task-scripts")
                         console.line(text = "ветка long/13-task-scripts уже есть — переключился на неё")
                         console.line(text = "#13 уже In progress")
+                    }
+                }
+            }
+        }
+
+        given("ветка есть только в origin") {
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
+            every { git.hasLocalBranch(name = "task/13-task-scripts") } returns false
+            every { git.hasRemoteBranch(name = "task/13-task-scripts") } returns true
+            `when` {
+                command.run(args = listOf("13", "task-scripts"), console = console)
+                then {
+                    verifySequence {
+                        git.isClean()
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        git.fetch()
+                        git.hasLocalBranch(name = "task/13-task-scripts")
+                        git.hasRemoteBranch(name = "task/13-task-scripts")
+                        git.switchTo(name = "task/13-task-scripts")
+                        console.line(text = "ветка task/13-task-scripts уже есть — переключился на неё")
+                        console.line(text = "#13 уже In progress")
+                    }
+                }
+            }
+        }
+
+        given("локальная long-ветка отстала от origin: в неё слили PR блока") {
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeGroomedItem()
+            every { git.hasLocalBranch(name = "long/13-task-scripts") } returns true
+            every { git.hasRemoteBranch(name = "long/13-task-scripts") } returns true
+            every {
+                git.isAncestor(ancestor = "origin/long/13-task-scripts", descendant = "refs/heads/long/13-task-scripts")
+            } returns false
+            every {
+                git.isAncestor(ancestor = "refs/heads/long/13-task-scripts", descendant = "origin/long/13-task-scripts")
+            } returns true
+            justRun { git.fastForward(name = "long/13-task-scripts") }
+            `when` {
+                command.run(args = listOf("13", "task-scripts", "--long"), console = console)
+                then {
+                    verifySequence {
+                        git.isClean()
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        git.fetch()
+                        git.hasLocalBranch(name = "long/13-task-scripts")
+                        git.hasRemoteBranch(name = "long/13-task-scripts")
+                        git.isAncestor(
+                            ancestor = "origin/long/13-task-scripts",
+                            descendant = "refs/heads/long/13-task-scripts",
+                        )
+                        git.isAncestor(
+                            ancestor = "refs/heads/long/13-task-scripts",
+                            descendant = "origin/long/13-task-scripts",
+                        )
+                        git.switchTo(name = "long/13-task-scripts")
+                        git.fastForward(name = "long/13-task-scripts")
+                        console.line(text = makeFastForwardLine())
+                        board.move(item = makeGroomedItem(), status = "In progress")
+                        console.line(text = "#13 → In progress")
+                    }
+                }
+            }
+        }
+
+        given("локальная ветка разошлась с origin") {
+            every { issues.info(number = 13) } returns makeTaskInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeGroomedItem()
+            every { git.hasLocalBranch(name = "task/13-task-scripts") } returns true
+            every { git.hasRemoteBranch(name = "task/13-task-scripts") } returns true
+            every { git.isAncestor(ancestor = any(), descendant = any()) } returns false
+            `when` {
+                shouldThrowWithMessage<TaskError.Refusal>(makeDivergedMessage()) {
+                    command.run(args = listOf("13", "task-scripts"), console = console)
+                }
+                then {
+                    verifySequence {
+                        git.isClean()
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        git.fetch()
+                        git.hasLocalBranch(name = "task/13-task-scripts")
+                        git.hasRemoteBranch(name = "task/13-task-scripts")
+                        git.isAncestor(
+                            ancestor = "origin/task/13-task-scripts",
+                            descendant = "refs/heads/task/13-task-scripts",
+                        )
+                        git.isAncestor(
+                            ancestor = "refs/heads/task/13-task-scripts",
+                            descendant = "origin/task/13-task-scripts",
+                        )
                     }
                 }
             }

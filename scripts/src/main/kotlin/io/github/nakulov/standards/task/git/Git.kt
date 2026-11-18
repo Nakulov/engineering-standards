@@ -56,6 +56,14 @@ class Git(
         read(args = listOf("switch", "--quiet", name))
     }
 
+    /**
+     * Открытая ветка [name] — до `origin/[name]`, только перемоткой: обновляются и ссылка, и файлы (#61). Отставание
+     * проверяет вызывающий; не перематывается — ошибка `git`.
+     */
+    fun fastForward(name: String) {
+        read(args = listOf("merge", "--quiet", "--ff-only", "origin/$name"))
+    }
+
     /** Отсоединиться на [ref] — так worktree уходит со своей ветки, не трогая `dev`. */
     fun detach(ref: String) {
         read(args = listOf("switch", "--quiet", "--detach", ref))
