@@ -13,8 +13,8 @@ fun makeHelpRun(): LauncherRun {
     return LauncherRun(
         code = 0,
         out = "task — механика процесса: ветки, PR, доска. Команды:\n\n" +
-            "  task start <N> <slug> [--long | --from long/<M>-…] — ветка task/<N>-<slug> от origin/dev, " +
-            "статус In progress\n" +
+            "  task start <N> <slug> [--long | --from long/<M>-…] [--worktree] — ветка task/<N>-<slug> от " +
+            "origin/dev, статус In progress; --worktree — в копии .claude/worktrees/<slug>\n" +
             "  task pr --title «…» --body-file <файл> [--check «команда»]… [--part] | --ready — " +
             "черновик PR по шаблону; --ready — к ревью\n" +
             "  task done — после слияния PR: свежий dev, ветка удалена, статус Done\n" +

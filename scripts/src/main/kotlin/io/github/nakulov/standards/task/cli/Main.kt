@@ -12,6 +12,7 @@ import io.github.nakulov.standards.task.command.PrCommand
 import io.github.nakulov.standards.task.command.Publisher
 import io.github.nakulov.standards.task.command.StageCommand
 import io.github.nakulov.standards.task.command.StartCommand
+import io.github.nakulov.standards.task.command.WorktreeFiles
 import io.github.nakulov.standards.task.git.Git
 import io.github.nakulov.standards.task.github.GitHub
 import io.github.nakulov.standards.task.github.Issues
@@ -44,7 +45,7 @@ fun main(args: Array<String>) {
     )
     val task = Task(
         commands = mapOf(
-            "start" to StartCommand(git = git, issues = issues, board = board),
+            "start" to StartCommand(git = git, issues = issues, board = board, files = WorktreeFiles(git = git)),
             "pr" to PrCommand(
                 git = git,
                 issues = issues,
