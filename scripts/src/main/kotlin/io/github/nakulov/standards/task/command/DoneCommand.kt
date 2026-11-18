@@ -7,10 +7,13 @@ import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.git.BranchName
 import io.github.nakulov.standards.task.git.Git
 import io.github.nakulov.standards.task.github.Issues
+import java.io.File
 
 /**
  * `task done` из ветки задачи после слияния её PR: свежий `dev` (в worktree — отсоединение на `origin/dev`, `dev` не
  * трогается), локальная ветка удаляется, задача → Done. Задача ещё открыта (PR с `Part of`) — статус не меняется.
+ * Своя копия `.claude/worktrees/<slug>` удаляется последним шагом — после неё текущей папки нет; копия long-ветки на
+ * ветке блока остаётся (#52).
  */
 class DoneCommand(
     private val git: Git,
@@ -39,16 +42,20 @@ class DoneCommand(
         if (!pullRequest.merged) {
             throw TaskError.Refusal(message = "PR #${pullRequest.number} не слит — сначала слияние")
         }
-        leaveBranch(name = name, console = console)
+        val worktree = leaveBranch(name = name, console = console)
         finishIssue(issue = branch.issue, console = console)
+        if (worktree) {
+            removeOwnCopy(branch = branch, console = console)
+        }
     }
 
     private fun leaveBranch(
         name: String,
         console: Console,
-    ) {
+    ): Boolean {
         git.fetch()
-        if (git.isWorktree()) {
+        val worktree = git.isWorktree()
+        if (worktree) {
             git.detach(ref = BASE)
             console.line(text = "worktree отсоединён на $BASE, dev не тронут")
         } else {
@@ -57,6 +64,7 @@ class DoneCommand(
         }
         git.deleteBranch(name = name)
         console.line(text = "ветка $name удалена")
+        return worktree
     }
 
     private fun finishIssue(
@@ -72,6 +80,22 @@ class DoneCommand(
             board.move(item = item, status = Board.DONE)
         }
         console.line(text = "#$issue → ${Board.DONE}")
+    }
+
+    /**
+     * Своя копия — `.claude/worktrees/<slug>` этой ветки (#52): удаляется изнутри, без `git -C` — защита сессии в ворктри
+     * не пускает `git` в основную папку. Копия long-ветки, где слита ветка блока, остаётся.
+     */
+    private fun removeOwnCopy(
+        branch: BranchName,
+        console: Console,
+    ) {
+        val root = git.root()
+        if (File(root).canonicalPath != File(git.copyPath(slug = branch.slug)).canonicalPath) {
+            return
+        }
+        git.removeWorktree(path = root)
+        console.line(text = "копия $root удалена — текущей папки больше нет")
     }
 
     private companion object {
