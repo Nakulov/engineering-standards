@@ -95,6 +95,7 @@
   - [x] Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
   - [x] Задача 2: `task start --worktree` и отказ «ветка открыта»
   - [x] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
+  - [x] Задача 2a: справка `task --help` с `--worktree` (➕)
   - [ ] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
   - [ ] Задача 4: Git — файлы основной папки по `.worktreeinclude`
@@ -111,7 +112,7 @@
 - #53: ручной критерий «живой прогон» — отметить по итогам этого выполнения.
 
 ## PR 1: `task start --worktree` создаёт копию задачи на ветке
-**Объём:** `Git.kt`, `GitSpec.kt`, `StartCommand.kt`, `StartCommandSpec.kt`, `StartCommandSpecData.kt`, `templates/project/gitignore`, `.gitignore`; ≈ 7 файлов
+**Объём:** `Git.kt`, `GitSpec.kt`, `StartCommand.kt`, `StartCommandSpec.kt`, `StartCommandSpecData.kt`, `templates/project/gitignore`, `.gitignore`, `TaskLauncherSpecData.kt`; ≈ 8 файлов
 
 ### Задача 1: Git — копия на ветке, перемотка и переключение в копии, путь копии
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/git/Git.kt:210` — после `removeWorktree` шесть методов; в `companion object` — `WORKTREES`
@@ -854,6 +855,15 @@
 - [x] 2. В `.gitignore` после `node_modules/` внутри блока (перед `# <<< engineering-standards`) добавить `.claude/worktrees/`
 - [x] 3. Запустить `scripts/setup --check` — код выхода 0, в выводе нет расхождения по `.gitignore`
 - [x] 4. Коммит
+
+### Задача 2a: справка `task --help` с `--worktree`
+➕ Новая задача, согласована пользователем 2026-11-18. Причина — пробел плана: usage изменён в задаче 2 (`StartCommand.usage`), ожидаемая справка в `TaskLauncherSpecData.kt:16` не обновлена, `TaskLauncherSpec` падает.
+- Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/TaskLauncherSpecData.kt:16` — ожидаемая строка `start` в справке
+
+Тест: сама спека `TaskLauncherSpec` — проверка; кода нет.
+- [x] 1. Обновить ожидаемую строку `start` на новый usage из `StartCommand.kt`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — `BUILD SUCCESSFUL`
+- [x] 3. Коммит
 
 ### Приёмка
 - [x] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
