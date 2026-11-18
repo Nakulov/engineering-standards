@@ -100,7 +100,7 @@
 - PR 2: копия настраивается по `.worktreeinclude`
   - [x] Задача 4: Git — файлы основной папки по `.worktreeinclude`
   - [x] Задача 5: `WorktreeFiles` копирует файлы в копию
-  - [ ] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
+  - [x] Задача 6: `task start --worktree` копирует файлы, `.worktreeinclude` этого репозитория
   - [ ] Приёмка
 - PR 3: `task done` удаляет свою копию
   - [ ] Задача 7: удаление своей копии в `task done`
@@ -1122,13 +1122,13 @@
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/cli/Main.kt:44` — `files = WorktreeFiles(git = git)`
 - Создать: `.worktreeinclude` — `local.properties`
 
-- [ ] 1. Падающий тест. В `StartCommandSpec.kt`:
+- [x] 1. Падающий тест. В `StartCommandSpec.kt`:
   - после `val console = mockk<Console>()` — `val files = mockk<WorktreeFiles>()`; конструктор — `StartCommand(git = git, issues = issues, board = board, files = files)`; к заглушкам — `justRun { files.copyInto(copy = any(), console = any()) }`;
   - в случаях «--worktree, ветки нет, основная папка грязная», «--long --worktree: новая long-ветка в копии» и «--from long/… --worktree…» сразу после строки `console.line(text = "ветка … от origin/… — копия …")` вставить `files.copyInto(copy = <путь копии случая>, console = console)` (до `git.push` в long-случае);
   - в случаях «--worktree, ветка есть только в origin» и «--worktree, локальная ветка отстала…» после строки `console.line(text = "ветка task/13-task-scripts уже есть — копия …")` вставить `files.copyInto(copy = makeCopyPath(), console = console)`;
   - в случаях «--worktree повторно…» и «…своя копия long-ветки отсоединена…» — без вызова (`verifySequence` подтверждает, что существующая копия файлы не получает).
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: `No parameter with name 'files' found`
-- [ ] 3. Минимальный код в `StartCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — падает: `No parameter with name 'files' found`
+- [x] 3. Минимальный код в `StartCommand.kt`:
   - конструктор: после `private val board: Board,` — `private val files: WorktreeFiles,`
   - KDoc класса: в фразу про `--worktree` после «основной папки:» добавить «файлы из `.worktreeinclude` копируются при создании,»
   - в `openCopy`, ветка «существующая»: после `if (behind) { … } else { … }` добавить
@@ -1145,8 +1145,8 @@
     ```
   В `Main.kt:44`: `"start" to StartCommand(git = git, issues = issues, board = board, files = WorktreeFiles(git = git)),` и импорт `io.github.nakulov.standards.task.command.WorktreeFiles`.
   Файл `.worktreeinclude` в корне репозитория — одна строка `local.properties`.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*StartCommandSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*WorktreeFilesSpec*' --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный

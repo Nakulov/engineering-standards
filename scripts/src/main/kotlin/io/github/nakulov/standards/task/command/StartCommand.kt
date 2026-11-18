@@ -16,13 +16,14 @@ import java.io.File
  * Long-ветка сразу отправляется в `origin`, чтобы от неё начинались части. Исследование — без ветки, эпик в работу не
  * берётся. Существующая ветка, отставшая от `origin`, перематывается; разошедшаяся — отказ до переключения (#61).
  * `--worktree` — ветка в копии `.claude/worktrees/<slug>` основной папки: основная папка не переключается и может быть
- * грязной, последняя строка вывода — путь копии (#52). Ветка открыта в другой папке — отказ с путём.
+ * грязной, файлы из `.worktreeinclude` копируются при создании, последняя строка вывода — путь копии (#52). Ветка открыта в другой папке — отказ с путём.
  * Повторный запуск безопасен.
  */
 class StartCommand(
     private val git: Git,
     private val issues: Issues,
     private val board: Board,
+    private val files: WorktreeFiles,
 ) : Command {
     override val usage: String =
         "<N> <slug> [--long | --from long/<M>-…] [--worktree] — ветка task/<N>-<slug> от origin/dev, статус " +
@@ -169,6 +170,9 @@ class StartCommand(
             } else {
                 console.line(text = "ветка $name уже есть — копия $copy")
             }
+            if (!occupied) {
+                files.copyInto(copy = copy, console = console)
+            }
         } else {
             if (occupied) {
                 throw occupiedRefusal(copy = copy)
@@ -245,6 +249,9 @@ class StartCommand(
             git.setBase(branch = name, base = from)
         }
         console.line(text = if (copy == null) "ветка $name от $base" else "ветка $name от $base — копия $copy")
+        if (copy != null) {
+            files.copyInto(copy = copy, console = console)
+        }
         if (request.branch.long) {
             git.push(name = name)
             console.line(text = "ветка $name отправлена в origin")
