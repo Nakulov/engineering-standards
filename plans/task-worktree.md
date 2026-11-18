@@ -96,7 +96,7 @@
   - [x] Задача 2: `task start --worktree` и отказ «ветка открыта»
   - [x] Задача 3: `.claude/worktrees/` в общем блоке `.gitignore`
   - [x] Задача 2a: справка `task --help` с `--worktree` (➕)
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 2: копия настраивается по `.worktreeinclude`
   - [ ] Задача 4: Git — файлы основной папки по `.worktreeinclude`
   - [ ] Задача 5: `WorktreeFiles` копирует файлы в копию
@@ -868,7 +868,7 @@
 ### Приёмка
 - [x] Что даёт этот PR — проверено: `./gradlew :scripts:test --tests '*StartCommandSpec*' --tests '*GitSpec*'` зелёный
 - [x] Крайние случаи обработаны: грязная основная папка с `--worktree`, повтор с перемоткой, отставшая локальная ветка без копии, `--from` с `--worktree`, отсоединённая своя копия переключается, чужая папка / занятый slug — отказ, ветка открыта в основной папке / в копии, исследование + `--worktree`, отказ `checkReady` с `--worktree`
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
 
 ## PR 2: копия настраивается по `.worktreeinclude`
 **Объём:** `Git.kt`, `GitSpec.kt`, `GitSpecData.kt`, `WorktreeFiles.kt`, `WorktreeFilesSpec.kt`, `WorktreeFilesSpecData.kt`, `StartCommand.kt`, `StartCommandSpec.kt`, `Main.kt`, `.worktreeinclude`; ≈ 10 файлов
