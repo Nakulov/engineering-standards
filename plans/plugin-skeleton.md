@@ -168,8 +168,8 @@
 - PR 3: `setup` пишет `settings.json`
   - [x] Задача 6: разбор и печать JSON
   - [x] Задача 7: шаг «подключение»
-  - [ ] Задача 8: `settings.json` этого репозитория
-  - [ ] Приёмка
+  - [x] Задача 8: `settings.json` этого репозитория
+  - [x] Приёмка
 - PR 4: обёртка `task` для терминала
   - [ ] Задача 9: скрипт обёртки
   - [ ] Задача 10: шаг «обёртка»
@@ -1421,18 +1421,18 @@
 - Создать: `.claude/settings.json` — разрешение `Bash(task:*)`, пишет `setup` (репозиторий стандарта — без маркетплейса)
 
 Тест: не применим — файл пишет шаг из задачи 7; проверка — `scripts/setup --check`.
-- [ ] 1. Запустить `scripts/setup --check`. Отклонения должны быть только по `.claude/settings.json`. Если есть другие — ⚠️ в «Прогресс», остановиться и спросить пользователя: полный `setup` записал бы их в GitHub.
-- [ ] 2. Запустить `scripts/setup` в корне репозитория. Ожидается в выводе:
+- [x] 1. Запустить `scripts/setup --check`. Отклонения должны быть только по `.claude/settings.json`. Если есть другие — ⚠️ в «Прогресс», остановиться и спросить пользователя: полный `setup` записал бы их в GitHub.
+- [x] 2. Запустить `scripts/setup` в корне репозитория. Ожидается в выводе:
   - `[заметка] подключение: .claude/settings.json: репозиторий стандарта — …`
   - `[исправлено] подключение: .claude/settings.json: разрешение Bash(task:*) добавлено — закоммитьте через задачу`
-- [ ] 3. Сверить файл: `cat .claude/settings.json` — ровно объект `permissions.allow` с `"Bash(task:*)"` (как `makePermissionOnlySettings()`).
-- [ ] 4. Запустить `scripts/setup --check` — код 0, по «подключение» — `[заметка]` и `[ok]`.
-- [ ] 5. Коммит — только `.claude/settings.json`. `.claude/skills/` и `.claude/agents/` всё ещё в `.git/info/exclude` и в коммит не попадают.
+- [x] 3. Сверить файл: `cat .claude/settings.json` — ровно объект `permissions.allow` с `"Bash(task:*)"` (как `makePermissionOnlySettings()`).
+- [x] 4. Запустить `scripts/setup --check` — код 0, по «подключение» — `[заметка]` и `[ok]`.
+- [x] 5. Коммит — только `.claude/settings.json`. `.claude/skills/` и `.claude/agents/` всё ещё в `.git/info/exclude` и в коммит не попадают.
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `scripts/setup --check` здесь — код 0; спеки `PluginSettingsSpec`, `JsonSpec` зелёные.
-- [ ] Крайние случаи обработаны: нет файла, чужие ключи, `false`, другой источник ± `--confirm`, репозиторий стандарта, битый JSON без записи, комментарии, повторный запуск.
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
+- [x] Что даёт этот PR — проверено: `scripts/setup --check` здесь — код 0; спеки `PluginSettingsSpec`, `JsonSpec` зелёные.
+- [x] Крайние случаи обработаны: нет файла, чужие ключи, `false`, другой источник ± `--confirm`, репозиторий стандарта, битый JSON без записи, комментарии, повторный запуск.
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
 
 ## PR 4: обёртка `task` для терминала
 **Объём:** `scripts/task-wrapper`, `TaskWrapperScriptSpec.kt`, `TaskWrapperScriptSpecData.kt`, `TaskWrapper.kt`, `TaskWrapperSpec.kt`, `TaskWrapperSpecData.kt`, `SetupMain.kt`; 7 файлов
