@@ -172,7 +172,7 @@
   - [x] Приёмка
 - PR 4: обёртка `task` для терминала
   - [x] Задача 9: скрипт обёртки
-  - [ ] Задача 10: шаг «обёртка»
+  - [x] Задача 10: шаг «обёртка»
   - [ ] Приёмка
 - PR 5: `.gitignore` и README
   - [ ] Задача 11: `plans/done/` и `plans/journal/` в общем блоке
@@ -1617,7 +1617,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/TaskWrapperSpec.kt`, `TaskWrapperSpecData.kt` — временный `HOME`: нет, наша отличается, наша совпадает, чужая, не в PATH, `--check`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/SetupMain.kt:34` — шаг последним
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `TaskWrapperSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1768,8 +1768,8 @@
       bin.setWritable(false)
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*TaskWrapperSpec*'` — падает: `Unresolved reference 'TaskWrapper'`.
-- [ ] 3. Минимальный код.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskWrapperSpec*'` — падает: `Unresolved reference 'TaskWrapper'`.
+- [x] 3. Минимальный код.
   `TaskWrapper.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1857,8 +1857,8 @@
               ),
   ```
   и в KDoc `main` дописать: «последним — обёртка `~/.local/bin/task`: шаг машины, не репозитория (#43)».
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*TaskWrapperSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*TaskWrapperSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `scripts/setup` здесь пишет `~/.local/bin/task` (`[исправлено] машина: …`, при отсутствии `~/.local/bin` в PATH — заметка со строкой для `~/.zshrc`); из терминала в корне репозитория `~/.local/bin/task --help` — справка `task`.
