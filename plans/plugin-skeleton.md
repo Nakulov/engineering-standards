@@ -161,7 +161,7 @@
   - [x] Задача 2: манифесты плагина и маркетплейса
   - [x] Задача 3: правила `rules/`
   - [x] Задача 4: хук `SessionStart`
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 2: скиллы и агенты из плагина
   - [ ] Задача 5: перенос скиллов и агентов
   - [ ] Приёмка
@@ -538,9 +538,9 @@
 - [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `claude --plugin-dir . -p "Перечисли дословно правила из контекста сессии про язык и PR"` — в ответе тексты `rules/language.md` и `rules/no-pr-without-issue.md`; `claude --plugin-dir . --allowedTools 'Bash(task:*)' -p "Выполни в Bash: task --help"` — справка `task` (флаг — до PR 3: правило в `settings.json` появится в задаче 8).
-- [ ] Крайние случаи обработаны: повторный старт не дублирует PATH, нет `CLAUDE_ENV_FILE`, кеш недоступен → код 0, нет `rules/`.
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
+- [x] Что даёт этот PR — проверено: `claude --plugin-dir . -p "Перечисли дословно правила из контекста сессии про язык и PR"` — в ответе тексты `rules/language.md` и `rules/no-pr-without-issue.md`; `claude --plugin-dir . --allowedTools 'Bash(task:*)' -p "Выполни в Bash: task --help"` — справка `task` (флаг — до PR 3: правило в `settings.json` появится в задаче 8).
+- [x] Крайние случаи обработаны: повторный старт не дублирует PATH, нет `CLAUDE_ENV_FILE`, кеш недоступен → код 0, нет `rules/`.
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
 
 ## PR 2: скиллы и агенты из плагина
 **Объём:** `skills/{groom,plan,execute,worktree}/SKILL.md`, `agents/*.md` (5); 9 файлов
