@@ -164,7 +164,7 @@
   - [x] Приёмка
 - PR 2: скиллы и агенты из плагина
   - [x] Задача 5: перенос скиллов и агентов
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 3: `setup` пишет `settings.json`
   - [ ] Задача 6: разбор и печать JSON
   - [ ] Задача 7: шаг «подключение»
@@ -556,9 +556,9 @@
 - [x] 4. Коммит. `.claude/skills/` и `.claude/agents/` не удалять: по ним идёт выполнение этого плана (PR 3–5), удаление — «После завершения».
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: шаги 2–3 задачи 5.
-- [ ] Крайние случаи обработаны: тексты совпадают с `.claude/` побайтно.
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
+- [x] Что даёт этот PR — проверено: шаги 2–3 задачи 5.
+- [x] Крайние случаи обработаны: тексты совпадают с `.claude/` побайтно.
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
 
 ## PR 3: `setup` пишет `settings.json`
 **Объём:** `JsonValue.kt`, `JsonParser.kt`, `JsonSpec.kt`, `JsonSpecData.kt`, `PluginSettings.kt`, `PluginSettingsSpec.kt`, `PluginSettingsSpecData.kt`, `SetupMain.kt`, `.claude/settings.json`; 9 файлов
