@@ -166,7 +166,7 @@
   - [x] Задача 5: перенос скиллов и агентов
   - [x] Приёмка
 - PR 3: `setup` пишет `settings.json`
-  - [ ] Задача 6: разбор и печать JSON
+  - [x] Задача 6: разбор и печать JSON
   - [ ] Задача 7: шаг «подключение»
   - [ ] Задача 8: `settings.json` этого репозитория
   - [ ] Приёмка
@@ -568,7 +568,7 @@
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/JsonParser.kt` — текст → значение
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/JsonSpec.kt`, `JsonSpecData.kt` — туда и обратно, порядок ключей, экранирование, кириллица, вложенность, ошибки со строкой
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `JsonSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -671,8 +671,8 @@
       return JsonObject(fields = linkedMapOf("b" to JsonNumber(raw = "1"), "a" to JsonArray(items = items)))
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — падает: `Unresolved reference 'JsonParser'`.
-- [ ] 3. Минимальный код.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — падает: `Unresolved reference 'JsonParser'`.
+- [x] 3. Минимальный код.
   `JsonValue.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -921,8 +921,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 7: шаг «подключение»
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/PluginSettings.kt` — три ключа стандарта в `.claude/settings.json`
