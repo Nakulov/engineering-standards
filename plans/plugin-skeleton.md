@@ -160,7 +160,7 @@
   - [x] Задача 1: опыты до кода
   - [x] Задача 2: манифесты плагина и маркетплейса
   - [x] Задача 3: правила `rules/`
-  - [ ] Задача 4: хук `SessionStart`
+  - [x] Задача 4: хук `SessionStart`
   - [ ] Приёмка
 - PR 2: скиллы и агенты из плагина
   - [ ] Задача 5: перенос скиллов и агентов
@@ -316,7 +316,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/SessionStartHookSpec.kt` — случаи хука
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/SessionStartHookSpecData.kt` — временный плагин, проект, запуск
 
-- [ ] 1. Падающий тест: PATH один раз, `rules/` по алфавиту, без `CLAUDE_ENV_FILE`, запись корня, кеш недоступен, пустые `rules/`.
+- [x] 1. Падающий тест: PATH один раз, `rules/` по алфавиту, без `CLAUDE_ENV_FILE`, запись корня, кеш недоступен, пустые `rules/`.
   `SessionStartHookSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.plugin
@@ -478,8 +478,8 @@
       return LauncherRun(code = process.waitFor(), out = out, err = err)
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — падает: `NoSuchFileException: …/hooks/session-start` в `makeHookPlugin`.
-- [ ] 3. Минимальный код. `hooks/session-start` (исполняемый, `chmod +x`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — падает: `NoSuchFileException: …/hooks/session-start` в `makeHookPlugin`.
+- [x] 3. Минимальный код. `hooks/session-start` (исполняемый, `chmod +x`):
   ```bash
   #!/bin/bash
   # Хук SessionStart плагина engineering-standards (#43, решение 9): PATH к scripts/ плагина, корень плагина для обёртки
@@ -534,8 +534,8 @@
     }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — `BUILD SUCCESSFUL`; `claude plugin validate .` — ошибок нет.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — `BUILD SUCCESSFUL`; `claude plugin validate .` — ошибок нет.
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `claude --plugin-dir . -p "Перечисли дословно правила из контекста сессии про язык и PR"` — в ответе тексты `rules/language.md` и `rules/no-pr-without-issue.md`; `claude --plugin-dir . --allowedTools 'Bash(task:*)' -p "Выполни в Bash: task --help"` — справка `task` (флаг — до PR 3: правило в `settings.json` появится в задаче 8).

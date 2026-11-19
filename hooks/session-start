@@ -1,0 +1,34 @@
+#!/bin/bash
+# Хук SessionStart плагина engineering-standards (#43, решение 9): PATH к scripts/ плагина, корень плагина для обёртки
+# ~/.local/bin/task, rules/ в контекст сессии. Любая ошибка — код 0 и stderr: хук не блокирует сессию.
+# Совместим с bash 3.2 (macOS).
+set -u
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+
+if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
+  line="export PATH=\"$root/scripts:\$PATH\""
+  if ! grep -qxF "$line" "$CLAUDE_ENV_FILE" 2>/dev/null; then
+    printf '%s\n' "$line" >>"$CLAUDE_ENV_FILE" 2>/dev/null ||
+      echo "engineering-standards: PATH не записан в $CLAUDE_ENV_FILE" >&2
+  fi
+else
+  echo "\`task\` не в PATH — вызывай $root/scripts/task"
+fi
+
+# Корень плагина для обёртки: ключ — основная папка репозитория, ворктри попадают в тот же ключ.
+common=$(git -C "${CLAUDE_PROJECT_DIR:-$PWD}" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+if [ -n "$common" ]; then
+  roots="${XDG_CACHE_HOME:-$HOME/.cache}/engineering-standards/roots"
+  key=$(dirname "$common" | tr '/' '-')
+  { mkdir -p "$roots" && printf '%s\n' "$root" >"$roots/$key"; } 2>/dev/null ||
+    echo "engineering-standards: корень плагина не записан в $roots" >&2
+fi
+
+for rule in "$root"/rules/*.md; do
+  if [ -f "$rule" ]; then
+    cat "$rule"
+    echo
+  fi
+done
+exit 0
