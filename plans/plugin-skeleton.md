@@ -106,6 +106,14 @@
 - Отклонение от объёма — обнови план. Всё — не молча: сообщай пользователю.
 - План синхронен с фактической работой.
 - Итоги опытов задачи 1 — строкой на опыт ниже, до начала задачи 2.
+- Итоги опытов задачи 1:
+  - опыт 1: ок — `es-exp task ping` из PATH хука; без правила `Bash(task:*)` команда не выполняется, нужен запрос подтверждения.
+  - опыт 2а: ок — субагент видит PATH из хука (`es-exp task probe`).
+  - опыт 2б: ок — после `/clear` `task ping` отработал, запроса не было, в логе есть `"source":"clear"` (и `startup`). Оговорка: первый запрос до `/clear` сессия обработала скиллом `ping` (ответ `pong-v2`), а не командой `task`; PATH при старте подтверждён опытом 1.
+  - опыт 3: ок — `CLAUDE_PROJECT_DIR` задан (путь с префиксом `/private`), `CLAUDE_ENV_FILE` задан.
+  - опыт 6: ок — работают обе формы `/ping` и `/es-exp:ping`; в README можно писать короткое `/ping`.
+  - опыт 4: ок — после `marketplace update` и `plugin update` без `version` ответ `pong-v2`; в кеше две папки версий.
+  - опыт 5: плагин включён и подключён через `--plugin-dir` — хук сработал 1 раз, ответила v2.
 
 ## Обзор решения
 - **Подход и архитектура:** каркас и перенос текущих скиллов и агентов как есть; весь репозиторий — плагин (#3). Здесь работаем через `claude --plugin-dir .`, проекты подключаются через маркетплейс GitHub и `setup` (#43, решения 1–10).
@@ -149,8 +157,8 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: плагин загружается здесь
-  - [ ] Задача 1: опыты до кода
-  - [ ] Задача 2: манифесты плагина и маркетплейса
+  - [x] Задача 1: опыты до кода
+  - [x] Задача 2: манифесты плагина и маркетплейса
   - [ ] Задача 3: правила `rules/`
   - [ ] Задача 4: хук `SessionStart`
   - [ ] Приёмка
@@ -184,7 +192,7 @@
 
 Тест: не применим — опыт и есть проверка; ожидаемый результат — у каждого шага.
 
-- [ ] 1. Подготовить временный плагин и проект:
+- [x] 1. Подготовить временный плагин и проект:
   ```bash
   EXP=$(mktemp -d)/es-exp; P=$(mktemp -d)/es-project
   mkdir -p "$EXP/.claude-plugin" "$EXP/hooks" "$EXP/scripts" "$EXP/skills/ping" "$EXP/agents" "$P/.claude"
@@ -214,23 +222,23 @@
   echo "EXP=$EXP P=$P"
   ```
   Ожидается: строка `EXP=… P=…` — пути нужны в следующих шагах.
-- [ ] 2. **Опыт 1** (решения 4 и 5): `Bash(task:*)` срабатывает без запроса на голое `task` из PATH хука.
+- [x] 2. **Опыт 1** (решения 4 и 5): `Bash(task:*)` срабатывает без запроса на голое `task` из PATH хука.
   - Команда: `cd "$P" && claude -p --plugin-dir "$EXP" "Выполни в Bash команду: task ping. Верни её вывод дословно."`
   - Ожидается: в ответе `es-exp task ping`.
   - Контроль: убрать правило (`printf '{}\n' >"$P/.claude/settings.json"`), повторить — запрос отклонён (в `-p` без разрешения инструмент не запускается). Затем вернуть правило.
-- [ ] 3. **Опыт 2а** (решение 4): субагент видит PATH из хука.
+- [x] 3. **Опыт 2а** (решение 4): субагент видит PATH из хука.
   - Команда: `cd "$P" && claude -p --plugin-dir "$EXP" "Запусти агента probe и верни его ответ дословно."`
   - Ожидается: `es-exp task probe`.
-- [ ] 4. **Опыт 2б**, пользователь (решение 4): PATH после `/clear`.
+- [x] 4. **Опыт 2б**, пользователь (решение 4): PATH после `/clear`.
   - `cd "$P" && claude --plugin-dir "$EXP"` → попросить «выполни task ping» → `/clear` → снова «выполни task ping».
   - Ожидается: оба раза `es-exp task ping`; в `~/.cache/es-exp.log` есть строка с `"source":"clear"`.
-- [ ] 5. **Опыт 3** (секция 2): у хука есть `CLAUDE_PROJECT_DIR`.
+- [x] 5. **Опыт 3** (секция 2): у хука есть `CLAUDE_PROJECT_DIR`.
   - Команда: `grep -c "project=$P" ~/.cache/es-exp.log` (с учётом `/private` на macOS — сверять по концу пути `es-project`).
   - Ожидается: ≥ 1. Провал — не блокер: хук берёт `$PWD` (`${CLAUDE_PROJECT_DIR:-$PWD}`), отметить ⚠️ без остановки.
-- [ ] 6. **Опыт 6** (README): короткое `/ping` при `--plugin-dir`.
+- [x] 6. **Опыт 6** (README): короткое `/ping` при `--plugin-dir`.
   - Команды: `cd "$P" && claude -p --plugin-dir "$EXP" "/ping"` и `claude -p --plugin-dir "$EXP" "/es-exp:ping"`.
   - Ожидается: в ответе `pong-v1`. Записать, какая форма работает — от неё зависит текст README в задаче 12. Не блокер.
-- [ ] 7. **Опыт 4** (решение 8): `/plugin update` без `version` берёт новый коммит.
+- [x] 7. **Опыт 4** (решение 8): `/plugin update` без `version` берёт новый коммит.
   - Подготовка: `git -C "$EXP" init -q && git -C "$EXP" add -A && git -C "$EXP" -c user.name=t -c user.email=t@t commit -qm v1`.
   - Установка: `cd "$P" && claude plugin marketplace add "$EXP" --scope project && claude plugin install es-exp@es-exp --scope project`.
   - Обновление: заменить `pong-v1` на `pong-v2` в `$EXP/skills/ping/SKILL.md`, закоммитить (`commit -qam v2`), выполнить `claude plugin marketplace update es-exp && claude plugin update es-exp@es-exp --scope project`.
@@ -238,20 +246,20 @@
   - Ожидается: `pong-v2`; `ls ~/.claude/plugins/cache/es-exp/es-exp/` показывает папку новой версии.
   - Флаги команд — по `claude plugin <команда> --help`, если отличаются.
   - Оговорка: источник здесь локальная папка; источник `github` проверяет пилот #24.
-- [ ] 8. **Опыт 5** (решение 2): плагин включён и одновременно подключён через `--plugin-dir`.
+- [x] 8. **Опыт 5** (решение 2): плагин включён и одновременно подключён через `--plugin-dir`.
   - Команда (после опыта 4, плагин установлен): `: >~/.cache/es-exp.log; cd "$P" && claude -p --plugin-dir "$EXP" "/es-exp:ping"; wc -l <~/.cache/es-exp.log`.
   - Записать: сколько раз сработал хук (1 или 2), какая версия ответила.
   - Решение 2 и так не включает плагин здесь — итог только записываем. Не блокер.
-- [ ] 9. Убрать за собой: `cd "$P" && claude plugin uninstall es-exp@es-exp --scope project; claude plugin marketplace remove es-exp; rm -rf "$EXP" "$P" ~/.cache/es-exp.log`.
+- [x] 9. Убрать за собой: `cd "$P" && claude plugin uninstall es-exp@es-exp --scope project; claude plugin marketplace remove es-exp; rm -rf "$EXP" "$P" ~/.cache/es-exp.log`.
   - Ожидается: `claude plugin list` без `es-exp`.
-- [ ] 10. Итог в «Прогресс»: строка на опыт — «опыт N: ок / провал — что видно». Коммита нет: файлов в репозитории задача не меняет.
+- [x] 10. Итог в «Прогресс»: строка на опыт — «опыт N: ок / провал — что видно». Коммита нет: файлов в репозитории задача не меняет.
 
 ### Задача 2: манифесты плагина и маркетплейса
 - Создать: `.claude-plugin/plugin.json` — имя, описание, автор
 - Создать: `.claude-plugin/marketplace.json` — маркетплейс из одного плагина `source: "./"`
 
 Тест: не применим — манифест без логики; проверка формата — `claude plugin validate .`.
-- [ ] 1. Создать `.claude-plugin/plugin.json`:
+- [x] 1. Создать `.claude-plugin/plugin.json`:
   ```json
   {
     "name": "engineering-standards",
@@ -262,7 +270,7 @@
     "repository": "https://github.com/Nakulov/engineering-standards"
   }
   ```
-- [ ] 2. Создать `.claude-plugin/marketplace.json`:
+- [x] 2. Создать `.claude-plugin/marketplace.json`:
   ```json
   {
     "name": "engineering-standards",
@@ -278,8 +286,8 @@
     ]
   }
   ```
-- [ ] 3. Запустить `claude plugin validate .` — проверка пройдена, ошибок нет. Если валидатор предупреждает о `CLAUDE.md` в корне — это не ошибка (memory: проверено 2026-11-13).
-- [ ] 4. Коммит
+- [x] 3. Запустить `claude plugin validate .` — проверка пройдена, ошибок нет. Если валидатор предупреждает о `CLAUDE.md` в корне — это не ошибка (memory: проверено 2026-11-13).
+- [x] 4. Коммит
 
 ### Задача 3: правила `rules/`
 - Создать: `rules/answers.md`, `rules/language.md`, `rules/no-pr-without-issue.md` — одно правило на файл, 1–3 строки с причиной и задачей (решение 10)
