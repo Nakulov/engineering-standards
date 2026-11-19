@@ -171,7 +171,7 @@
   - [x] Задача 8: `settings.json` этого репозитория
   - [x] Приёмка
 - PR 4: обёртка `task` для терминала
-  - [ ] Задача 9: скрипт обёртки
+  - [x] Задача 9: скрипт обёртки
   - [ ] Задача 10: шаг «обёртка»
   - [ ] Приёмка
 - PR 5: `.gitignore` и README
@@ -1441,7 +1441,7 @@
 - Создать: `scripts/task-wrapper` — источник `~/.local/bin/task`
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/TaskWrapperScriptSpec.kt`, `TaskWrapperScriptSpecData.kt` — репозиторий стандарта, запись, нет записи → 2, папка версии удалена → 2, ворктри → тот же ключ, не git → 2
 
-- [ ] 1. Падающий тест. Используются `makeTempDir`, `runGit`, `makeGitProject`, `makeRootKey` из `SessionStartHookSpecData.kt` (тот же пакет).
+- [x] 1. Падающий тест. Используются `makeTempDir`, `runGit`, `makeGitProject`, `makeRootKey` из `SessionStartHookSpecData.kt` (тот же пакет).
   `TaskWrapperScriptSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.plugin
@@ -1581,8 +1581,8 @@
       return LauncherRun(code = process.waitFor(), out = out, err = err)
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*TaskWrapperScriptSpec*'` — падает: `NoSuchFileException: …/scripts/task-wrapper` в `makeWrapperCopy`.
-- [ ] 3. Минимальный код. `scripts/task-wrapper` (исполняемый, `chmod +x`):
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskWrapperScriptSpec*'` — падает: `NoSuchFileException: …/scripts/task-wrapper` в `makeWrapperCopy`.
+- [x] 3. Минимальный код. `scripts/task-wrapper` (исполняемый, `chmod +x`):
   ```bash
   #!/bin/bash
   # engineering-standards task-wrapper
@@ -1609,8 +1609,8 @@
   fi
   exec "$root/scripts/task" "$@"
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*TaskWrapperScriptSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*TaskWrapperScriptSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 10: шаг «обёртка»
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/TaskWrapper.kt` — ставит `~/.local/bin/task`
