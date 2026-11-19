@@ -9,7 +9,7 @@ import kotlin.system.exitProcess
 
 /**
  * Точка входа `setup`: её запускает `scripts/setup` через запускатель `task` и передаёт корень плагина в
- * `TASK_PLUGIN_ROOT`. Репозиторий — текущая папка. Порядок шагов: сначала файлы — первый коммит пустого репозитория
+ * `TASK_PLUGIN_ROOT`. Репозиторий — текущая папка. Порядок шагов: сначала файлы (в том числе `.claude/settings.json` — подключение плагина, #43) — первый коммит пустого репозитория
  * берёт их, затем ветка — защита и доска ставятся на существующую `dev`.
  */
 fun main(args: Array<String>) {
@@ -25,7 +25,12 @@ fun main(args: Array<String>) {
         steps = listOf(
             StandardFiles(git = git, pluginRoot = pluginRoot),
             GitignoreBlock(git = git, block = File(pluginRoot, GITIGNORE).readText()),
-            InitialBranch(gitHub = gitHub, git = git, files = listOf(".github", ".gitignore", ".editorconfig")),
+            PluginSettings(git = git, pluginRoot = pluginRoot),
+            InitialBranch(
+                gitHub = gitHub,
+                git = git,
+                files = listOf(".github", ".gitignore", ".editorconfig", ".claude/settings.json"),
+            ),
             RepositorySettings(gitHub = gitHub),
             Rulesets(gitHub = gitHub, scratch = scratch),
             Labels(gitHub = gitHub, standard = labels),

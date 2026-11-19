@@ -166,10 +166,10 @@
   - [x] Задача 5: перенос скиллов и агентов
   - [x] Приёмка
 - PR 3: `setup` пишет `settings.json`
-  - [ ] Задача 6: разбор и печать JSON
-  - [ ] Задача 7: шаг «подключение»
-  - [ ] Задача 8: `settings.json` этого репозитория
-  - [ ] Приёмка
+  - [x] Задача 6: разбор и печать JSON
+  - [x] Задача 7: шаг «подключение»
+  - [x] Задача 8: `settings.json` этого репозитория
+  - [x] Приёмка
 - PR 4: обёртка `task` для терминала
   - [ ] Задача 9: скрипт обёртки
   - [ ] Задача 10: шаг «обёртка»
@@ -568,7 +568,7 @@
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/JsonParser.kt` — текст → значение
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/JsonSpec.kt`, `JsonSpecData.kt` — туда и обратно, порядок ключей, экранирование, кириллица, вложенность, ошибки со строкой
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `JsonSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -671,8 +671,8 @@
       return JsonObject(fields = linkedMapOf("b" to JsonNumber(raw = "1"), "a" to JsonArray(items = items)))
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — падает: `Unresolved reference 'JsonParser'`.
-- [ ] 3. Минимальный код.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — падает: `Unresolved reference 'JsonParser'`.
+- [x] 3. Минимальный код.
   `JsonValue.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -921,15 +921,15 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 7: шаг «подключение»
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/PluginSettings.kt` — три ключа стандарта в `.claude/settings.json`
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PluginSettingsSpec.kt`, `PluginSettingsSpecData.kt` — нет файла, ключи проекта целы, `false`, другой источник ± `--confirm`, репозиторий стандарта, битый JSON без записи, повтор без изменений, `--check`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/SetupMain.kt:26-27` — шаг после `GitignoreBlock`, `.claude/settings.json` в файлах первого коммита
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PluginSettingsSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1254,8 +1254,8 @@
       )
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: `Unresolved reference 'PluginSettings'`.
-- [ ] 3. Минимальный код.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: `Unresolved reference 'PluginSettings'`.
+- [x] 3. Минимальный код.
   `PluginSettings.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1414,25 +1414,25 @@
               ),
   ```
   и в KDoc `main` после «Порядок шагов: сначала файлы» дописать «(в том числе `.claude/settings.json` — подключение плагина, #43)».
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*' --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*' --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 8: `settings.json` этого репозитория
 - Создать: `.claude/settings.json` — разрешение `Bash(task:*)`, пишет `setup` (репозиторий стандарта — без маркетплейса)
 
 Тест: не применим — файл пишет шаг из задачи 7; проверка — `scripts/setup --check`.
-- [ ] 1. Запустить `scripts/setup --check`. Отклонения должны быть только по `.claude/settings.json`. Если есть другие — ⚠️ в «Прогресс», остановиться и спросить пользователя: полный `setup` записал бы их в GitHub.
-- [ ] 2. Запустить `scripts/setup` в корне репозитория. Ожидается в выводе:
+- [x] 1. Запустить `scripts/setup --check`. Отклонения должны быть только по `.claude/settings.json`. Если есть другие — ⚠️ в «Прогресс», остановиться и спросить пользователя: полный `setup` записал бы их в GitHub.
+- [x] 2. Запустить `scripts/setup` в корне репозитория. Ожидается в выводе:
   - `[заметка] подключение: .claude/settings.json: репозиторий стандарта — …`
   - `[исправлено] подключение: .claude/settings.json: разрешение Bash(task:*) добавлено — закоммитьте через задачу`
-- [ ] 3. Сверить файл: `cat .claude/settings.json` — ровно объект `permissions.allow` с `"Bash(task:*)"` (как `makePermissionOnlySettings()`).
-- [ ] 4. Запустить `scripts/setup --check` — код 0, по «подключение» — `[заметка]` и `[ok]`.
-- [ ] 5. Коммит — только `.claude/settings.json`. `.claude/skills/` и `.claude/agents/` всё ещё в `.git/info/exclude` и в коммит не попадают.
+- [x] 3. Сверить файл: `cat .claude/settings.json` — ровно объект `permissions.allow` с `"Bash(task:*)"` (как `makePermissionOnlySettings()`).
+- [x] 4. Запустить `scripts/setup --check` — код 0, по «подключение» — `[заметка]` и `[ok]`.
+- [x] 5. Коммит — только `.claude/settings.json`. `.claude/skills/` и `.claude/agents/` всё ещё в `.git/info/exclude` и в коммит не попадают.
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `scripts/setup --check` здесь — код 0; спеки `PluginSettingsSpec`, `JsonSpec` зелёные.
-- [ ] Крайние случаи обработаны: нет файла, чужие ключи, `false`, другой источник ± `--confirm`, репозиторий стандарта, битый JSON без записи, комментарии, повторный запуск.
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
+- [x] Что даёт этот PR — проверено: `scripts/setup --check` здесь — код 0; спеки `PluginSettingsSpec`, `JsonSpec` зелёные.
+- [x] Крайние случаи обработаны: нет файла, чужие ключи, `false`, другой источник ± `--confirm`, репозиторий стандарта, битый JSON без записи, комментарии, повторный запуск.
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`.
 
 ## PR 4: обёртка `task` для терминала
 **Объём:** `scripts/task-wrapper`, `TaskWrapperScriptSpec.kt`, `TaskWrapperScriptSpecData.kt`, `TaskWrapper.kt`, `TaskWrapperSpec.kt`, `TaskWrapperSpecData.kt`, `SetupMain.kt`; 7 файлов
