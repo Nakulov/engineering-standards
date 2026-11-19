@@ -167,7 +167,7 @@
   - [x] Приёмка
 - PR 3: `setup` пишет `settings.json`
   - [x] Задача 6: разбор и печать JSON
-  - [ ] Задача 7: шаг «подключение»
+  - [x] Задача 7: шаг «подключение»
   - [ ] Задача 8: `settings.json` этого репозитория
   - [ ] Приёмка
 - PR 4: обёртка `task` для терминала
@@ -929,7 +929,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PluginSettingsSpec.kt`, `PluginSettingsSpecData.kt` — нет файла, ключи проекта целы, `false`, другой источник ± `--confirm`, репозиторий стандарта, битый JSON без записи, повтор без изменений, `--check`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/SetupMain.kt:26-27` — шаг после `GitignoreBlock`, `.claude/settings.json` в файлах первого коммита
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
   `PluginSettingsSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1254,8 +1254,8 @@
       )
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: `Unresolved reference 'PluginSettings'`.
-- [ ] 3. Минимальный код.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: `Unresolved reference 'PluginSettings'`.
+- [x] 3. Минимальный код.
   `PluginSettings.kt`:
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1414,8 +1414,8 @@
               ),
   ```
   и в KDoc `main` после «Порядок шагов: сначала файлы» дописать «(в том числе `.claude/settings.json` — подключение плагина, #43)».
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*' --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*' --tests '*JsonSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 8: `settings.json` этого репозитория
 - Создать: `.claude/settings.json` — разрешение `Bash(task:*)`, пишет `setup` (репозиторий стандарта — без маркетплейса)
