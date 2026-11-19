@@ -9,8 +9,9 @@ import kotlin.system.exitProcess
 
 /**
  * Точка входа `setup`: её запускает `scripts/setup` через запускатель `task` и передаёт корень плагина в
- * `TASK_PLUGIN_ROOT`. Репозиторий — текущая папка. Порядок шагов: сначала файлы — первый коммит пустого репозитория
- * берёт их, затем ветка — защита и доска ставятся на существующую `dev`.
+ * `TASK_PLUGIN_ROOT`. Репозиторий — текущая папка. Порядок шагов: сначала файлы (в том числе `.claude/settings.json` — подключение плагина, #43) — первый коммит пустого репозитория
+ * берёт их, затем ветка — защита и доска ставятся на существующую `dev`; последним — обёртка `~/.local/bin/task`:
+ * шаг машины, не репозитория (#43).
  */
 fun main(args: Array<String>) {
     val shell = ProcessShell(directory = File(System.getProperty("user.dir")))
@@ -25,11 +26,21 @@ fun main(args: Array<String>) {
         steps = listOf(
             StandardFiles(git = git, pluginRoot = pluginRoot),
             GitignoreBlock(git = git, block = File(pluginRoot, GITIGNORE).readText()),
-            InitialBranch(gitHub = gitHub, git = git, files = listOf(".github", ".gitignore", ".editorconfig")),
+            PluginSettings(git = git, pluginRoot = pluginRoot),
+            InitialBranch(
+                gitHub = gitHub,
+                git = git,
+                files = listOf(".github", ".gitignore", ".editorconfig", ".claude/settings.json"),
+            ),
             RepositorySettings(gitHub = gitHub),
             Rulesets(gitHub = gitHub, scratch = scratch),
             Labels(gitHub = gitHub, standard = labels),
             BoardSetup(gitHub = gitHub, template = board, scratch = scratch),
+            TaskWrapper(
+                home = File(System.getProperty("user.home")),
+                pluginRoot = pluginRoot,
+                path = System.getenv("PATH").orEmpty(),
+            ),
         ),
         console = SystemConsole,
         debug = System.getenv("TASK_DEBUG") == "1",

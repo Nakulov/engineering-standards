@@ -1,0 +1,8 @@
+{
+  "name": "engineering-standards",
+  "description": "Общие правила, скиллы и скрипты процесса наших проектов",
+  "author": {
+    "name": "Nakulov"
+  },
+  "repository": "https://github.com/Nakulov/engineering-standards"
+}

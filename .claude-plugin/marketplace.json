@@ -1,0 +1,13 @@
+{
+  "name": "engineering-standards",
+  "owner": {
+    "name": "Nakulov"
+  },
+  "plugins": [
+    {
+      "name": "engineering-standards",
+      "source": "./",
+      "description": "Общие правила, скиллы и скрипты процесса наших проектов"
+    }
+  ]
+}
