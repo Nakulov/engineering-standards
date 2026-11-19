@@ -175,7 +175,7 @@
   - [x] Задача 10: шаг «обёртка»
   - [x] Приёмка
 - PR 5: `.gitignore` и README
-  - [ ] Задача 11: `plans/done/` и `plans/journal/` в общем блоке
+  - [x] Задача 11: `plans/done/` и `plans/journal/` в общем блоке
   - [ ] Задача 12: раздел README «Подключение»
   - [ ] Приёмка
 
@@ -1873,11 +1873,11 @@
 - Изменить: `.gitignore` — общий блок по шаблону, пишет `setup`
 
 Тест: не применим — шаблон без логики; проверка формата — `scripts/setup --check` (сверяет блок с шаблоном).
-- [ ] 1. В `templates/project/gitignore` после `.claude/worktrees/` добавить строки `plans/done/` и `plans/journal/`. `plans/<slug>.md` не скрывается: его коммитит `task plan` (#53).
-- [ ] 2. Запустить `scripts/setup --check`. Отклонения должны быть только по `.gitignore`. Если есть другие — ⚠️ в «Прогресс», остановиться и спросить пользователя: полный `setup` записал бы их в GitHub.
-- [ ] 3. Запустить `scripts/setup` — в выводе `[исправлено] файлы: .gitignore: общий блок отличается от стандарта — блок записан, закоммитьте через задачу`.
-- [ ] 4. Запустить `scripts/setup --check` — код 0; `git status --short` не показывает `plans/done/` и `plans/journal/`.
-- [ ] 5. Коммит — `templates/project/gitignore` и `.gitignore`
+- [x] 1. В `templates/project/gitignore` после `.claude/worktrees/` добавить строки `plans/done/` и `plans/journal/`. `plans/<slug>.md` не скрывается: его коммитит `task plan` (#53).
+- [x] 2. Запустить `scripts/setup --check`. Отклонения должны быть только по `.gitignore`. Если есть другие — ⚠️ в «Прогресс», остановиться и спросить пользователя: полный `setup` записал бы их в GitHub.
+- [x] 3. Запустить `scripts/setup` — в выводе `[исправлено] файлы: .gitignore: общий блок отличается от стандарта — блок записан, закоммитьте через задачу`.
+- [x] 4. Запустить `scripts/setup --check` — код 0; `git status --short` не показывает `plans/done/` и `plans/journal/`.
+- [x] 5. Коммит — `templates/project/gitignore` и `.gitignore`
 
 ### Задача 12: раздел README «Подключение»
 - Изменить: `README.md:39-42` — как подключить проект и как работать в этом репозитории
