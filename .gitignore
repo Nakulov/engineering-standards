@@ -13,4 +13,6 @@ __pycache__/
 .venv/
 node_modules/
 .claude/worktrees/
+plans/done/
+plans/journal/
 # <<< engineering-standards
