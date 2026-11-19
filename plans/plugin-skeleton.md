@@ -163,7 +163,7 @@
   - [x] Задача 4: хук `SessionStart`
   - [x] Приёмка
 - PR 2: скиллы и агенты из плагина
-  - [ ] Задача 5: перенос скиллов и агентов
+  - [x] Задача 5: перенос скиллов и агентов
   - [ ] Приёмка
 - PR 3: `setup` пишет `settings.json`
   - [ ] Задача 6: разбор и печать JSON
@@ -550,10 +550,10 @@
 - Создать: `agents/{implementation-reviewer,plan-executor,plan-reviewer,standards-reviewer,test-reviewer}.md` — копии `.claude/agents/*.md`
 
 Тест: не применим — перенос без правки текста; проверка — `diff -r` с источником и `claude plugin validate .`.
-- [ ] 1. Скопировать: `mkdir -p skills agents && cp -R .claude/skills/groom .claude/skills/plan .claude/skills/execute .claude/skills/worktree skills/ && cp .claude/agents/*.md agents/`. Источник — `.claude/`, не `drafts/`: в `drafts/` поверх того же текста лежат пометки «Набросок по #N» и разделы «Открыто» (сверено 2026-11-19 `diff`).
-- [ ] 2. Сверить: `diff -r .claude/skills skills && diff -r .claude/agents agents` — пустой вывод, код 0.
-- [ ] 3. Сверить: `claude plugin validate .` — ошибок нет; `claude --plugin-dir . -p "Перечисли доступные скиллы и типы агентов плагина engineering-standards"` — в ответе 4 скилла и 5 агентов.
-- [ ] 4. Коммит. `.claude/skills/` и `.claude/agents/` не удалять: по ним идёт выполнение этого плана (PR 3–5), удаление — «После завершения».
+- [x] 1. Скопировать: `mkdir -p skills agents && cp -R .claude/skills/groom .claude/skills/plan .claude/skills/execute .claude/skills/worktree skills/ && cp .claude/agents/*.md agents/`. Источник — `.claude/`, не `drafts/`: в `drafts/` поверх того же текста лежат пометки «Набросок по #N» и разделы «Открыто» (сверено 2026-11-19 `diff`).
+- [x] 2. Сверить: `diff -r .claude/skills skills && diff -r .claude/agents agents` — пустой вывод, код 0.
+- [x] 3. Сверить: `claude plugin validate .` — ошибок нет; `claude --plugin-dir . -p "Перечисли доступные скиллы и типы агентов плагина engineering-standards"` — в ответе 4 скилла и 5 агентов.
+- [x] 4. Коммит. `.claude/skills/` и `.claude/agents/` не удалять: по ним идёт выполнение этого плана (PR 3–5), удаление — «После завершения».
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: шаги 2–3 задачи 5.
