@@ -91,7 +91,7 @@
 - PR 2: `setup` разрешает запись журналов без запроса
   - [x] Задача 2: список правил `allow` в `PluginSettings`
   - [x] Задача 3: правило в настройках репозитория и в README
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
   - [ ] Задача 4: правило `rules/bash-commands.md` и его копии в агентах
   - [ ] Задача 5: команды агентов через `-C`
@@ -415,10 +415,10 @@
 - [x] 4. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `PluginSettingsSpec` — дописывает `Edit(/plans/journal/**)`, повторно не дублирует (`makeSettingsUnchangedFindings`), чужое `Bash(./gradlew:*)` сохраняет (`makeProjectSettingsWithStandard`)
-- [ ] Крайние случаи обработаны: только `Bash(task:*)` → дописано одно правило; режим проверки — две находки DEVIATION
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] Перед PR 3 — вручную (ревью плана, В2): в режиме «accept edits» команда `git -C <путь к копии> diff` проходит без запроса доступа. Спросила — ⚠️ блокер: PR 3 не начинать, новый круг обсуждения с пользователем (правило `Bash(git -C:*)` в `RULES` или `git diff` без `-C`)
+- [x] Что даёт этот PR — проверено: `PluginSettingsSpec` — дописывает `Edit(/plans/journal/**)`, повторно не дублирует (`makeSettingsUnchangedFindings`), чужое `Bash(./gradlew:*)` сохраняет (`makeProjectSettingsWithStandard`)
+- [x] Крайние случаи обработаны: только `Bash(task:*)` → дописано одно правило; режим проверки — две находки DEVIATION
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] Перед PR 3 — вручную (ревью плана, В2): в режиме «accept edits» команда `git -C <путь к копии> diff` проходит без запроса доступа. Спросила — ⚠️ блокер: PR 3 не начинать, новый круг обсуждения с пользователем (правило `Bash(git -C:*)` в `RULES` или `git diff` без `-C`) — ✋ вручную: не автоматизируется, проверяет человек
 
 ## PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
 **Объём:** `rules/bash-commands.md`, `agents/plan-executor.md`, `agents/{implementation,test,standards}-reviewer.md`, `task/MarkersSpec.kt`, `task/MarkersSpecData.kt` — правило и его копии; ≈ 7 файлов
