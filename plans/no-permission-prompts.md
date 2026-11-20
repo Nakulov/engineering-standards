@@ -86,7 +86,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: `task` работает в папке из опции `-C`
-  - [ ] Задача 1: опция `-C` у `task`
+  - [x] Задача 1: опция `-C` у `task`
   - [ ] Приёмка
 - PR 2: `setup` разрешает запись журналов без запроса
   - [ ] Задача 2: список правил `allow` в `PluginSettings`
@@ -108,7 +108,7 @@
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/cli/Main.kt:25-30`, `:68` — папка и аргументы из `WorkingDirectory`
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/WorkingDirectorySpec.kt`, `WorkingDirectorySpecData.kt` — без `-C`, абсолютный и относительный путь, `-C` без пути, нет папки, `-C` не первым
 
-- [ ] 1. Падающий тест: случаи `-C`
+- [x] 1. Падающий тест: случаи `-C`
   `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/WorkingDirectorySpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.cli
@@ -179,8 +179,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*WorkingDirectorySpec*'` — падает: `Unresolved reference: WorkingDirectory`
-- [ ] 3. Минимальный код: разбор `-C` и подключение в `main`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*WorkingDirectorySpec*'` — падает: `Unresolved reference: WorkingDirectory`
+- [x] 3. Минимальный код: разбор `-C` и подключение в `main`
   `scripts/src/main/kotlin/io/github/nakulov/standards/task/cli/WorkingDirectory.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.cli
@@ -246,8 +246,8 @@
   последняя строка `main` (строка 68):
   было: `    exitProcess(task.run(args = args.toList()))`
   стало: `    exitProcess(task.run(args = invocation.args))`
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*WorkingDirectorySpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*WorkingDirectorySpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `task -C <путь к репозиторию> --help` печатает список команд; `task -C missing --help` — `-C missing: нет такой папки — проверьте путь`, код 2
