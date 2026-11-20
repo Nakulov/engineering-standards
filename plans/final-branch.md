@@ -92,7 +92,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: итоговый PR long-задачи открывается без push в long-ветку
   - [x] Задача 1: Git — поиск long-ветки, слияние, удаление в origin
-  - [ ] Задача 2: task final — PR из `task/<N>-final`
+  - [x] Задача 2: task final — PR из `task/<N>-final`
   - [ ] Задача 3: task done — удаление long после итогового PR
   - [ ] Приёмка
 
@@ -218,7 +218,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/FinalCommandSpecData.kt` — целиком
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/TaskLauncherSpecData.kt:21` — строка `task final`
 
-- [ ] 1. Падающий тест. `FinalCommandSpecData.kt`:
+- [x] 1. Падающий тест. `FinalCommandSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -395,8 +395,8 @@
             "  task final <N> --title «…» --body-file <файл> [--check «команда»]… — итоговый PR " +
             "task/<N>-final → dev из long/<N>-…\n" +
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*.FinalCommandSpec' --tests '*.TaskLauncherSpec'` — падает: `FinalCommandSpec` «первый итоговый PR из long-ветки» — `publish` с `head = long/13-x` вместо `task/13-final` (воспроизведение бага), `TaskLauncherSpec` — другая строка справки
-- [ ] 3. Минимальный код — `FinalCommand.kt` целиком:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*.FinalCommandSpec' --tests '*.TaskLauncherSpec'` — падает: `FinalCommandSpec` «первый итоговый PR из long-ветки» — `publish` с `head = long/13-x` вместо `task/13-final` (воспроизведение бага), `TaskLauncherSpec` — другая строка справки
+- [x] 3. Минимальный код — `FinalCommand.kt` целиком:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -494,8 +494,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*.FinalCommandSpec' --tests '*.TaskLauncherSpec'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе: «task final открывает итоговый PR из ветки task/<N>-final»
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*.FinalCommandSpec' --tests '*.TaskLauncherSpec'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе: «task final открывает итоговый PR из ветки task/<N>-final»
 
 ### Задача 3: task done — удаление long после итогового PR
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/DoneCommand.kt:45-49, 85-99` — шаги `freeLong` и `removeLong`, копия по slug
