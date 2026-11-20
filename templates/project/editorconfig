@@ -16,3 +16,9 @@ indent_size = 2
 # В Markdown пробелы в конце строки значимы, а в шаблонах задач есть заготовки вида «1. ».
 [*.md]
 trim_trailing_whitespace = false
+
+[*.{kt,kts}]
+# Импорты без звёздочки (KT-DOC-1): IntelliJ не сворачивает их в `*`.
+ij_kotlin_name_count_to_use_star_import = 2147483647
+ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
+ij_kotlin_packages_to_use_import_on_demand = unset
