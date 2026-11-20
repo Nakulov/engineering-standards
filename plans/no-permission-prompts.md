@@ -93,7 +93,7 @@
   - [x] Задача 3: правило в настройках репозитория и в README
   - [x] Приёмка
 - PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
-  - [ ] Задача 4: правило `rules/bash-commands.md` и его копии в агентах
+  - [x] Задача 4: правило `rules/bash-commands.md` и его копии в агентах
   - [ ] Задача 5: команды агентов через `-C`
   - [ ] Приёмка
 
@@ -429,7 +429,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpecData.kt` — пары «правило ↔ агент»
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpec.kt` — ожидаемые блоки, названия
 
-- [ ] 1. Падающий тест: пары «правило ↔ агент»
+- [x] 1. Падающий тест: пары «правило ↔ агент»
   `MarkersSpecData.kt` — от `/** Скилл и агент…` до конца `COPIES` (строки 5–11), стало:
   ```kotlin
   /** Источник и копия, у которых блоки `<префикс>:*` — копии 1 в 1. */
@@ -487,8 +487,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает: `FileNotFoundException: …/rules/bash-commands.md`
-- [ ] 3. Минимальный код: правило и копии
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает: `FileNotFoundException: …/rules/bash-commands.md`
+- [x] 3. Минимальный код: правило и копии
   `rules/bash-commands.md` — целиком:
   ```markdown
   <!-- >>> rules:bash-commands -->
@@ -508,8 +508,8 @@
   <!-- <<< rules:bash-commands -->
   ```
   `agents/implementation-reviewer.md`, `agents/test-reviewer.md`, `agents/standards-reviewer.md` — после строки «`Bash` — только чтение: `git diff`, `git log`; тесты не запускаешь — их прогнали исполнитель и CI. Ничего не исправляешь.», через пустую строку, — тот же блок от `<!-- >>> rules:bash-commands -->` до `<!-- <<< rules:bash-commands -->`, 1 в 1.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и правило вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и правило вместе
 
 ### Задача 5: команды агентов через `-C`
 - Изменить: `agents/plan-executor.md:22` — команды в рабочей папке через `-C`
