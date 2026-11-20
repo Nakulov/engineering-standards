@@ -70,7 +70,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: `task commit` принимает коммит без «Задачи плана» в ветке без плана
   - [x] Задача 1: `CommitMessage.parse` требует строку только при плане
-  - [ ] Задача 2: `CommitCommand` передаёт план ветки в `parse`
+  - [x] Задача 2: `CommitCommand` передаёт план ветки в `parse`
   - [ ] Задача 3: груминг называет команды для «сразу в работу»
   - [ ] Приёмка
 
@@ -204,7 +204,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/CommitCommandSpec.kt` — ветка с планом и без
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/CommitCommandSpecData.kt` — файл `no-plan-task.txt`
 
-- [ ] 1. Падающий тест.
+- [x] 1. Падающий тест.
 
   `CommitCommandSpecData.kt` — целиком:
   ```kotlin
@@ -317,8 +317,8 @@
       })
   ```
   `plans/done/old.md` в ветке без плана — проверка, что архив не считается планом (`isPlan` — один `/`).
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — падает: в «файлы изменены, план отмечен» `verifySequence` не находит `git.addedPaths(base = "origin/dev")`; отказ с именем плана не брошен — коммит прошёл (`plan = null` из задачи 1).
-- [ ] 3. Минимальный код — `CommitCommand.kt:9-38`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — падает: в «файлы изменены, план отмечен» `verifySequence` не находит `git.addedPaths(base = "origin/dev")`; отказ с именем плана не брошен — коммит прошёл (`plan = null` из задачи 1).
+- [x] 3. Минимальный код — `CommitCommand.kt:9-38`:
   ```kotlin
   /**
    * `task commit --message-file <файл>` (#53): коммит по шаблону задачи плана. Пути — из раздела «Файлы:» сообщения;
@@ -361,8 +361,8 @@
           const val BASE = "origin/dev"
       }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе (`CommitCommand.kt`, `CommitCommandSpec.kt`, `CommitCommandSpecData.kt`).
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitCommandSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе (`CommitCommand.kt`, `CommitCommandSpec.kt`, `CommitCommandSpecData.kt`).
 
 ### Задача 3: груминг называет команды для «сразу в работу»
 - Изменить: `skills/groom/SKILL.md:30` — строка про ветку, коммит и PR

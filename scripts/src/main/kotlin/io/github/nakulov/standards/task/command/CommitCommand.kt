@@ -9,6 +9,7 @@ import java.io.File
 /**
  * `task commit --message-file <файл>` (#53): коммит по шаблону задачи плана. Пути — из раздела «Файлы:» сообщения;
  * изменённый план `plans/<имя>.md` добавляется сам — отметки `[x]` идут в коммит задачи.
+ * «Задача плана» обязательна, только если в ветке есть план (#82).
  */
 class CommitCommand(
     private val git: Git,
@@ -27,7 +28,8 @@ class CommitCommand(
         if (!file.isFile) {
             throw TaskError.Failure(message = "нет файла сообщения ${args.last()}")
         }
-        val message = CommitMessage.parse(text = file.readText(), plan = null)
+        val plan = git.addedPaths(base = BASE).firstOrNull { path -> isPlan(path = path) }
+        val message = CommitMessage.parse(text = file.readText(), plan = plan)
         val changed = git.changedPaths()
         val unchanged = message.files.firstOrNull { path -> path !in changed }
         if (unchanged != null) {
@@ -46,5 +48,6 @@ class CommitCommand(
 
     private companion object {
         const val MESSAGE_FILE = "--message-file"
+        const val BASE = "origin/dev"
     }
 }
