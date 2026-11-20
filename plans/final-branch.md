@@ -93,8 +93,8 @@
 - PR 1: итоговый PR long-задачи открывается без push в long-ветку
   - [x] Задача 1: Git — поиск long-ветки, слияние, удаление в origin
   - [x] Задача 2: task final — PR из `task/<N>-final`
-  - [ ] Задача 3: task done — удаление long после итогового PR
-  - [ ] Приёмка
+  - [x] Задача 3: task done — удаление long после итогового PR
+  - [x] Приёмка
 
 **После завершения** (внешнее, без чекбоксов):
 - Ручная проверка `task final` на настоящей long-задаче при включённом `standards/long` (см. «После завершения»).
@@ -502,7 +502,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/DoneCommandSpec.kt` — три случая перед закрывающим `})`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/DoneCommandSpecData.kt` — строки вывода
 
-- [ ] 1. Падающий тест. В `DoneCommandSpecData.kt`:
+- [x] 1. Падающий тест. В `DoneCommandSpecData.kt`:
   ```kotlin
   fun makeLongRemovedMessage(): String {
       return "long-ветка long/13-big удалена — локально и в origin"
@@ -607,8 +607,8 @@
               command.run(args = emptyList(), console = console)
           }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*.DoneCommandSpec'` — падает: два новых `given` — в последовательности нет `git.longBranch(issue = 13)` (после `pullRequest` сразу `fetch`); отказ — исключение не брошено
-- [ ] 3. Минимальный код — в `DoneCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*.DoneCommandSpec'` — падает: два новых `given` — в последовательности нет `git.longBranch(issue = 13)` (после `pullRequest` сразу `fetch`); отказ — исключение не брошено
+- [x] 3. Минимальный код — в `DoneCommand.kt`:
   в `run` вместо строк `:45-49`:
   ```kotlin
           val final = !branch.long && branch.slug == FinalCommand.SLUG
@@ -662,15 +662,15 @@
           if (File(root).canonicalPath != File(git.copyPath(slug = slug)).canonicalPath) {
   ```
   KDoc класса `:12-17` — дописать: «Из `task/<N>-final` удаляется и long-ветка задачи — локально и в `origin` (#66).»
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*.DoneCommandSpec'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе: «task done после итогового PR удаляет и long-ветку задачи»
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*.DoneCommandSpec'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе: «task done после итогового PR удаляет и long-ветку задачи»
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `FinalCommandSpec` «первый итоговый PR из long-ветки» — `head = task/13-final`, push в long нет
-- [ ] Крайние случаи обработаны: повтор из final и из long, final только в `origin`, конфликт слияния, long не найдена, long открыта в другой папке, грязное дерево, `long/7-*` против `long/70-…`, копия-ворктри long
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`; `scripts/task --help` — строка `task final` новая
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам (автоматический — тестом; два ручных — в «После завершения»)
-- [ ] Покрытие требований:
+- [x] Что даёт этот PR — проверено: `FinalCommandSpec` «первый итоговый PR из long-ветки» — `head = task/13-final`, push в long нет
+- [x] Крайние случаи обработаны: повтор из final и из long, final только в `origin`, конфликт слияния, long не найдена, long открыта в другой папке, грязное дерево, `long/7-*` против `long/70-…`, копия-ворктри long
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`; `scripts/task --help` — строка `task final` новая
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам (автоматический — тестом; два ручных — в «После завершения»)
+- [x] Покрытие требований:
   - тест воспроизводит баг → задача 2 («первый итоговый PR из long-ветки»)
   - PR `task/<N>-final` → `dev`, в long ничего не пушится → задача 2
   - повтор: свежая long вливается в final, PR не дублируется → задача 1 (`merge`), задача 2
