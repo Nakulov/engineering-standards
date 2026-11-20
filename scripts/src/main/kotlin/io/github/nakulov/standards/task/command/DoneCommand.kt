@@ -13,7 +13,7 @@ import java.io.File
  * `task done` из ветки задачи после слияния её PR: свежий `dev` (в worktree — отсоединение на `origin/dev`, `dev` не
  * трогается), локальная ветка удаляется, задача → Done. Задача ещё открыта (PR с `Part of`) — статус не меняется.
  * Своя копия `.claude/worktrees/<slug>` удаляется последним шагом — после неё текущей папки нет; копия long-ветки на
- * ветке блока остаётся (#52).
+ * ветке блока остаётся (#52). Из `task/<N>-final` удаляется и long-ветка задачи — локально и в `origin` (#66).
  */
 class DoneCommand(
     private val git: Git,
@@ -42,10 +42,16 @@ class DoneCommand(
         if (!pullRequest.merged) {
             throw TaskError.Refusal(message = "PR #${pullRequest.number} не слит — сначала слияние")
         }
+        val final = !branch.long && branch.slug == FinalCommand.SLUG
+        val long = if (final) freeLong(issue = branch.issue) else null
         val worktree = leaveBranch(name = name, console = console)
+        if (final) {
+            removeLong(issue = branch.issue, name = long, console = console)
+        }
         finishIssue(issue = branch.issue, console = console)
         if (worktree) {
-            removeOwnCopy(branch = branch, console = console)
+            val slug = long?.let { found -> BranchName.parse(branch = found)?.slug } ?: branch.slug
+            removeOwnCopy(slug = slug, console = console)
         }
     }
 
@@ -67,6 +73,38 @@ class DoneCommand(
         return worktree
     }
 
+    /**
+     * Long-ветка задачи для удаления после итогового PR из `task/<N>-final` (#66); нет — `null`. Открыта в другой
+     * папке — отказ до удаления final: иначе `task done` уже не повторить.
+     */
+    private fun freeLong(issue: Int): String? {
+        val name = git.longBranch(issue = issue) ?: return null
+        val folder = git.openedAt(branch = name)
+        if (folder != null) {
+            throw TaskError.Refusal(message = "ветка $name открыта в $folder — переключите там ветку и повторите task done")
+        }
+        return name
+    }
+
+    /** Long-ветка [name] после итогового PR (#66) — удаляется локально и в `origin`, где есть. */
+    private fun removeLong(
+        issue: Int,
+        name: String?,
+        console: Console,
+    ) {
+        if (name == null) {
+            console.line(text = "long-ветки задачи #$issue нет — удалена только ветка итогового PR")
+            return
+        }
+        if (git.hasLocalBranch(name = name)) {
+            git.deleteBranch(name = name)
+        }
+        if (git.hasRemoteBranch(name = name)) {
+            git.deleteRemoteBranch(name = name)
+        }
+        console.line(text = "long-ветка $name удалена — локально и в origin")
+    }
+
     private fun finishIssue(
         issue: Int,
         console: Console,
@@ -84,14 +122,15 @@ class DoneCommand(
 
     /**
      * Своя копия — `.claude/worktrees/<slug>` этой ветки (#52): удаляется изнутри, без `git -C` — защита сессии в ворктри
-     * не пускает `git` в основную папку. Копия long-ветки, где слита ветка блока, остаётся.
+     * не пускает `git` в основную папку. Копия long-ветки, где слита ветка блока, остаётся. Копия ветки final — копия её
+     * long-ветки (#66).
      */
     private fun removeOwnCopy(
-        branch: BranchName,
+        slug: String,
         console: Console,
     ) {
         val root = git.root()
-        if (File(root).canonicalPath != File(git.copyPath(slug = branch.slug)).canonicalPath) {
+        if (File(root).canonicalPath != File(git.copyPath(slug = slug)).canonicalPath) {
             return
         }
         git.removeWorktree(path = root)
