@@ -24,6 +24,7 @@ fun makeHelpRun(): LauncherRun {
             "  task new <тип> --title «…» --body-file <файл> [--parent N] [--blocked-by N,N] — " +
             "задача по шаблону типа в Backlog\n" +
             "  task commit --message-file <файл> — коммит по шаблону задачи плана: файлы — из раздела «Файлы:»\n" +
+            "  task groomed <N> — задача из Backlog в Groomed: груминг закончен\n" +
             "  task plan <N> <slug> [--long] --issue-parts <файл> — " +
             "план plans/<slug>.md в ветку задачи без смены статуса\n",
         err = "",

@@ -80,7 +80,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: задача из Backlog сама переходит в Groomed после груминга и плана
   - [x] Задача 1: `Grooming` — перевод из Backlog в Groomed
-  - [ ] Задача 2: команда `task groomed`
+  - [x] Задача 2: команда `task groomed`
   - [ ] Задача 3: `task plan` переводит задачу в Groomed
   - [ ] Задача 4: скиллы `groom` и `decompose`
   - [ ] Приёмка
@@ -189,7 +189,7 @@
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/cli/Main.kt:61` — регистрация `"groomed"`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/TaskLauncherSpecData.kt:27` — строка справки
 
-- [ ] 1. Падающий тест: открытая задача в Backlog → `move` и строка; закрытая или эпик → `Refusal` без обращения к доске; аргументы `[]`, `["x"]`, `["13", "14"]` → `Failure` с usage
+- [x] 1. Падающий тест: открытая задача в Backlog → `move` и строка; закрытая или эпик → `Refusal` без обращения к доске; аргументы `[]`, `["x"]`, `["13", "14"]` → `Failure` с usage
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -268,8 +268,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GroomedCommandSpec*'` — падает: `Unresolved reference: GroomedCommand`
-- [ ] 3. Минимальный код — команда `GroomedCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GroomedCommandSpec*'` — падает: `Unresolved reference: GroomedCommand`
+- [x] 3. Минимальный код — команда `GroomedCommand.kt`:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -320,8 +320,8 @@
   ```kotlin
               "  task groomed <N> — задача из Backlog в Groomed: груминг закончен\n" +
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GroomedCommandSpec*' --tests '*TaskLauncherSpec*'` → `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GroomedCommandSpec*' --tests '*TaskLauncherSpec*'` → `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: `task plan` переводит задачу в Groomed
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/PlanCommand.kt:12–23, 81–82` — `board`, `Grooming`, kdoc, `usage`
