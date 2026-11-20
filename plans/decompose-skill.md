@@ -85,7 +85,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: скилл плана переезжает в `decompose` с решениями «Пересмотра» #46
-  - [ ] Задача 1: Переезд в `skills/decompose/` и шапка
+  - [x] Задача 1: Переезд в `skills/decompose/` и шапка
   - [ ] Задача 2: Тест синхронности маркерных блоков
   - [ ] Задача 3: Без строки detekt в скилле и агенте
   - [ ] Задача 4: Вход только с номером, рамка и соглашение о задачах
@@ -113,8 +113,8 @@
 
 Тест: не применим — переименование и текст; проверка — `ls` и `grep`.
 
-- [ ] 1. `git mv skills/plan skills/decompose`
-- [ ] 2. Шапка `skills/decompose/SKILL.md`:
+- [x] 1. `git mv skills/plan skills/decompose`
+- [x] 2. Шапка `skills/decompose/SKILL.md`:
   было:
   ```
   ---
@@ -132,10 +132,10 @@
   model: sonnet
   ---
   ```
-- [ ] 3. `skills/decompose/SKILL.md:9`: «Вход — номер задачи `/plan <N>`» → «Вход — номер задачи `/decompose <N>`» (абзац целиком перепишет задача 4).
+- [x] 3. `skills/decompose/SKILL.md:9`: «Вход — номер задачи `/plan <N>`» → «Вход — номер задачи `/decompose <N>`» (абзац целиком перепишет задача 4).
   `skills/groom/SKILL.md:29`: «Продолжи в новой сессии из папки проекта: `/plan <N>`» → «Продолжи в новой сессии из папки проекта: `/decompose <N>`».
-- [ ] 4. Проверка: `ls skills` → `decompose  execute  groom  worktree`; `grep -rn '/plan ' skills agents` → пусто; `grep -n '^name:' skills/decompose/SKILL.md` → `2:name: decompose`
-- [ ] 5. Коммит — «Скилл плана переехал в skills/decompose»
+- [x] 4. Проверка: `ls skills` → `decompose  execute  groom  worktree`; `grep -rn '/plan ' skills agents` → пусто; `grep -n '^name:' skills/decompose/SKILL.md` → `2:name: decompose`
+- [x] 5. Коммит — «Скилл плана переехал в skills/decompose»
 
 ### Задача 2: Тест синхронности маркерных блоков
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpec.kt` — блоки `plan:*` совпадают, в скилле все пять
