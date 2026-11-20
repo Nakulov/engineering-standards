@@ -89,9 +89,9 @@
   - [x] Задача 1: опция `-C` у `task`
   - [x] Приёмка
 - PR 2: `setup` разрешает запись журналов без запроса
-  - [ ] Задача 2: список правил `allow` в `PluginSettings`
-  - [ ] Задача 3: правило в настройках репозитория и в README
-  - [ ] Приёмка
+  - [x] Задача 2: список правил `allow` в `PluginSettings`
+  - [x] Задача 3: правило в настройках репозитория и в README
+  - [x] Приёмка
 - PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
   - [ ] Задача 4: правило `rules/bash-commands.md` и его копии в агентах
   - [ ] Задача 5: команды агентов через `-C`
@@ -262,7 +262,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PluginSettingsSpecData.kt` — второе правило в данных и находках; данные «только Bash»
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PluginSettingsSpec.kt` — случай «недостающее правило дописывается, имеющееся не дублируется»
 
-- [ ] 1. Падающий тест: данные со вторым правилом
+- [x] 1. Падающий тест: данные со вторым правилом
   `PluginSettingsSpecData.kt`:
   - `makeStandardKeys` — массив `allow` (строки 62–64), было:
     ```kotlin
@@ -356,9 +356,9 @@
               readSettings(root = root)
           }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: несовпадение ожидаемого и фактического — в фактическом нет `Edit(/plans/journal/**)` (в находках и в тексте настроек)
-- [ ] 3. Минимальный код: `PluginSettings.kt`
-  - KDoc класса, было: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешение `Bash(task:*)`; …»; стало: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешения `Bash(task:*)` и `Edit(/plans/journal/**)` (#98: журналы и сообщение коммита — без запроса доступа); недостающие разрешения дописываются, остальные ключи и правила проекта не трогаются. …» (остаток абзаца без изменений).
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: несовпадение ожидаемого и фактического — в фактическом нет `Edit(/plans/journal/**)` (в находках и в тексте настроек)
+- [x] 3. Минимальный код: `PluginSettings.kt`
+  - KDoc класса, было: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешение `Bash(task:*)`; …»; стало: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешения `Bash(task:*)` и `Edit` на журналы плана в `plans/journal/` (#98: журналы и сообщение коммита — без запроса доступа); недостающие разрешения дописываются, остальные ключи и правила проекта не трогаются. …» (остаток абзаца без изменений). В KDoc нельзя писать `/**` внутри текста: Kotlin откроет вложенный комментарий; точное правило — в `RULES`.
   - в `run`: `val findings = plugin + permissions(fields = fields, mode = mode)`
   - метод `permission(...)` целиком заменить на:
     ```kotlin
@@ -388,15 +388,15 @@
     ```kotlin
         val RULES = listOf("Bash(task:*)", "Edit(/plans/journal/**)")
     ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: правило в настройках репозитория и в README
 - Изменить: `.claude/settings.json` — правило `Edit(/plans/journal/**)`
 - Изменить: `README.md:46` — два разрешения
 
 Тест: не применим — настройки и текст; формат `.claude/settings.json` проверяет `PluginSettings` (шаг 2).
-- [ ] 1. `.claude/settings.json` — целиком:
+- [x] 1. `.claude/settings.json` — целиком:
   ```json
   {
     "permissions": {
@@ -407,18 +407,18 @@
     }
   }
   ```
-- [ ] 2. Проверить, что `PluginSettings` считает файл полным: `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`, и сравнить текст файла с `makePermissionOnlySettings()` в `PluginSettingsSpecData.kt` — совпадает (формат печати `setup`, повторный `setup` файл не перепишет)
-- [ ] 3. `README.md:46`, было:
+- [x] 2. Проверить, что `PluginSettings` считает файл полным: `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`, и сравнить текст файла с `makePermissionOnlySettings()` в `PluginSettingsSpecData.kt` — совпадает (формат печати `setup`, повторный `setup` файл не перепишет)
+- [x] 3. `README.md:46`, было:
   `- \`.claude/settings.json\` — маркетплейс \`engineering-standards\`, включённый плагин и разрешение \`Bash(task:*)\`.`
   стало:
   `- \`.claude/settings.json\` — маркетплейс \`engineering-standards\`, включённый плагин и разрешения \`Bash(task:*)\` и \`Edit(/plans/journal/**)\` (журналы и сообщение коммита — без запроса доступа).`
-- [ ] 4. Коммит
+- [x] 4. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `PluginSettingsSpec` — дописывает `Edit(/plans/journal/**)`, повторно не дублирует (`makeSettingsUnchangedFindings`), чужое `Bash(./gradlew:*)` сохраняет (`makeProjectSettingsWithStandard`)
-- [ ] Крайние случаи обработаны: только `Bash(task:*)` → дописано одно правило; режим проверки — две находки DEVIATION
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] Перед PR 3 — вручную (ревью плана, В2): в режиме «accept edits» команда `git -C <путь к копии> diff` проходит без запроса доступа. Спросила — ⚠️ блокер: PR 3 не начинать, новый круг обсуждения с пользователем (правило `Bash(git -C:*)` в `RULES` или `git diff` без `-C`)
+- [x] Что даёт этот PR — проверено: `PluginSettingsSpec` — дописывает `Edit(/plans/journal/**)`, повторно не дублирует (`makeSettingsUnchangedFindings`), чужое `Bash(./gradlew:*)` сохраняет (`makeProjectSettingsWithStandard`)
+- [x] Крайние случаи обработаны: только `Bash(task:*)` → дописано одно правило; режим проверки — две находки DEVIATION
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] Перед PR 3 — вручную (ревью плана, В2): в режиме «accept edits» команда `git -C <путь к копии> diff` проходит без запроса доступа. Спросила — ⚠️ блокер: PR 3 не начинать, новый круг обсуждения с пользователем (правило `Bash(git -C:*)` в `RULES` или `git diff` без `-C`) — ✋ вручную: не автоматизируется, проверяет человек
 
 ## PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
 **Объём:** `rules/bash-commands.md`, `agents/plan-executor.md`, `agents/{implementation,test,standards}-reviewer.md`, `task/MarkersSpec.kt`, `task/MarkersSpecData.kt` — правило и его копии; ≈ 7 файлов

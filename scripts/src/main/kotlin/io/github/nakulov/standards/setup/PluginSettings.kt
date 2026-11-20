@@ -6,10 +6,11 @@ import java.io.File
 
 /**
  * Подключение плагина в `.claude/settings.json` проекта (#43, решения 3 и 5): стандарт владеет тремя ключами —
- * маркетплейс, `enabledPlugins` и разрешение `Bash(task:*)`; остальные ключи и правила проекта не трогаются. Явный
- * `false` проекта не переписывается — стандарт не отменяет решение проекта (#1). Другой источник маркетплейса
- * заменяется только с `--confirm`. В репозитории самого стандарта плагин подключается через `--plugin-dir` —
- * пишется только разрешение (решение 2).
+ * маркетплейс, `enabledPlugins` и разрешения `Bash(task:*)` и `Edit` на журналы плана в `plans/journal/` (#98:
+ * журналы и сообщение коммита — без запроса доступа); недостающие разрешения дописываются, остальные ключи и
+ * правила проекта не трогаются. Явный `false` проекта не переписывается — стандарт не отменяет решение проекта (#1).
+ * Другой источник маркетплейса заменяется только с `--confirm`. В репозитории самого стандарта плагин подключается
+ * через `--plugin-dir` — пишется только разрешение (решение 2).
  */
 class PluginSettings(
     private val git: Git,
@@ -29,7 +30,7 @@ class PluginSettings(
         } else {
             listOf(marketplace(fields = fields, mode = mode), enabled(fields = fields, mode = mode))
         }
-        val findings = plugin + permission(fields = fields, mode = mode)
+        val findings = plugin + permissions(fields = fields, mode = mode)
         if (fields != settings.fields) {
             file.parentFile.mkdirs()
             file.writeText(JsonObject(fields = fields).toText() + "\n")
@@ -81,21 +82,24 @@ class PluginSettings(
         }
     }
 
-    private fun permission(
+    private fun permissions(
         fields: MutableMap<String, JsonValue>,
         mode: Setup.Mode,
-    ): Finding {
+    ): List<Finding> {
         val permissions = objectAt(fields = fields, key = PERMISSIONS)
         val allow = permissions.fields[ALLOW] ?: JsonArray(items = emptyList())
         val items = (allow as? JsonArray)?.items
             ?: throw TaskError.Failure(message = "$SETTINGS: $PERMISSIONS.$ALLOW — ожидается массив […]")
-        return when {
-            JsonString(value = RULE) in items -> finding(status = Finding.Status.OK, text = "разрешение $RULE")
-            !mode.apply -> finding(status = Finding.Status.DEVIATION, text = "нет разрешения $RULE")
-            else -> {
-                val updated = JsonArray(items = items + JsonString(value = RULE))
-                fields[PERMISSIONS] = JsonObject(fields = permissions.fields + (ALLOW to updated))
-                finding(status = Finding.Status.FIXED, text = "разрешение $RULE добавлено$COMMIT")
+        val missing = RULES.filter { rule -> JsonString(value = rule) !in items }
+        if (mode.apply && missing.isNotEmpty()) {
+            val updated = JsonArray(items = items + missing.map { rule -> JsonString(value = rule) })
+            fields[PERMISSIONS] = JsonObject(fields = permissions.fields + (ALLOW to updated))
+        }
+        return RULES.map { rule ->
+            when {
+                rule !in missing -> finding(status = Finding.Status.OK, text = "разрешение $rule")
+                !mode.apply -> finding(status = Finding.Status.DEVIATION, text = "нет разрешения $rule")
+                else -> finding(status = Finding.Status.FIXED, text = "разрешение $rule добавлено$COMMIT")
             }
         }
     }
@@ -129,7 +133,7 @@ class PluginSettings(
         const val ENABLED = "enabledPlugins"
         const val PERMISSIONS = "permissions"
         const val ALLOW = "allow"
-        const val RULE = "Bash(task:*)"
+        val RULES = listOf("Bash(task:*)", "Edit(/plans/journal/**)")
         const val COMMIT = " — закоммитьте через задачу"
         const val STANDARD_REPOSITORY =
             "репозиторий стандарта — маркетплейс и enabledPlugins не пишутся: подключение через claude --plugin-dir ."
