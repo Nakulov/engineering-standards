@@ -89,7 +89,7 @@
   - [x] Задача 1: опция `-C` у `task`
   - [x] Приёмка
 - PR 2: `setup` разрешает запись журналов без запроса
-  - [ ] Задача 2: список правил `allow` в `PluginSettings`
+  - [x] Задача 2: список правил `allow` в `PluginSettings`
   - [ ] Задача 3: правило в настройках репозитория и в README
   - [ ] Приёмка
 - PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
@@ -262,7 +262,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PluginSettingsSpecData.kt` — второе правило в данных и находках; данные «только Bash»
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PluginSettingsSpec.kt` — случай «недостающее правило дописывается, имеющееся не дублируется»
 
-- [ ] 1. Падающий тест: данные со вторым правилом
+- [x] 1. Падающий тест: данные со вторым правилом
   `PluginSettingsSpecData.kt`:
   - `makeStandardKeys` — массив `allow` (строки 62–64), было:
     ```kotlin
@@ -356,9 +356,9 @@
               readSettings(root = root)
           }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: несовпадение ожидаемого и фактического — в фактическом нет `Edit(/plans/journal/**)` (в находках и в тексте настроек)
-- [ ] 3. Минимальный код: `PluginSettings.kt`
-  - KDoc класса, было: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешение `Bash(task:*)`; …»; стало: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешения `Bash(task:*)` и `Edit(/plans/journal/**)` (#98: журналы и сообщение коммита — без запроса доступа); недостающие разрешения дописываются, остальные ключи и правила проекта не трогаются. …» (остаток абзаца без изменений).
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — падает: несовпадение ожидаемого и фактического — в фактическом нет `Edit(/plans/journal/**)` (в находках и в тексте настроек)
+- [x] 3. Минимальный код: `PluginSettings.kt`
+  - KDoc класса, было: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешение `Bash(task:*)`; …»; стало: «стандарт владеет тремя ключами — маркетплейс, `enabledPlugins` и разрешения `Bash(task:*)` и `Edit` на журналы плана в `plans/journal/` (#98: журналы и сообщение коммита — без запроса доступа); недостающие разрешения дописываются, остальные ключи и правила проекта не трогаются. …» (остаток абзаца без изменений). В KDoc нельзя писать `/**` внутри текста: Kotlin откроет вложенный комментарий; точное правило — в `RULES`.
   - в `run`: `val findings = plugin + permissions(fields = fields, mode = mode)`
   - метод `permission(...)` целиком заменить на:
     ```kotlin
@@ -388,8 +388,8 @@
     ```kotlin
         val RULES = listOf("Bash(task:*)", "Edit(/plans/journal/**)")
     ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`; затем `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 3: правило в настройках репозитория и в README
 - Изменить: `.claude/settings.json` — правило `Edit(/plans/journal/**)`

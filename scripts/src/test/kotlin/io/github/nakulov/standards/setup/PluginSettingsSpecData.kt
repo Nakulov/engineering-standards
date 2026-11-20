@@ -60,7 +60,8 @@ private fun makeStandardKeys(
         "  },",
         "  \"permissions\": {",
         "    \"allow\": [",
-        "      \"Bash(task:*)\"",
+        "      \"Bash(task:*)\",",
+        "      \"Edit(/plans/journal/**)\"",
         "    ]",
         "  }",
         "}",
@@ -90,7 +91,8 @@ fun makeProjectSettingsWithStandard(): String {
           "permissions": {
             "allow": [
               "Bash(./gradlew:*)",
-              "Bash(task:*)"
+              "Bash(task:*)",
+              "Edit(/plans/journal/**)"
             ]
           },
           "extraKnownMarketplaces": {
@@ -109,6 +111,20 @@ fun makeProjectSettingsWithStandard(): String {
 }
 
 fun makePermissionOnlySettings(): String {
+    return """
+        {
+          "permissions": {
+            "allow": [
+              "Bash(task:*)",
+              "Edit(/plans/journal/**)"
+            ]
+          }
+        }
+    """.trimIndent() + "\n"
+}
+
+/** Настройки до #98: только правило `Bash(task:*)`. */
+fun makeBashOnlySettings(): String {
     return """
         {
           "permissions": {
@@ -138,6 +154,10 @@ fun makeSettingsAddedFindings(): List<Finding> {
             status = Finding.Status.FIXED,
             text = "разрешение Bash(task:*) добавлено — закоммитьте через задачу",
         ),
+        makeSettingsFinding(
+            status = Finding.Status.FIXED,
+            text = "разрешение Edit(/plans/journal/**) добавлено — закоммитьте через задачу",
+        ),
     )
 }
 
@@ -149,6 +169,7 @@ fun makeSettingsMissingFindings(): List<Finding> {
             text = "плагин engineering-standards@engineering-standards не включён",
         ),
         makeSettingsFinding(status = Finding.Status.DEVIATION, text = "нет разрешения Bash(task:*)"),
+        makeSettingsFinding(status = Finding.Status.DEVIATION, text = "нет разрешения Edit(/plans/journal/**)"),
     )
 }
 
@@ -160,6 +181,7 @@ fun makeSettingsUnchangedFindings(): List<Finding> {
             text = "плагин engineering-standards@engineering-standards включён",
         ),
         makeSettingsFinding(status = Finding.Status.OK, text = "разрешение Bash(task:*)"),
+        makeSettingsFinding(status = Finding.Status.OK, text = "разрешение Edit(/plans/journal/**)"),
     )
 }
 
@@ -170,7 +192,7 @@ fun makeDisabledFindings(): List<Finding> {
         text = "плагин engineering-standards@engineering-standards выключен проектом (false) — " +
             "стандарт не переписывает решение проекта",
     )
-    return listOf(unchanged[0], disabled, unchanged[2])
+    return listOf(unchanged[0], disabled, unchanged[2], unchanged[3])
 }
 
 fun makeOtherSourceFindings(): List<Finding> {
@@ -181,7 +203,7 @@ fun makeOtherSourceFindings(): List<Finding> {
             "{ \"source\": { \"source\": \"directory\", \"path\": \"/tmp/standards\" } } — " +
             "заменит на github Nakulov/engineering-standards",
     )
-    return listOf(other, unchanged[1], unchanged[2])
+    return listOf(other, unchanged[1], unchanged[2], unchanged[3])
 }
 
 fun makeStandardRepositoryFindings(): List<Finding> {
@@ -195,5 +217,19 @@ fun makeStandardRepositoryFindings(): List<Finding> {
             status = Finding.Status.FIXED,
             text = "разрешение Bash(task:*) добавлено — закоммитьте через задачу",
         ),
+        makeSettingsFinding(
+            status = Finding.Status.FIXED,
+            text = "разрешение Edit(/plans/journal/**) добавлено — закоммитьте через задачу",
+        ),
+    )
+}
+
+/** Репозиторий стандарта с `Bash(task:*)`: имеющееся правило — OK, недостающее — дописано. */
+fun makeJournalAddedFindings(): List<Finding> {
+    val standard = makeStandardRepositoryFindings()
+    return listOf(
+        standard[0],
+        makeSettingsFinding(status = Finding.Status.OK, text = "разрешение Bash(task:*)"),
+        standard[2],
     )
 }
