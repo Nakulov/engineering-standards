@@ -86,7 +86,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: скилл плана переезжает в `decompose` с решениями «Пересмотра» #46
   - [x] Задача 1: Переезд в `skills/decompose/` и шапка
-  - [ ] Задача 2: Тест синхронности маркерных блоков
+  - [x] Задача 2: Тест синхронности маркерных блоков
   - [ ] Задача 3: Без строки detekt в скилле и агенте
   - [ ] Задача 4: Вход только с номером, рамка и соглашение о задачах
   - [ ] Задача 5: «Как спрашивать» и семь принципов
@@ -141,7 +141,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpec.kt` — блоки `plan:*` совпадают, в скилле все пять
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpecData.kt` — разбор блоков
 
-- [ ] 1. Падающий тест — `MarkersSpec.kt`:
+- [x] 1. Падающий тест — `MarkersSpec.kt`:
   ```kotlin
   package io.github.nakulov.standards.task
 
@@ -166,8 +166,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает: `Unresolved reference 'findMarkerMismatches'` (и `findSkillMarkers`)
-- [ ] 3. Минимальный код — `MarkersSpecData.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает: `Unresolved reference 'findMarkerMismatches'` (и `findSkillMarkers`)
+- [x] 3. Минимальный код — `MarkersSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.task
 
@@ -197,8 +197,8 @@
       return BLOCK.findAll(input = text).associate { match -> match.groupValues[1] to match.groupValues[2] }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL` (блоки сейчас совпадают)
-- [ ] 5. Коммит — тест и код вместе: «Тест синхронности маркерных блоков скилла и агента»
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL` (блоки сейчас совпадают)
+- [x] 5. Коммит — тест и код вместе: «Тест синхронности маркерных блоков скилла и агента»
 
 ### Задача 3: Без строки detekt в скилле и агенте
 - Изменить: `skills/decompose/SKILL.md:118` — убрать строку detekt (решение 3в)
@@ -210,9 +210,9 @@
   В коде запреты проверяет detekt (`ForbiddenComment`, `NotImplementedDeclaration`, `EmptyFunctionBlock` — сверить в <задача: правила detekt>).
   ```
   (блок кончается строкой «…упал по другой причине — разобраться до кода.», затем `<!-- <<< plan:no-stubs -->`)
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает: «блоки plan:* — копии 1 в 1», в выводе `plan:no-stubs`
-- [ ] 3. Минимальный код: то же удаление в `agents/plan-reviewer.md` (строки 110–111)
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; `grep -rn 'В коде запреты проверяет detekt' skills agents` → пусто (detekt в `agents/plan-reviewer.md:137`, «Читаемость», — вне ограничения, остаётся)
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает: «блоки plan:* — копии 1 в 1», в выводе `plan:no-stubs`
+- [x] 3. Минимальный код: то же удаление в `agents/plan-reviewer.md` (строки 110–111)
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; `grep -rn 'В коде запреты проверяет detekt' skills agents` → пусто (detekt в `agents/plan-reviewer.md:137`, «Читаемость», — вне ограничения, остаётся)
 - [ ] 5. Коммит — «Строка detekt убрана из скилла плана и агента ревью»
 
 ### Задача 4: Вход только с номером, рамка и соглашение о задачах
