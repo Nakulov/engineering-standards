@@ -79,7 +79,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: задача из Backlog сама переходит в Groomed после груминга и плана
-  - [ ] Задача 1: `Grooming` — перевод из Backlog в Groomed
+  - [x] Задача 1: `Grooming` — перевод из Backlog в Groomed
   - [ ] Задача 2: команда `task groomed`
   - [ ] Задача 3: `task plan` переводит задачу в Groomed
   - [ ] Задача 4: скиллы `groom` и `decompose`
@@ -95,7 +95,7 @@
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/Grooming.kt` — правило перехода
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/GroomingSpec.kt` — тесты статусов
 
-- [ ] 1. Падающий тест: Backlog → `move` и строка «→ Groomed»; Groomed, In progress, In review, Done → без `move`, строка «уже в»
+- [x] 1. Падающий тест: Backlog → `move` и строка «→ Groomed»; Groomed, In progress, In review, Done → без `move`, строка «уже в»
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -153,8 +153,8 @@
       })
   ```
   Перед запуском сверь сигнатуры `withGivens` и `case` с использованием в `StartCommandSpec.kt:271–281` и `:302–310`.
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GroomingSpec*'` — падает: `Unresolved reference: Grooming`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GroomingSpec*'` — падает: `Unresolved reference: Grooming`
+- [x] 3. Минимальный код:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -180,8 +180,8 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GroomingSpec*'` → `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GroomingSpec*'` → `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 2: команда `task groomed`
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/GroomedCommand.kt` — команда
