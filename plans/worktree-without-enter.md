@@ -87,7 +87,7 @@ Execute из основной папки:
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: execute ведёт журнал при работе в копии
-  - [ ] Задача 1: блок `agents:working-folder` в агентах и `MarkersSpec`
+  - [x] Задача 1: блок `agents:working-folder` в агентах и `MarkersSpec`
   - [ ] Задача 2: `/worktree` без перехода сессии
   - [ ] Задача 3: `execute` из основной папки с рабочей папкой из выбора
   - [ ] Приёмка
@@ -104,7 +104,7 @@ Execute из основной папки:
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpec.kt:6-33` — ожидания
 - Изменить: `agents/plan-executor.md:25`, `agents/implementation-reviewer.md:35`, `agents/test-reviewer.md:36`, `agents/standards-reviewer.md:37` — блок
 
-- [ ] 1. Падающий тест: источник `agents/plan-executor.md` даёт блок `agents:working-folder`, ревьюеры — его копии.
+- [x] 1. Падающий тест: источник `agents/plan-executor.md` даёт блок `agents:working-folder`, ревьюеры — его копии.
   `MarkersSpecData.kt` — заменить объявление `COPIES`:
   ```kotlin
   private val COPIES = listOf(
@@ -150,14 +150,14 @@ Execute из основной папки:
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает тест «в источниках все блоки plan:*, execute:*, rules:* и agents:*»: в фактическом списке нет `agents:working-folder`. Тест «копии 1 в 1» — зелёный (блока нет ни в источнике, ни в копиях).
-- [ ] 3. Минимальный код: блок из «Технических деталей» (4 строки, 1 в 1) — в каждый из 4 агентов сразу после строки `<!-- <<< rules:bash-commands -->`, отделённый пустой строкой до и после:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает тест «в источниках все блоки plan:*, execute:*, rules:* и agents:*»: в фактическом списке нет `agents:working-folder`. Тест «копии 1 в 1» — зелёный (блока нет ни в источнике, ни в копиях).
+- [x] 3. Минимальный код: блок из «Технических деталей» (4 строки, 1 в 1) — в каждый из 4 агентов сразу после строки `<!-- <<< rules:bash-commands -->`, отделённый пустой строкой до и после:
   - `agents/plan-executor.md` — между `<!-- <<< rules:bash-commands -->` (стр. 25) и `## Вход`;
   - `agents/implementation-reviewer.md` — между `<!-- <<< rules:bash-commands -->` и `## Что проверяешь`;
   - `agents/test-reviewer.md` — между `<!-- <<< rules:bash-commands -->` и `## Что проверяешь`;
   - `agents/standards-reviewer.md` — между `<!-- <<< rules:bash-commands -->` и `## Как проверяешь`.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`, оба теста зелёные.
-- [ ] 5. Коммит — тест и блоки вместе: «Агенты работают с файлами по абсолютному пути рабочей папки».
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`, оба теста зелёные.
+- [x] 5. Коммит — тест и блоки вместе: «Агенты работают с файлами по абсолютному пути рабочей папки».
 
 ### Задача 2: `/worktree` без перехода сессии
 - Изменить: `skills/worktree/SKILL.md` — вступление, «Где лежит копия», шаги 2–3
