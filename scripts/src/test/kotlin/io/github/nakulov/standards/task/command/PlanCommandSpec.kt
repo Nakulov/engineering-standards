@@ -3,6 +3,7 @@ package io.github.nakulov.standards.task.command
 import io.github.nakulov.kotestkit.shouldThrowWithMessageTest
 import io.github.nakulov.kotestkit.then
 import io.github.nakulov.kotestkit.`when`
+import io.github.nakulov.standards.task.board.Board
 import io.github.nakulov.standards.task.cli.Console
 import io.github.nakulov.standards.task.cli.TaskError
 import io.github.nakulov.standards.task.git.Git
@@ -16,6 +17,7 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import io.mockk.verifySequence
 import java.io.File
 
@@ -26,9 +28,10 @@ class PlanCommandSpec :
         val git = mockk<Git>()
         val issues = mockk<Issues>()
         val console = mockk<Console>()
+        val board = mockk<Board>()
         val root = makePlanRoot()
         val temp = makePlanTemp(root = root)
-        val command = PlanCommand(git = git, issues = issues, directory = root)
+        val command = PlanCommand(git = git, issues = issues, board = board, directory = root)
         val merged = IssueParts.merge(
             body = makePlanIssueBody(),
             parts = File(root, "parts.md").readText(),
@@ -43,6 +46,9 @@ class PlanCommandSpec :
         justRun { git.pushHead(path = any(), branch = any()) }
         justRun { git.moveBranch(branch = any(), commit = any()) }
         justRun { issues.editBody(number = any(), body = any()) }
+        justRun { board.move(item = any(), status = any()) }
+        every { issues.nodeId(number = 53) } returns "I_issue53"
+        every { board.item(issue = 53, nodeId = "I_issue53") } returns makeGroomedItem()
         every { git.root() } returns root.path
         every { git.commonDir() } returns File(root, ".git").path
         every { git.openedAt(branch = PLAN_BRANCH) } returns null
@@ -76,6 +82,9 @@ class PlanCommandSpec :
                         git.removeWorktree(path = temp)
                         issues.editBody(number = 53, body = merged)
                         console.line(text = "#53: тело задачи обновлено, локальный plans/commit-commands.md удалён")
+                        issues.nodeId(number = 53)
+                        board.item(issue = 53, nodeId = "I_issue53")
+                        console.line(text = "#53 уже в «Groomed»")
                     }
                 }
             }
@@ -149,6 +158,55 @@ class PlanCommandSpec :
                 command.run(args = makePlanArgs(), console = console)
                 then {
                     verify { console.error(text = "удалите вручную: git worktree remove --force $temp") }
+                    verify { issues.editBody(number = 53, body = merged) }
+                }
+            }
+        }
+
+        given("задача в Backlog") {
+            every { git.hasRemoteBranch(name = PLAN_BRANCH) } returns false
+            every { git.hasLocalBranch(name = PLAN_BRANCH) } returns false
+            every { board.item(issue = 53, nodeId = "I_issue53") } returns makeBacklogItem()
+            `when` {
+                command.run(args = makePlanArgs(), console = console)
+                then {
+                    verifyOrder {
+                        issues.editBody(number = 53, body = merged)
+                        board.move(item = makeBacklogItem(), status = Board.GROOMED)
+                        console.line(text = "#53 → Groomed")
+                    }
+                }
+            }
+        }
+
+        given("статус не сменился") {
+            every { git.hasRemoteBranch(name = PLAN_BRANCH) } returns false
+            every { git.hasLocalBranch(name = PLAN_BRANCH) } returns false
+            every {
+                board.item(issue = 53, nodeId = "I_issue53")
+            } throws TaskError.Refusal(message = "#53 не на доске — добавьте её на доску проекта")
+            `when` {
+                val error = shouldThrow<TaskError.Failure> { command.run(args = makePlanArgs(), console = console) }
+                then {
+                    error.message shouldBe "план сохранён, статус — нет: task groomed 53 " +
+                        "(#53 не на доске — добавьте её на доску проекта)"
+                    File(root, "plans/commit-commands.md").exists() shouldBe false
+                    verify { issues.editBody(number = 53, body = merged) }
+                }
+            }
+        }
+
+        given("статус не сменился: доска не переместила") {
+            every { git.hasRemoteBranch(name = PLAN_BRANCH) } returns false
+            every { git.hasLocalBranch(name = PLAN_BRANCH) } returns false
+            every { board.item(issue = 53, nodeId = "I_issue53") } returns makeBacklogItem()
+            every {
+                board.move(item = makeBacklogItem(), status = Board.GROOMED)
+            } throws TaskError.Failure(message = "gh project: сбой")
+            `when` {
+                val error = shouldThrow<TaskError.Failure> { command.run(args = makePlanArgs(), console = console) }
+                then {
+                    error.message shouldBe "план сохранён, статус — нет: task groomed 53 (gh project: сбой)"
                     verify { issues.editBody(number = 53, body = merged) }
                 }
             }

@@ -5,6 +5,7 @@ import io.github.nakulov.standards.task.command.CheckRunner
 import io.github.nakulov.standards.task.command.CommitCommand
 import io.github.nakulov.standards.task.command.DoneCommand
 import io.github.nakulov.standards.task.command.FinalCommand
+import io.github.nakulov.standards.task.command.GroomedCommand
 import io.github.nakulov.standards.task.command.NewCommand
 import io.github.nakulov.standards.task.command.PlanArchive
 import io.github.nakulov.standards.task.command.PlanCommand
@@ -58,7 +59,8 @@ fun main(args: Array<String>) {
             "stage" to StageCommand(gitHub = gitHub, template = File(pluginRoot, "templates/github/stage.md")),
             "new" to NewCommand(git = git, issues = issues, board = board),
             "commit" to CommitCommand(git = git, directory = directory),
-            "plan" to PlanCommand(git = git, issues = issues, directory = directory),
+            "groomed" to GroomedCommand(issues = issues, board = board),
+            "plan" to PlanCommand(git = git, issues = issues, board = board, directory = directory),
         ),
         console = SystemConsole,
         debug = System.getenv("TASK_DEBUG") == "1",
