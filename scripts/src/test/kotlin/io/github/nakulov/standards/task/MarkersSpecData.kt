@@ -10,6 +10,8 @@ private val COPIES = listOf(
     Copies(source = "skills/execute/SKILL.md", copy = "agents/plan-executor.md", prefix = "execute"),
 ) + listOf("plan-executor", "implementation-reviewer", "test-reviewer", "standards-reviewer").map { agent ->
     Copies(source = "rules/bash-commands.md", copy = "agents/$agent.md", prefix = "rules")
+} + listOf("implementation-reviewer", "test-reviewer", "standards-reviewer").map { reviewer ->
+    Copies(source = "agents/plan-executor.md", copy = "agents/$reviewer.md", prefix = "agents")
 }
 
 // Блок: `<!-- >>> <префикс>:<имя> -->` + перевод строки + текст + `<!-- <<< <префикс>:<имя> -->`; `\1` — то же имя.
