@@ -196,6 +196,22 @@ class PlanCommandSpec :
             }
         }
 
+        given("статус не сменился: доска не переместила") {
+            every { git.hasRemoteBranch(name = PLAN_BRANCH) } returns false
+            every { git.hasLocalBranch(name = PLAN_BRANCH) } returns false
+            every { board.item(issue = 53, nodeId = "I_issue53") } returns makeBacklogItem()
+            every {
+                board.move(item = makeBacklogItem(), status = Board.GROOMED)
+            } throws TaskError.Failure(message = "gh project: сбой")
+            `when` {
+                val error = shouldThrow<TaskError.Failure> { command.run(args = makePlanArgs(), console = console) }
+                then {
+                    error.message shouldBe "план сохранён, статус — нет: task groomed 53 (gh project: сбой)"
+                    verify { issues.editBody(number = 53, body = merged) }
+                }
+            }
+        }
+
         shouldThrowWithMessageTest<TaskError.Failure>(
             "план сохранён, тело задачи — нет: повторите task plan (gh issue: сбой)",
         ) {
