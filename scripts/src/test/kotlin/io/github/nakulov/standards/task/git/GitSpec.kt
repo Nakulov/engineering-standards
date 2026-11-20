@@ -322,4 +322,33 @@ class GitSpec :
             Git(shell = ProcessShell(directory = worktree)).removeWorktree(path = worktree.path)
             worktree.exists()
         }
+
+        shouldReturnTest("long/7-big", options = TestOptions(name = "long-ветка задачи — локальная")) {
+            Git(shell = ProcessShell(directory = makeCloneWithLongBranch())).longBranch(issue = 7)
+        }
+
+        shouldReturnTest("long/7-big", options = TestOptions(name = "long-ветка задачи — только в origin")) {
+            Git(shell = ProcessShell(directory = makeCloneWithRemoteLongBranch())).longBranch(issue = 7)
+        }
+
+        shouldReturnTest(null, options = TestOptions(name = "у задачи нет long-ветки")) {
+            Git(shell = ProcessShell(directory = makeClone())).longBranch(issue = 7)
+        }
+
+        shouldReturnTest(listOf(true, true), options = TestOptions(name = "свежая long влита в final")) {
+            val clone = makeFinalBranchBehindLong(conflict = false)
+            val merged = Git(shell = ProcessShell(directory = clone)).merge(ref = "origin/long/7-big")
+            listOf(merged, File(clone, "b.txt").exists())
+        }
+
+        shouldReturnTest(false, options = TestOptions(name = "слияние long в final с конфликтом")) {
+            Git(shell = ProcessShell(directory = makeFinalBranchBehindLong(conflict = true)))
+                .merge(ref = "origin/long/7-big")
+        }
+
+        shouldReturnTest(false, options = TestOptions(name = "long-ветка удалена в origin")) {
+            val git = Git(shell = ProcessShell(directory = makeCloneWithLongBranch()))
+            git.deleteRemoteBranch(name = "long/7-big")
+            git.hasRemoteBranch(name = "long/7-big")
+        }
     })

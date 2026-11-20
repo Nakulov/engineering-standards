@@ -99,6 +99,29 @@ class Git(
         return result.out.trim().takeIf { result.code == 0 }
     }
 
+    /**
+     * Long-ветка задачи [issue] — локальная или только в `origin`; нет — `null`. Нужна `task final` и `task done` из
+     * ветки итогового PR `task/<N>-final` (#66).
+     */
+    fun longBranch(issue: Int): String? {
+        val refs = listOf("$HEADS$LONG$issue-*", "$REMOTES$LONG$issue-*")
+        return read(args = listOf("for-each-ref", "--format=%(refname)") + refs)
+            .lines()
+            .filter { line -> line.isNotBlank() }
+            .map { line -> line.removePrefix(prefix = HEADS).removePrefix(prefix = REMOTES) }
+            .firstOrNull()
+    }
+
+    /** Слияние [ref] в текущую ветку; не прошло (конфликт) — `false`, незавершённое слияние остаётся пользователю. */
+    fun merge(ref: String): Boolean {
+        return run(args = listOf("merge", "--quiet", "--no-edit", ref)).code == 0
+    }
+
+    /** Удаление ветки в `origin`: long-ветку после итогового PR из `task/<N>-final` (#66). */
+    fun deleteRemoteBranch(name: String) {
+        read(args = listOf("push", "--quiet", "origin", "--delete", name))
+    }
+
     /** В репозитории есть хотя бы один коммит (`HEAD` указывает на коммит, а не на нерождённую ветку). */
     fun hasCommits(): Boolean {
         return exists(ref = "HEAD")
@@ -342,6 +365,9 @@ class Git(
 
     private companion object {
         const val BASE_KEY = "task-base"
+        const val HEADS = "refs/heads/"
+        const val REMOTES = "refs/remotes/origin/"
+        const val LONG = "long/"
         const val NUL = '\u0000'
         const val STATUS_PREFIX = 3
         const val RENAMED = 'R'

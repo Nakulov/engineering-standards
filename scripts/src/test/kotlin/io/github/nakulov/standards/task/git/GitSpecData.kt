@@ -190,6 +190,42 @@ fun readHeadFiles(directory: File): List<String> {
     return process.inputStream.bufferedReader().readText().lines().filter { line -> line.isNotBlank() }
 }
 
+/** Клон с long-веткой `long/7-big` — локальной и в `origin`; рядом `long/70-other`: номер с тем же началом. */
+fun makeCloneWithLongBranch(): File {
+    val clone = makeClone()
+    git(directory = clone, args = listOf("branch", "--quiet", "long/70-other"))
+    git(directory = clone, args = listOf("branch", "--quiet", "long/7-big"))
+    git(directory = clone, args = listOf("push", "--quiet", "origin", "long/70-other", "long/7-big"))
+    return clone
+}
+
+/** Как [makeCloneWithLongBranch], но локальной `long/7-big` нет — только в `origin`. */
+fun makeCloneWithRemoteLongBranch(): File {
+    val clone = makeCloneWithLongBranch()
+    git(directory = clone, args = listOf("branch", "--quiet", "-D", "long/7-big"))
+    return clone
+}
+
+/**
+ * Клон с личностью на ветке `task/7-final` от `dev`; в `origin/long/7-big` — коммит «блок слит» с `b.txt`.
+ * [conflict] — на final свой `b.txt`: слияние long с конфликтом.
+ */
+fun makeFinalBranchBehindLong(conflict: Boolean): File {
+    val clone = makeIdentityClone()
+    git(directory = clone, args = listOf("switch", "--quiet", "--create", "long/7-big"))
+    File(clone, "b.txt").writeText("long\n")
+    git(directory = clone, args = listOf("add", "b.txt"))
+    git(directory = clone, args = listOf("commit", "--quiet", "--message", "блок слит"))
+    git(directory = clone, args = listOf("push", "--quiet", "origin", "long/7-big"))
+    git(directory = clone, args = listOf("switch", "--quiet", "--create", "task/7-final", "dev"))
+    if (conflict) {
+        File(clone, "b.txt").writeText("final\n")
+        git(directory = clone, args = listOf("add", "b.txt"))
+        git(directory = clone, args = listOf("commit", "--quiet", "--message", "правка по ревью"))
+    }
+    return clone
+}
+
 /** Временная папка в `build/` модуля: её убирает `./gradlew clean`. */
 private fun makeTempDirectory(): File {
     val base = File(System.getProperty("task.cache"), "git")

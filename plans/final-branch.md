@@ -91,7 +91,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: итоговый PR long-задачи открывается без push в long-ветку
-  - [ ] Задача 1: Git — поиск long-ветки, слияние, удаление в origin
+  - [x] Задача 1: Git — поиск long-ветки, слияние, удаление в origin
   - [ ] Задача 2: task final — PR из `task/<N>-final`
   - [ ] Задача 3: task done — удаление long после итогового PR
   - [ ] Приёмка
@@ -108,7 +108,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpecData.kt` — три подготовки репозитория
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpec.kt` — шесть случаев в конце спеки
 
-- [ ] 1. Падающий тест: в `GitSpecData.kt` перед `private fun makeTempDirectory()`:
+- [x] 1. Падающий тест: в `GitSpecData.kt` перед `private fun makeTempDirectory()`:
   ```kotlin
   /** Клон с long-веткой `long/7-big` — локальной и в `origin`; рядом `long/70-other`: номер с тем же началом. */
   fun makeCloneWithLongBranch(): File {
@@ -177,8 +177,8 @@
             git.hasRemoteBranch(name = "long/7-big")
         }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*.GitSpec'` — падает: `Unresolved reference 'longBranch'` (и `merge`, `deleteRemoteBranch`)
-- [ ] 3. Минимальный код: в `Git.kt` после `fun base(...)`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*.GitSpec'` — падает: `Unresolved reference 'longBranch'` (и `merge`, `deleteRemoteBranch`)
+- [x] 3. Минимальный код: в `Git.kt` после `fun base(...)`:
   ```kotlin
     /**
      * Long-ветка задачи [issue] — локальная или только в `origin`; нет — `null`. Нужна `task final` и `task done` из
@@ -209,8 +209,8 @@
         const val REMOTES = "refs/remotes/origin/"
         const val LONG = "long/"
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*.GitSpec'` — `BUILD SUCCESSFUL`
-- [ ] 5. Коммит — тест и код вместе: «Git ищет long-ветку задачи, вливает ветку и удаляет её в origin»
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*.GitSpec'` — `BUILD SUCCESSFUL`
+- [x] 5. Коммит — тест и код вместе: «Git ищет long-ветку задачи, вливает ветку и удаляет её в origin»
 
 ### Задача 2: task final — PR из `task/<N>-final`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/FinalCommand.kt` — целиком
