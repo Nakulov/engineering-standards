@@ -80,6 +80,17 @@ class PluginSettingsSpec :
             readSettings(root = root)
         }
 
+        shouldReturnTest(makeJournalAddedFindings()) {
+            writeSettings(root = root, text = makeBashOnlySettings())
+            PluginSettings(git = git, pluginRoot = root).run(mode = makeApplyMode())
+        }
+
+        shouldReturnTest(makePermissionOnlySettings()) {
+            writeSettings(root = root, text = makeBashOnlySettings())
+            PluginSettings(git = git, pluginRoot = root).run(mode = makeApplyMode())
+            readSettings(root = root)
+        }
+
         shouldThrowWithMessageTest<TaskError.Failure>(".claude/settings.json:3: ожидается ключ в кавычках") {
             writeSettings(root = root, text = makeBrokenSettings())
             step.run(mode = makeApplyMode())

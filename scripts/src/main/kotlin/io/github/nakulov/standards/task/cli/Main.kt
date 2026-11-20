@@ -24,10 +24,16 @@ import kotlin.system.exitProcess
 
 /**
  * Точка входа `task`: её запускает `scripts/task` из jar в кеше и передаёт корень плагина в `TASK_PLUGIN_ROOT`.
- * Команды работают в текущей папке.
+ * Команды работают в текущей папке или в папке из `-C <папка>` ([WorkingDirectory]).
  */
 fun main(args: Array<String>) {
-    val directory = File(System.getProperty("user.dir"))
+    val invocation = try {
+        WorkingDirectory(current = File(System.getProperty("user.dir"))).split(args = args.toList())
+    } catch (error: TaskError) {
+        SystemConsole.error(text = error.message.orEmpty())
+        exitProcess(error.exitCode)
+    }
+    val directory = invocation.directory
     val shell = ProcessShell(directory = directory)
     val pause = { millis: Long -> Thread.sleep(millis) }
     val gitHub = GitHub(shell = shell, pause = pause)
@@ -65,5 +71,5 @@ fun main(args: Array<String>) {
         console = SystemConsole,
         debug = System.getenv("TASK_DEBUG") == "1",
     )
-    exitProcess(task.run(args = args.toList()))
+    exitProcess(task.run(args = invocation.args))
 }
