@@ -15,7 +15,7 @@ import java.io.File
  * и блокеры), ветка от свежего `origin/dev` (или от long-ветки — для маленького PR в неё), статус In progress.
  * Long-ветка сразу отправляется в `origin`, чтобы от неё начинались части. Исследование — без ветки, эпик в работу не
  * берётся. Существующая ветка, отставшая от `origin`, перематывается; разошедшаяся — отказ до переключения (#61).
- * `--worktree` — ветка в копии `.claude/worktrees/<slug>` основной папки: основная папка не переключается и может быть
+ * `--worktree` — ветка в копии `.worktrees/<slug>` основной папки: основная папка не переключается и может быть
  * грязной, файлы из `.worktreeinclude` копируются при создании, последняя строка вывода — путь копии (#52). Ветка открыта в другой папке — отказ с путём.
  * Повторный запуск безопасен.
  */
@@ -27,7 +27,7 @@ class StartCommand(
 ) : Command {
     override val usage: String =
         "<N> <slug> [--long | --from long/<M>-…] [--worktree] — ветка task/<N>-<slug> от origin/dev, статус " +
-            "In progress; --worktree — в копии .claude/worktrees/<slug>"
+            "In progress; --worktree — в копии .worktrees/<slug>"
 
     override fun run(
         args: List<String>,
@@ -132,7 +132,7 @@ class StartCommand(
         }
     }
 
-    /** Ветка в копии `.claude/worktrees/<slug>` (#52); возвращает путь копии. */
+    /** Ветка в копии `.worktrees/<slug>` (#52); возвращает путь копии. */
     private fun openCopy(
         request: Request,
         console: Console,

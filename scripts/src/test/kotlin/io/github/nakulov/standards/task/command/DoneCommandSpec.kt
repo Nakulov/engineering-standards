@@ -37,8 +37,8 @@ class DoneCommandSpec :
         every { issues.nodeId(number = 13) } returns "I_issue13"
         justRun { git.removeWorktree(path = any()) }
         justRun { git.deleteRemoteBranch(name = any()) }
-        every { git.root() } returns "/repo/.claude/worktrees/task-scripts"
-        every { git.copyPath(slug = "task-scripts") } returns "/repo/.claude/worktrees/task-scripts"
+        every { git.root() } returns "/repo/.worktrees/task-scripts"
+        every { git.copyPath(slug = "task-scripts") } returns "/repo/.worktrees/task-scripts"
 
         given("последний PR слит в основном клоне") {
             every { git.isWorktree() } returns false
@@ -87,9 +87,9 @@ class DoneCommandSpec :
                         console.line(text = "#13 открыта — не последний PR задачи, статус остаётся")
                         git.root()
                         git.copyPath(slug = "task-scripts")
-                        git.removeWorktree(path = "/repo/.claude/worktrees/task-scripts")
+                        git.removeWorktree(path = "/repo/.worktrees/task-scripts")
                         console.line(
-                            text = "копия /repo/.claude/worktrees/task-scripts удалена — текущей папки больше нет",
+                            text = "копия /repo/.worktrees/task-scripts удалена — текущей папки больше нет",
                         )
                     }
                 }
@@ -147,12 +147,12 @@ class DoneCommandSpec :
             command.run(args = emptyList(), console = console)
         }
 
-        given("ветка блока task/13-big-pr1 слита в копии long-ветки .claude/worktrees/big") {
+        given("ветка блока task/13-big-pr1 слита в копии long-ветки .worktrees/big") {
             every { git.currentBranch() } returns "task/13-big-pr1"
             every { issues.pullRequest(branch = "task/13-big-pr1") } returns PullRequest(number = 40, merged = true)
             every { git.isWorktree() } returns true
-            every { git.root() } returns "/repo/.claude/worktrees/big"
-            every { git.copyPath(slug = "big-pr1") } returns "/repo/.claude/worktrees/big-pr1"
+            every { git.root() } returns "/repo/.worktrees/big"
+            every { git.copyPath(slug = "big-pr1") } returns "/repo/.worktrees/big-pr1"
             every { issues.info(number = 13) } returns makeTaskInfo()
             `when` {
                 command.run(args = emptyList(), console = console)
@@ -176,7 +176,7 @@ class DoneCommandSpec :
             }
         }
 
-        given("итоговый PR из task/13-final слит в копии long-ветки .claude/worktrees/big") {
+        given("итоговый PR из task/13-final слит в копии long-ветки .worktrees/big") {
             every { git.currentBranch() } returns "task/13-final"
             every { issues.pullRequest(branch = "task/13-final") } returns PullRequest(number = 50, merged = true)
             every { git.isWorktree() } returns true
@@ -186,8 +186,8 @@ class DoneCommandSpec :
             every { git.hasRemoteBranch(name = "long/13-big") } returns true
             every { issues.info(number = 13) } returns makeClosedInfo()
             every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
-            every { git.root() } returns "/repo/.claude/worktrees/big"
-            every { git.copyPath(slug = "big") } returns "/repo/.claude/worktrees/big"
+            every { git.root() } returns "/repo/.worktrees/big"
+            every { git.copyPath(slug = "big") } returns "/repo/.worktrees/big"
             `when` {
                 command.run(args = emptyList(), console = console)
                 then {
@@ -215,8 +215,8 @@ class DoneCommandSpec :
                         console.line(text = "#13 → Done")
                         git.root()
                         git.copyPath(slug = "big")
-                        git.removeWorktree(path = "/repo/.claude/worktrees/big")
-                        console.line(text = "копия /repo/.claude/worktrees/big удалена — текущей папки больше нет")
+                        git.removeWorktree(path = "/repo/.worktrees/big")
+                        console.line(text = "копия /repo/.worktrees/big удалена — текущей папки больше нет")
                     }
                 }
             }

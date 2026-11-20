@@ -47,7 +47,7 @@ fun makeDirtyMessage(): String {
 
 fun makeUsageMessage(): String {
     return "использование: task start <N> <slug> [--long | --from long/<M>-…] [--worktree] — ветка task/<N>-<slug> " +
-        "от origin/dev, статус In progress; --worktree — в копии .claude/worktrees/<slug>"
+        "от origin/dev, статус In progress; --worktree — в копии .worktrees/<slug>"
 }
 
 fun makeNoLongBranchMessage(): String {
@@ -73,7 +73,7 @@ private fun makeItem(status: String): BoardItem {
 }
 
 fun makeCopyPath(): String {
-    return "/repo/.claude/worktrees/task-scripts"
+    return "/repo/.worktrees/task-scripts"
 }
 
 fun makeOpenedMessage(folder: String): String {

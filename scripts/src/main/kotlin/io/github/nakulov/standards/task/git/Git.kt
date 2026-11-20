@@ -259,7 +259,7 @@ class Git(
         readIn(path = path, args = listOf("merge", "--quiet", "--ff-only", "origin/$name"))
     }
 
-    /** Копия задачи со [slug] — `.claude/worktrees/<slug>` основной папки, и при запуске из другой копии (#52). */
+    /** Копия задачи со [slug] — `.worktrees/<slug>` основной папки, и при запуске из другой копии (#52). */
     fun copyPath(slug: String): String {
         return File(mainRoot(), "$WORKTREES/$slug").path
     }
@@ -374,6 +374,6 @@ class Git(
         const val COPIED = 'C'
         const val FROM_ROOT = ":/"
         const val WORKTREE = "worktree "
-        const val WORKTREES = ".claude/worktrees"
+        const val WORKTREES = ".worktrees"
     }
 }

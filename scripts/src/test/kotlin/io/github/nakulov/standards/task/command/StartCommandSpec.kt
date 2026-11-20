@@ -416,7 +416,7 @@ class StartCommandSpec :
         }
 
         given("--long --worktree: новая long-ветка в копии") {
-            every { git.copyPath(slug = "big") } returns "/repo/.claude/worktrees/big"
+            every { git.copyPath(slug = "big") } returns "/repo/.worktrees/big"
             every { issues.info(number = 13) } returns makeTaskInfo()
             every { board.item(issue = 13, nodeId = "I_issue13") } returns makeGroomedItem()
             every { git.hasLocalBranch(name = "long/13-big") } returns false
@@ -433,14 +433,14 @@ class StartCommandSpec :
                         git.openedAt(branch = "long/13-big")
                         git.hasLocalBranch(name = "long/13-big")
                         git.hasRemoteBranch(name = "long/13-big")
-                        git.addBranchWorktree(path = "/repo/.claude/worktrees/big", name = "long/13-big", base = "origin/dev")
-                        console.line(text = "ветка long/13-big от origin/dev — копия /repo/.claude/worktrees/big")
-                        files.copyInto(copy = "/repo/.claude/worktrees/big", console = console)
+                        git.addBranchWorktree(path = "/repo/.worktrees/big", name = "long/13-big", base = "origin/dev")
+                        console.line(text = "ветка long/13-big от origin/dev — копия /repo/.worktrees/big")
+                        files.copyInto(copy = "/repo/.worktrees/big", console = console)
                         git.push(name = "long/13-big")
                         console.line(text = "ветка long/13-big отправлена в origin")
                         board.move(item = makeGroomedItem(), status = "In progress")
                         console.line(text = "#13 → In progress")
-                        console.line(text = "/repo/.claude/worktrees/big")
+                        console.line(text = "/repo/.worktrees/big")
                     }
                 }
             }
@@ -492,7 +492,7 @@ class StartCommandSpec :
         }
 
         given("--from long/… --worktree: ветка блока в своей копии") {
-            every { git.copyPath(slug = "part-a") } returns "/repo/.claude/worktrees/part-a"
+            every { git.copyPath(slug = "part-a") } returns "/repo/.worktrees/part-a"
             every { issues.info(number = 13) } returns makeTaskInfo()
             every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
             every { git.hasLocalBranch(name = "task/13-part-a") } returns false
@@ -512,17 +512,17 @@ class StartCommandSpec :
                         git.hasRemoteBranch(name = "task/13-part-a")
                         git.hasRemoteBranch(name = "long/13-big")
                         git.addBranchWorktree(
-                            path = "/repo/.claude/worktrees/part-a",
+                            path = "/repo/.worktrees/part-a",
                             name = "task/13-part-a",
                             base = "origin/long/13-big",
                         )
                         git.setBase(branch = "task/13-part-a", base = "long/13-big")
                         console.line(
-                            text = "ветка task/13-part-a от origin/long/13-big — копия /repo/.claude/worktrees/part-a",
+                            text = "ветка task/13-part-a от origin/long/13-big — копия /repo/.worktrees/part-a",
                         )
-                        files.copyInto(copy = "/repo/.claude/worktrees/part-a", console = console)
+                        files.copyInto(copy = "/repo/.worktrees/part-a", console = console)
                         console.line(text = "#13 уже In progress")
-                        console.line(text = "/repo/.claude/worktrees/part-a")
+                        console.line(text = "/repo/.worktrees/part-a")
                     }
                 }
             }
