@@ -287,7 +287,7 @@ class GitSpec :
         shouldReturnTest(true, options = TestOptions(name = "путь копии — в основной папке, и из другой копии")) {
             val worktree = makeWorktree()
             val path = Git(shell = ProcessShell(directory = worktree)).copyPath(slug = "x")
-            File(path).canonicalPath == File(worktree.parentFile, "clone/.claude/worktrees/x").canonicalPath
+            File(path).canonicalPath == File(worktree.parentFile, "clone/.worktrees/x").canonicalPath
         }
 
         shouldReturnTest(true, options = TestOptions(name = "список копий — с основной папкой")) {
