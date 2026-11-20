@@ -26,7 +26,7 @@ fun makeHelpRun(): LauncherRun {
             "  task commit --message-file <файл> — коммит по шаблону задачи плана: файлы — из раздела «Файлы:»\n" +
             "  task groomed <N> — задача из Backlog в Groomed: груминг закончен\n" +
             "  task plan <N> <slug> [--long] --issue-parts <файл> — " +
-            "план plans/<slug>.md в ветку задачи без смены статуса\n",
+            "план plans/<slug>.md в ветку задачи; задача из Backlog — в Groomed\n",
         err = "",
     )
 }

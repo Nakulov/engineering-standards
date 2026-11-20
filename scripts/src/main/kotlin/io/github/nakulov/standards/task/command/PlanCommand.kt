@@ -1,5 +1,6 @@
 package io.github.nakulov.standards.task.command
 
+import io.github.nakulov.standards.task.board.Board
 import io.github.nakulov.standards.task.cli.Command
 import io.github.nakulov.standards.task.cli.Console
 import io.github.nakulov.standards.task.cli.TaskError
@@ -11,16 +12,21 @@ import java.io.File
 
 /**
  * `task plan <N> <slug> [--long] --issue-parts <файл>` (#53): утверждённый план — в ветку задачи в `origin` через
- * временный worktree (рабочая папка и ветка пользователя не трогаются), без смены статуса и без PR; части плана —
- * в тело задачи между метками. Повтор — «Обновить план». Локальный план после сохранения удаляется.
+ * временный worktree (рабочая папка и ветка пользователя не трогаются), без PR; части плана — в тело задачи между
+ * метками. Повтор — «Обновить план». Локальный план после сохранения удаляется. Последним шагом задача из Backlog —
+ * в Groomed, другой статус не меняется (#69); сбой статуса — повтор `task groomed`.
  */
 class PlanCommand(
     private val git: Git,
     private val issues: Issues,
+    board: Board,
     private val directory: File,
 ) : Command {
+    private val grooming = Grooming(issues = issues, board = board)
+
     override val usage: String =
-        "<N> <slug> [--long] --issue-parts <файл> — план plans/<slug>.md в ветку задачи без смены статуса"
+        "<N> <slug> [--long] --issue-parts <файл> — план plans/<slug>.md в ветку задачи; задача из Backlog — " +
+            "в Groomed"
 
     override fun run(
         args: List<String>,
@@ -80,6 +86,12 @@ class PlanCommand(
         }
         plan.delete()
         console.line(text = "#$number: тело задачи обновлено, локальный plans/$slug.md удалён")
+        val status = try {
+            grooming.groom(number = number)
+        } catch (error: TaskError) {
+            throw TaskError.Failure(message = "план сохранён, статус — нет: task groomed $number (${error.message})")
+        }
+        console.line(text = status)
     }
 
     /** Коммит плана во временном worktree и push; план не изменился — `null`. Worktree удаляется всегда. */

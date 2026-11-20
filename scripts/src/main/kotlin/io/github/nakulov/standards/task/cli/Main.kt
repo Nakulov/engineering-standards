@@ -60,7 +60,7 @@ fun main(args: Array<String>) {
             "new" to NewCommand(git = git, issues = issues, board = board),
             "commit" to CommitCommand(git = git, directory = directory),
             "groomed" to GroomedCommand(issues = issues, board = board),
-            "plan" to PlanCommand(git = git, issues = issues, directory = directory),
+            "plan" to PlanCommand(git = git, issues = issues, board = board, directory = directory),
         ),
         console = SystemConsole,
         debug = System.getenv("TASK_DEBUG") == "1",

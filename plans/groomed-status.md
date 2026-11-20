@@ -81,7 +81,7 @@
 - PR 1: задача из Backlog сама переходит в Groomed после груминга и плана
   - [x] Задача 1: `Grooming` — перевод из Backlog в Groomed
   - [x] Задача 2: команда `task groomed`
-  - [ ] Задача 3: `task plan` переводит задачу в Groomed
+  - [x] Задача 3: `task plan` переводит задачу в Groomed
   - [ ] Задача 4: скиллы `groom` и `decompose`
   - [ ] Приёмка
 
@@ -329,7 +329,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/PlanCommandSpec.kt` — мок `board`, новые случаи
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/cli/TaskLauncherSpecData.kt:28` — новый `usage` у `plan`
 
-- [ ] 1. Падающий тест. В `PlanCommandSpec.kt`:
+- [x] 1. Падающий тест. В `PlanCommandSpec.kt`:
   - добавить импорты `io.github.nakulov.standards.task.board.Board` и `io.mockk.verifyOrder`;
   - после `val console = mockk<Console>()` добавить `val board = mockk<Board>()`;
   - конструктор заменить на `PlanCommand(git = git, issues = issues, board = board, directory = root)`;
@@ -380,8 +380,8 @@
               }
           }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PlanCommandSpec*'` — падает: `No parameter with name 'board' found` (конструктор `PlanCommand`)
-- [ ] 3. Минимальный код в `PlanCommand.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PlanCommandSpec*'` — падает: `No parameter with name 'board' found` (конструктор `PlanCommand`)
+- [x] 3. Минимальный код в `PlanCommand.kt`:
   - импорт `io.github.nakulov.standards.task.board.Board`;
   - kdoc (`:12–16`):
   ```kotlin
@@ -426,8 +426,8 @@
               "  task plan <N> <slug> [--long] --issue-parts <файл> — " +
               "план plans/<slug>.md в ветку задачи; задача из Backlog — в Groomed\n",
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test` → `BUILD SUCCESSFUL` (полный набор: `PlanCommandSpec`, `TaskLauncherSpec`, остальные)
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew :scripts:test` → `BUILD SUCCESSFUL` (полный набор: `PlanCommandSpec`, `TaskLauncherSpec`, остальные)
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 4: скиллы `groom` и `decompose`
 - Изменить: `skills/groom/SKILL.md:11` — исключение в «Ничего не меняешь»
