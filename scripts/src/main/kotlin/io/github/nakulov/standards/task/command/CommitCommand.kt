@@ -27,7 +27,7 @@ class CommitCommand(
         if (!file.isFile) {
             throw TaskError.Failure(message = "нет файла сообщения ${args.last()}")
         }
-        val message = CommitMessage.parse(text = file.readText())
+        val message = CommitMessage.parse(text = file.readText(), plan = null)
         val changed = git.changedPaths()
         val unchanged = message.files.firstOrNull { path -> path !in changed }
         if (unchanged != null) {

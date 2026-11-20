@@ -69,7 +69,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: `task commit` принимает коммит без «Задачи плана» в ветке без плана
-  - [ ] Задача 1: `CommitMessage.parse` требует строку только при плане
+  - [x] Задача 1: `CommitMessage.parse` требует строку только при плане
   - [ ] Задача 2: `CommitCommand` передаёт план ветки в `parse`
   - [ ] Задача 3: груминг называет команды для «сразу в работу»
   - [ ] Приёмка
@@ -85,7 +85,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/CommitMessageSpec.kt` — новые случаи, старые — с `plan`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/command/CommitMessageSpecData.kt` — данные без строки
 
-- [ ] 1. Падающий тест: без плана без строки → `planTask = null`; без плана со строкой → принят; с планом без строки → отказ с именем плана; старые случаи — с `plan = makePlanPath()`.
+- [x] 1. Падающий тест: без плана без строки → `planTask = null`; без плана со строкой → принят; с планом без строки → отказ с именем плана; старые случаи — с `plan = makePlanPath()`.
 
   `CommitMessageSpecData.kt` — дописать в конец:
   ```kotlin
@@ -142,8 +142,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — падает: `No parameter with name 'plan' found` (компиляция теста).
-- [ ] 3. Минимальный код — `CommitMessage.kt` целиком:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — падает: `No parameter with name 'plan' found` (компиляция теста).
+- [x] 3. Минимальный код — `CommitMessage.kt` целиком:
   ```kotlin
   package io.github.nakulov.standards.task.command
 
@@ -196,8 +196,8 @@
   }
   ```
   `CommitCommand.kt:30` — временно, чтобы собиралось до задачи 2: `CommitMessage.parse(text = file.readText(), plan = null)`.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе (`CommitMessage.kt`, `CommitMessageSpec.kt`, `CommitMessageSpecData.kt`, `CommitCommand.kt`).
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*CommitMessageSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе (`CommitMessage.kt`, `CommitMessageSpec.kt`, `CommitMessageSpecData.kt`, `CommitCommand.kt`).
 
 ### Задача 2: `CommitCommand` передаёт план ветки в `parse`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/command/CommitCommand.kt:9-38` — поиск плана через `addedPaths`

@@ -24,3 +24,15 @@ fun makeNoPlanTaskText(): String {
 fun makeNoFilesText(): String {
     return "Добавить\n\nЗадача плана: Задача 3\nФайлы:\n"
 }
+
+fun makePlanPath(): String {
+    return "plans/commit-commands.md"
+}
+
+fun makeNoPlanTaskCommitText(): String {
+    return "Поправить опечатку\n\nФайлы:\n- `scripts/a.kt` — опечатка\n"
+}
+
+fun makeNoPlanTaskCommitMessage(): CommitMessage {
+    return CommitMessage(title = "Поправить опечатку", planTask = null, files = listOf("scripts/a.kt"))
+}
