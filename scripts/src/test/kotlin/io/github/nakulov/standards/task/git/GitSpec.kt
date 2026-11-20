@@ -317,6 +317,28 @@ class GitSpec :
             )
         }
 
+        shouldReturnTest(
+            listOf("build/x/local.properties", "local.properties"),
+            options = TestOptions(name = "шаблон без / — файлы на любой глубине"),
+        ) {
+            val clone = makeCloneWithNestedProperties(include = "local.properties\n")
+            Git(shell = ProcessShell(directory = clone)).includedPaths(
+                path = clone.path,
+                listFile = File(clone.parentFile, "include").path,
+            )
+        }
+
+        shouldReturnTest(
+            listOf("local.properties"),
+            options = TestOptions(name = "шаблон с / — только файл корня (#81)"),
+        ) {
+            val clone = makeCloneWithNestedProperties(include = "/local.properties\n")
+            Git(shell = ProcessShell(directory = clone)).includedPaths(
+                path = clone.path,
+                listFile = File(clone.parentFile, "include").path,
+            )
+        }
+
         shouldReturnTest(false, options = TestOptions(name = "копия удаляет себя изнутри, без -C")) {
             val worktree = makeWorktree()
             Git(shell = ProcessShell(directory = worktree)).removeWorktree(path = worktree.path)

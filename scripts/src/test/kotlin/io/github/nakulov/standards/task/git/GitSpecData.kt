@@ -119,6 +119,20 @@ fun makeCloneWithIgnoredFiles(): File {
     return clone
 }
 
+/**
+ * Клон с двумя `local.properties`, оба игнорирует git: в корне и вложенный `build/x/` — как остатки тестов (#81).
+ * Рядом с клоном — список `include` с содержимым [include].
+ */
+fun makeCloneWithNestedProperties(include: String): File {
+    val clone = makeClone()
+    File(clone, ".gitignore").writeText("local.properties\nbuild/\n")
+    File(clone, "local.properties").writeText("sdk.dir=/sdk\n")
+    File(clone, "build/x").mkdirs()
+    File(clone, "build/x/local.properties").writeText("sdk.dir=/other\n")
+    File(clone.parentFile, "include").writeText(include)
+    return clone
+}
+
 /** Клон с личностью в настройке: `a.txt` изменён, `b.txt` удалён, `c.txt` и `plans/x.md` — новые. */
 fun makeCloneWithChanges(): File {
     val clone = makeClone()
