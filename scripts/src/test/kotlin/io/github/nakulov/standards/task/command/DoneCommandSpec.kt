@@ -36,6 +36,7 @@ class DoneCommandSpec :
         every { issues.pullRequest(branch = "task/13-task-scripts") } returns PullRequest(number = 30, merged = true)
         every { issues.nodeId(number = 13) } returns "I_issue13"
         justRun { git.removeWorktree(path = any()) }
+        justRun { git.deleteRemoteBranch(name = any()) }
         every { git.root() } returns "/repo/.claude/worktrees/task-scripts"
         every { git.copyPath(slug = "task-scripts") } returns "/repo/.claude/worktrees/task-scripts"
 
@@ -173,5 +174,90 @@ class DoneCommandSpec :
                     }
                 }
             }
+        }
+
+        given("итоговый PR из task/13-final слит в копии long-ветки .claude/worktrees/big") {
+            every { git.currentBranch() } returns "task/13-final"
+            every { issues.pullRequest(branch = "task/13-final") } returns PullRequest(number = 50, merged = true)
+            every { git.isWorktree() } returns true
+            every { git.longBranch(issue = 13) } returns "long/13-big"
+            every { git.openedAt(branch = "long/13-big") } returns null
+            every { git.hasLocalBranch(name = "long/13-big") } returns true
+            every { git.hasRemoteBranch(name = "long/13-big") } returns true
+            every { issues.info(number = 13) } returns makeClosedInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeInProgressItem()
+            every { git.root() } returns "/repo/.claude/worktrees/big"
+            every { git.copyPath(slug = "big") } returns "/repo/.claude/worktrees/big"
+            `when` {
+                command.run(args = emptyList(), console = console)
+                then {
+                    verifySequence {
+                        git.currentBranch()
+                        git.isClean()
+                        issues.pullRequest(branch = "task/13-final")
+                        git.longBranch(issue = 13)
+                        git.openedAt(branch = "long/13-big")
+                        git.fetch()
+                        git.isWorktree()
+                        git.detach(ref = "origin/dev")
+                        console.line(text = "worktree отсоединён на origin/dev, dev не тронут")
+                        git.deleteBranch(name = "task/13-final")
+                        console.line(text = "ветка task/13-final удалена")
+                        git.hasLocalBranch(name = "long/13-big")
+                        git.deleteBranch(name = "long/13-big")
+                        git.hasRemoteBranch(name = "long/13-big")
+                        git.deleteRemoteBranch(name = "long/13-big")
+                        console.line(text = makeLongRemovedMessage())
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        board.move(item = makeInProgressItem(), status = "Done")
+                        console.line(text = "#13 → Done")
+                        git.root()
+                        git.copyPath(slug = "big")
+                        git.removeWorktree(path = "/repo/.claude/worktrees/big")
+                        console.line(text = "копия /repo/.claude/worktrees/big удалена — текущей папки больше нет")
+                    }
+                }
+            }
+        }
+
+        given("итоговый PR из task/13-final слит, long-ветки уже нет") {
+            every { git.currentBranch() } returns "task/13-final"
+            every { issues.pullRequest(branch = "task/13-final") } returns PullRequest(number = 50, merged = true)
+            every { git.isWorktree() } returns false
+            every { git.longBranch(issue = 13) } returns null
+            every { issues.info(number = 13) } returns makeClosedInfo()
+            every { board.item(issue = 13, nodeId = "I_issue13") } returns makeDoneItem()
+            `when` {
+                command.run(args = emptyList(), console = console)
+                then {
+                    verifySequence {
+                        git.currentBranch()
+                        git.isClean()
+                        issues.pullRequest(branch = "task/13-final")
+                        git.longBranch(issue = 13)
+                        git.fetch()
+                        git.isWorktree()
+                        git.updateDev()
+                        console.line(text = "dev обновлён до origin/dev")
+                        git.deleteBranch(name = "task/13-final")
+                        console.line(text = "ветка task/13-final удалена")
+                        console.line(text = makeNoLongMessage())
+                        issues.info(number = 13)
+                        issues.nodeId(number = 13)
+                        board.item(issue = 13, nodeId = "I_issue13")
+                        console.line(text = "#13 → Done")
+                    }
+                }
+            }
+        }
+
+        shouldThrowWithMessageTest<TaskError.Refusal>(makeLongOpenedMessage()) {
+            every { git.currentBranch() } returns "task/13-final"
+            every { issues.pullRequest(branch = "task/13-final") } returns PullRequest(number = 50, merged = true)
+            every { git.longBranch(issue = 13) } returns "long/13-big"
+            every { git.openedAt(branch = "long/13-big") } returns "/repo"
+            command.run(args = emptyList(), console = console)
         }
     })
