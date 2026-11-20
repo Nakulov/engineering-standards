@@ -90,7 +90,7 @@
   - [x] Приёмка
 - PR 2: `setup` разрешает запись журналов без запроса
   - [x] Задача 2: список правил `allow` в `PluginSettings`
-  - [ ] Задача 3: правило в настройках репозитория и в README
+  - [x] Задача 3: правило в настройках репозитория и в README
   - [ ] Приёмка
 - PR 3: агенты правят файлы через Edit/Write и шлют одиночные команды
   - [ ] Задача 4: правило `rules/bash-commands.md` и его копии в агентах
@@ -396,7 +396,7 @@
 - Изменить: `README.md:46` — два разрешения
 
 Тест: не применим — настройки и текст; формат `.claude/settings.json` проверяет `PluginSettings` (шаг 2).
-- [ ] 1. `.claude/settings.json` — целиком:
+- [x] 1. `.claude/settings.json` — целиком:
   ```json
   {
     "permissions": {
@@ -407,12 +407,12 @@
     }
   }
   ```
-- [ ] 2. Проверить, что `PluginSettings` считает файл полным: `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`, и сравнить текст файла с `makePermissionOnlySettings()` в `PluginSettingsSpecData.kt` — совпадает (формат печати `setup`, повторный `setup` файл не перепишет)
-- [ ] 3. `README.md:46`, было:
+- [x] 2. Проверить, что `PluginSettings` считает файл полным: `./gradlew :scripts:test --tests '*PluginSettingsSpec*'` — `BUILD SUCCESSFUL`, и сравнить текст файла с `makePermissionOnlySettings()` в `PluginSettingsSpecData.kt` — совпадает (формат печати `setup`, повторный `setup` файл не перепишет)
+- [x] 3. `README.md:46`, было:
   `- \`.claude/settings.json\` — маркетплейс \`engineering-standards\`, включённый плагин и разрешение \`Bash(task:*)\`.`
   стало:
   `- \`.claude/settings.json\` — маркетплейс \`engineering-standards\`, включённый плагин и разрешения \`Bash(task:*)\` и \`Edit(/plans/journal/**)\` (журналы и сообщение коммита — без запроса доступа).`
-- [ ] 4. Коммит
+- [x] 4. Коммит
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `PluginSettingsSpec` — дописывает `Edit(/plans/journal/**)`, повторно не дублирует (`makeSettingsUnchangedFindings`), чужое `Bash(./gradlew:*)` сохраняет (`makeProjectSettingsWithStandard`)
