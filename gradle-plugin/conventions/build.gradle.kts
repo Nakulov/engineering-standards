@@ -19,6 +19,7 @@ val testPluginClasspath: Configuration by configurations.creating
 dependencies {
     implementation(project(":detekt-rules"))
     implementation(libs.detekt.gradle.plugin)
+    implementation(libs.kover.gradle.plugin)
 
     testImplementation(libs.kotestkit)
     testPluginClasspath(libs.kotlin.gradle.plugin)

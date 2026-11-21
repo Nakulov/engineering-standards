@@ -10,6 +10,7 @@ class StandardsKotlinPluginSpec : BehaviorSpec({
         nameFn = { case -> "образец: ${case.arg2}" },
         case(arg1 = makeViolationFindings(), arg2 = "violation", arg3 = ".kt:"),
         case(arg1 = makeNoBoundOutput(), arg2 = "no-bound", arg3 = "standards.kotlin:"),
+        case(arg1 = makeLowCoverageOutput(), arg2 = "low-coverage", arg3 = "Rule violated"),
     ) { expected, fixture, mark ->
         shouldReturnTest(expected) { findFailedCheckLines(fixture, mark) }
     }
