@@ -134,7 +134,7 @@
 - PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
   - [x] Задача 5: `BehaviorSpecOnly`
   - [x] Задача 6: `SpecDataContent`
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 4: Плагин `standards.kotlin` подключает detekt стандарта
   - [ ] Задача 7: Плагин с detekt, конфигом и своими правилами
   - [ ] Приёмка
@@ -1081,9 +1081,9 @@
 - [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Набор `standards` — 5 правил, `StandardsProviderSpec` зелёный
-- [ ] Крайние случаи: полное имя `BehaviorSpec`, приватный `make…`, `makeup`, `typealias` и data-класс в файле данных, обычный файл
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
+- [x] Набор `standards` — 5 правил, `StandardsProviderSpec` зелёный
+- [x] Крайние случаи: полное имя `BehaviorSpec`, приватный `make…`, `makeup`, `typealias` и data-класс в файле данных, обычный файл
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 4: Плагин `standards.kotlin` подключает detekt стандарта
 **Объём:** `gradle-plugin/settings.gradle.kts`, модуль `conventions` (сборка, плагин, `detekt.yml`, спека, данные, `FindFailedCheckLines.kt`), проект-образец из 3 файлов; ≈ 10 файлов
