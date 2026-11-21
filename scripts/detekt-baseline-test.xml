@@ -1,0 +1,562 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:GitSpec.kt:GitSpec$(directory = worktree)</ID>
+    <ID>ArgumentListWrapping:GitSpec.kt:GitSpec$(path)</ID>
+    <ID>ArgumentListWrapping:GitSpec.kt:GitSpec$(shell = ProcessShell(directory = worktree))</ID>
+    <ID>ArgumentListWrapping:PluginSettingsSpec.kt:PluginSettingsSpec$(".claude/settings.json: permissions.allow — ожидается массив […]")</ID>
+    <ID>ArgumentListWrapping:PluginSettingsSpecData.kt:("\"source\": \"directory\"", "\"path\": \"/tmp/standards\"")</ID>
+    <ID>ArgumentListWrapping:PluginSettingsSpecData.kt:(enabled = "true", source = listOf("\"source\": \"directory\"", "\"path\": \"/tmp/standards\""))</ID>
+    <ID>ArgumentListWrapping:StartCommandSpec.kt:StartCommandSpec$(ancestor = "origin/long/13-big", descendant = "refs/heads/long/13-big")</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$("~/.local/bin/task: не записана — проверьте права на ~/.local/bin")</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(listOf(makeWrapperFinding(status = Finding.Status.NOTE, text = makeForeignText(plugin = plugin))))</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(listOf(makeWrapperFinding(status = Finding.Status.OK, text = "обёртка по стандарту"), makePathNote()))</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(makeWrapperFinding(status = Finding.Status.NOTE, text = makeForeignText(plugin = plugin)))</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(makeWrapperFinding(status = Finding.Status.OK, text = "обёртка по стандарту"), makePathNote())</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(plugin = plugin)</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(status = Finding.Status.NOTE, text = makeForeignText(plugin = plugin))</ID>
+    <ID>ArgumentListWrapping:TaskWrapperSpec.kt:TaskWrapperSpec$(status = Finding.Status.OK, text = "обёртка по стандарту")</ID>
+    <ID>ArgumentListWrapping:TemplatesSpec.kt:TemplatesSpec$(emptyMap&lt;String, List&lt;String&gt;&gt;(), options = TestOptions(name = "нет дат и #N вне комментариев"))</ID>
+    <ID>ArgumentListWrapping:TemplatesSpec.kt:TemplatesSpec$(name = "нет дат и #N вне комментариев")</ID>
+    <ID>BinaryExpressionWrapping:StartCommandSpec.kt:StartCommandSpec$every { git.isAncestor(ancestor = "origin/long/13-big", descendant = "refs/heads/long/13-big") } returns true</ID>
+    <ID>FunctionLiteral:GitSpec.kt:GitSpec$&lt;anonymous&gt;</ID>
+    <ID>FunctionLiteral:StartCommandSpec.kt:StartCommandSpec$&lt;anonymous&gt;</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeBoardUrl: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeCopyJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeCopyRow: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeOptionsJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeRepositoryJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeTemplateError: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSetupSpecData.kt:fun makeTemplateRow: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSpecData.kt:fun makeInvisibleMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSpecData.kt:fun makeItemsPath: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSpecData.kt:fun makeMissingStatusMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:BoardSpecData.kt:fun makeNoBoardMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:BranchNameSpecData.kt:fun makeBadSlugMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:BranchNameSpecData.kt:fun makeLongSlug: String</ID>
+    <ID>FunctionOnlyReturningConstant:CheckRunnerSpecData.kt:fun makeFailedCheckMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:CommitMessageSpecData.kt:fun makeNoFilesText: String</ID>
+    <ID>FunctionOnlyReturningConstant:CommitMessageSpecData.kt:fun makeNoPlanTaskCommitText: String</ID>
+    <ID>FunctionOnlyReturningConstant:CommitMessageSpecData.kt:fun makeNoPlanTaskText: String</ID>
+    <ID>FunctionOnlyReturningConstant:CommitMessageSpecData.kt:fun makeNoTitleText: String</ID>
+    <ID>FunctionOnlyReturningConstant:CommitMessageSpecData.kt:fun makePlanPath: String</ID>
+    <ID>FunctionOnlyReturningConstant:DoneCommandSpecData.kt:fun makeDetachedMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:DoneCommandSpecData.kt:fun makeLongOpenedMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:DoneCommandSpecData.kt:fun makeLongRemovedMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:DoneCommandSpecData.kt:fun makeNoLongMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:DoneCommandSpecData.kt:fun makeNotTaskBranchMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:EnvironmentSpecData.kt:fun makeNoProjectMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:EnvironmentSpecData.kt:fun makeNoScopesMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:EnvironmentSpecData.kt:fun makeNotAdminMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:FinalCommandSpecData.kt:fun makeFinalDirtyMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:FinalCommandSpecData.kt:fun makeFinalWrongBranchMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitHubSpecData.kt:fun makeBadGatewayMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitHubSpecData.kt:fun makeNotFoundMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitHubSpecData.kt:fun makeTitle: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitHubSpecData.kt:fun makeUnpagedQuery: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitHubSpecData.kt:fun makeUnpagedQueryMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitSpecData.kt:fun makeNoOriginMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitSpecData.kt:fun makeNotFastForwardMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitignoreBlockSpecData.kt:fun makeBlock: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitignoreBlockSpecData.kt:fun makeBlockOnly: String</ID>
+    <ID>FunctionOnlyReturningConstant:GitignoreBlockSpecData.kt:fun makeProjectLines: String</ID>
+    <ID>FunctionOnlyReturningConstant:InitialBranchSpecData.kt:fun makeBranchNotFound: String</ID>
+    <ID>FunctionOnlyReturningConstant:InitialBranchSpecData.kt:fun makeFirstCommitMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssuePartsSpecData.kt:fun makeNewParts: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssuePartsSpecData.kt:fun makeParts: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssueTemplateSpecData.kt:fun makeNoTypeLabelMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssueTemplateSpecData.kt:fun makeTwoLabelsTemplate: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssuesSpecData.kt:fun makeBlockersJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssuesSpecData.kt:fun makeBlockersPath: String</ID>
+    <ID>FunctionOnlyReturningConstant:IssuesSpecData.kt:fun makeStateJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:LabelsSpecData.kt:fun makeBadLineMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:LabelsSpecData.kt:fun makeLabelsJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:LabelsSpecData.kt:fun makeLabelsPath: String</ID>
+    <ID>FunctionOnlyReturningConstant:LabelsSpecData.kt:fun makeUnquotedMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:LabelsSpecData.kt:fun makeUnquotedText: String</ID>
+    <ID>FunctionOnlyReturningConstant:NewCommandSpecData.kt:fun makeUnknownTypeMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:PlanCommandSpecData.kt:fun makePlanIssueBody: String</ID>
+    <ID>FunctionOnlyReturningConstant:PluginSettingsSpecData.kt:fun makeBrokenSettings: String</ID>
+    <ID>FunctionOnlyReturningConstant:PrBodySpecData.kt:fun makeNoAutomaticMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:PrCommandSpecData.kt:fun makeNoPrMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:ProcessShellSpecData.kt:fun makeMissingToolMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:PullRequestsSpecData.kt:fun makeCreateOutput: String</ID>
+    <ID>FunctionOnlyReturningConstant:PullRequestsSpecData.kt:fun makePullUrl: String</ID>
+    <ID>FunctionOnlyReturningConstant:RulesetsSpecData.kt:fun makeNotProtected: String</ID>
+    <ID>FunctionOnlyReturningConstant:RulesetsSpecData.kt:fun makeRulesetsJq: String</ID>
+    <ID>FunctionOnlyReturningConstant:RulesetsSpecData.kt:fun makeRulesetsPath: String</ID>
+    <ID>FunctionOnlyReturningConstant:SetupSpecData.kt:fun makeCrashMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:SetupSpecData.kt:fun makeUsageError: String</ID>
+    <ID>FunctionOnlyReturningConstant:StageCommandSpecData.kt:fun makeStageUsageMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:StartCommandSpecData.kt:fun makeCopyPath: String</ID>
+    <ID>FunctionOnlyReturningConstant:StartCommandSpecData.kt:fun makeDirtyMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:StartCommandSpecData.kt:fun makeDivergedMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:StartCommandSpecData.kt:fun makeFastForwardLine: String</ID>
+    <ID>FunctionOnlyReturningConstant:StartCommandSpecData.kt:fun makeNoLongBranchMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskLauncherSpecData.kt:fun makeBarePath: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeCrashMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeFailureMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeFailureTraceStart: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeHelpTitle: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeNoCommandsLine: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeRefusalMessage: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeStartHelpLine: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeStartUsage: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskSpecData.kt:fun makeUnknownCommandError: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeDifferentText: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeForeignTask: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeInstalledText: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeMissingText: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeOldWrapper: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeUpdatedText: String</ID>
+    <ID>FunctionOnlyReturningConstant:TaskWrapperSpecData.kt:fun makeWrapperSource: String</ID>
+    <ID>FunctionSignature:BoardSetupSpecData.kt:fun makeBoardFinding: Finding</ID>
+    <ID>FunctionSignature:GitSpecData.kt:private fun git</ID>
+    <ID>FunctionSignature:GitignoreBlockSpecData.kt:fun makeGitignoreFinding: Finding</ID>
+    <ID>FunctionSignature:GitignoreBlockSpecData.kt:fun writeGitignore</ID>
+    <ID>FunctionSignature:InitialBranchSpecData.kt:fun makeBranchFinding: Finding</ID>
+    <ID>FunctionSignature:PluginSettingsSpecData.kt:fun makeSettingsFinding: Finding</ID>
+    <ID>FunctionSignature:PluginSettingsSpecData.kt:fun writeSettings</ID>
+    <ID>FunctionSignature:PluginSettingsSpecData.kt:private fun makeStandardKeys: String</ID>
+    <ID>FunctionSignature:SessionStartHookSpecData.kt:fun readRootRecord: String</ID>
+    <ID>FunctionSignature:SessionStartHookSpecData.kt:fun runGit: String</ID>
+    <ID>FunctionSignature:SessionStartHookSpecData.kt:fun runHook: LauncherRun</ID>
+    <ID>FunctionSignature:StandardFilesSpecData.kt:fun writeProjectFile</ID>
+    <ID>FunctionSignature:TaskWrapperScriptSpecData.kt:fun runWrapper: LauncherRun</ID>
+    <ID>FunctionSignature:TaskWrapperScriptSpecData.kt:fun writeRootRecord</ID>
+    <ID>FunctionSignature:TaskWrapperScriptSpecData.kt:private fun writeScript</ID>
+    <ID>FunctionSignature:TaskWrapperSpecData.kt:fun makeWrapperFinding: Finding</ID>
+    <ID>FunctionSignature:TaskWrapperSpecData.kt:fun writeWrapper</ID>
+    <ID>ImportOrdering:StartCommandSpec.kt:import io.github.nakulov.kotestkit.case import io.github.nakulov.kotestkit.shouldThrowWithMessageTest import io.github.nakulov.kotestkit.then import io.github.nakulov.kotestkit.`when` import io.github.nakulov.kotestkit.withGivens import io.github.nakulov.standards.task.board.Board import io.github.nakulov.standards.task.cli.Console import io.github.nakulov.standards.task.cli.TaskError import io.github.nakulov.standards.task.git.Git import io.github.nakulov.standards.task.github.Issues import io.kotest.core.spec.IsolationMode import io.kotest.assertions.throwables.shouldThrowWithMessage import io.kotest.core.spec.style.BehaviorSpec import io.mockk.every import io.mockk.justRun import io.mockk.mockk import io.mockk.verifySequence</ID>
+    <ID>LargeClass:GitSpec.kt:GitSpec : BehaviorSpec</ID>
+    <ID>LargeClass:StartCommandSpec.kt:StartCommandSpec : BehaviorSpec</ID>
+    <ID>MagicNumber:BoardSpec.kt:BoardSpec$2000L</ID>
+    <ID>MagicNumber:GitHubSpec.kt:GitHubSpec$1000L</ID>
+    <ID>MagicNumber:IssuesSpec.kt:IssuesSpec$13</ID>
+    <ID>MagicNumber:IssuesSpec.kt:IssuesSpec$40</ID>
+    <ID>MagicNumber:IssuesSpec.kt:IssuesSpec$41</ID>
+    <ID>MagicNumber:IssuesSpec.kt:IssuesSpec$8</ID>
+    <ID>MagicNumber:IssuesSpecData.kt:3</ID>
+    <ID>MagicNumber:IssuesSpecData.kt:8</ID>
+    <ID>MagicNumber:NewCommandSpec.kt:NewCommandSpec$13</ID>
+    <ID>MagicNumber:NewCommandSpec.kt:NewCommandSpec$40</ID>
+    <ID>MagicNumber:NewCommandSpec.kt:NewCommandSpec$8</ID>
+    <ID>MagicNumber:PluginSettingsSpecData.kt:3</ID>
+    <ID>MagicNumber:StartCommandSpecData.kt:3</ID>
+    <ID>MagicNumber:StartCommandSpecData.kt:8</ID>
+    <ID>MatchingDeclarationName:TaskLauncherSpecData.kt:LauncherRun</ID>
+    <ID>MaxLineLength:GitSpec.kt:GitSpec$val paths = Git(shell = ProcessShell(directory = worktree)).worktrees().map { path -&gt; File(path).canonicalPath }</ID>
+    <ID>MaxLineLength:PluginSettingsSpec.kt:PluginSettingsSpec$shouldThrowWithMessageTest</ID>
+    <ID>MaxLineLength:PluginSettingsSpecData.kt:return makeStandardKeys(enabled = "true", source = listOf("\"source\": \"directory\"", "\"path\": \"/tmp/standards\""))</ID>
+    <ID>MaxLineLength:StartCommandSpec.kt:StartCommandSpec$every { git.isAncestor(ancestor = "origin/long/13-big", descendant = "refs/heads/long/13-big") } returns true</ID>
+    <ID>MaxLineLength:TaskWrapperSpec.kt:TaskWrapperSpec$shouldReturnTest</ID>
+    <ID>MaxLineLength:TaskWrapperSpec.kt:TaskWrapperSpec$shouldThrowWithMessageTest</ID>
+    <ID>MaxLineLength:TemplatesSpec.kt:TemplatesSpec$shouldReturnTest</ID>
+    <ID>MaxLineLength:WorktreeFilesSpecData.kt:/** Основная папка с `local.properties` и `.idea/x.xml`; [include] — содержимое `.worktreeinclude`, `null` — файла нет. */</ID>
+    <ID>MaximumLineLength:GitSpec.kt:GitSpec$}</ID>
+    <ID>MaximumLineLength:PluginSettingsSpec.kt:PluginSettingsSpec${</ID>
+    <ID>MaximumLineLength:PluginSettingsSpecData.kt:)</ID>
+    <ID>MaximumLineLength:StartCommandSpec.kt:StartCommandSpec$true</ID>
+    <ID>MaximumLineLength:TaskWrapperSpec.kt:TaskWrapperSpec${</ID>
+    <ID>MaximumLineLength:TemplatesSpec.kt:TemplatesSpec${</ID>
+    <ID>NamedLiteralArgument:BoardSetupSpec.kt:BoardSetupSpec$"доска без статуса, с лишним статусом и выключенным workflow"</ID>
+    <ID>NamedLiteralArgument:BoardSetupSpec.kt:BoardSetupSpec$"нет доски: копия шаблона и связь с репозиторием"</ID>
+    <ID>NamedLiteralArgument:BoardSetupSpecData.kt:"board"</ID>
+    <ID>NamedLiteralArgument:BoardSetupSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"#13 на нескольких досках"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"#13 не на доске — добавьте её на доску проекта"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"PVTI_1"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"gh: HTTP 403"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"users/owner\t10"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"добавление: видна с первой проверки"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"добавление: задача уже на доске, видна с третьей проверки"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$"смена статуса по имени"</ID>
+    <ID>NamedLiteralArgument:BoardSpec.kt:BoardSpec$2000L</ID>
+    <ID>NamedLiteralArgument:BoardSpecData.kt:"PVTI_13\tPVT_10\tPVTSSF_status\tGroomed\tBacklog=b1;Groomed=g1;In progress=p1;In review=r1;Done=d1"</ID>
+    <ID>NamedLiteralArgument:BranchNameSpec.kt:BranchNameSpec$"long/13-task-scripts"</ID>
+    <ID>NamedLiteralArgument:BranchNameSpec.kt:BranchNameSpec$"task/13-task-scripts"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"`scripts/b.kt` не изменён или не существует — уберите из «Файлов»"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"message.txt"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"no-plan-task.txt"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"scripts/a.kt"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"в ветке нет плана, в сообщении нет «Задачи плана»"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"в ветке план `plans/commit-commands.md` — нет строки «Задача плана: …», добавьте заголовок задачи плана"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"использование: task commit ${command.usage}"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"нет файла сообщения nope.txt"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpec.kt:CommitCommandSpec$"файлы изменены, план отмечен"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpecData.kt:"commit"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpecData.kt:"message.txt"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpecData.kt:"no-plan-task.txt"</ID>
+    <ID>NamedLiteralArgument:CommitCommandSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:CommitMessageSpec.kt:CommitMessageSpec$"в ветке план `plans/commit-commands.md` — нет строки «Задача плана: …», добавьте заголовок задачи плана"</ID>
+    <ID>NamedLiteralArgument:CommitMessageSpec.kt:CommitMessageSpec$"первая строка сообщения пуста — напишите, что сделано"</ID>
+    <ID>NamedLiteralArgument:CommitMessageSpec.kt:CommitMessageSpec$"раздел «Файлы:» пуст — перечислите файлы строками «- `путь` — что изменено»"</ID>
+    <ID>NamedLiteralArgument:CommitMessageSpecData.kt:"scripts/a.kt"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"PR #31 не слит — сначала слияние"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"PR с Part of слит в worktree"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"ветка блока task/13-big-pr1 слита в копии long-ветки .worktrees/big"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"задачу уже закрыли в Done"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"итоговый PR из task/13-final слит в копии long-ветки .worktrees/big"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"итоговый PR из task/13-final слит, long-ветки уже нет"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"последний PR слит в основном клоне"</ID>
+    <ID>NamedLiteralArgument:DoneCommandSpec.kt:DoneCommandSpec$"у ветки task/13-task-scripts нет PR — сначала task pr"</ID>
+    <ID>NamedLiteralArgument:FinalCommandSpec.kt:FinalCommandSpec$"13"</ID>
+    <ID>NamedLiteralArgument:FinalCommandSpec.kt:FinalCommandSpec$"первый итоговый PR из long-ветки"</ID>
+    <ID>NamedLiteralArgument:FinalCommandSpec.kt:FinalCommandSpec$"повтор из long-ветки, final только в origin"</ID>
+    <ID>NamedLiteralArgument:FinalCommandSpec.kt:FinalCommandSpec$"повтор из ветки final"</ID>
+    <ID>NamedLiteralArgument:FinalCommandSpec.kt:FinalCommandSpec$"у задачи #13 нет long-ветки — итоговый PR не из чего собрать"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"GraphQL-список"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"REST-список"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"запись: 502 не повторяется"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"чтение без сбоя"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"чтение: 404 не повторяется"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"чтение: 502 дважды"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$"чтение: 502, повтор успешен"</ID>
+    <ID>NamedLiteralArgument:GitHubSpec.kt:GitHubSpec$1000L</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"# План Q\n"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"b.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"clone"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"clone/.worktrees/x"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"copy"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"dev"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"f.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"include"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"local.properties"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"long/5-v"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"long/7-big"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"plans"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"plans/p.md"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"plans/q.md"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"q.md"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"q\n"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"sub"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"task-plan/q"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"task/1-x"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"task/2-y"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"task/3-z"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"Добавить c"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"Добавить план: Q"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"Убрать план: П"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$"второй коммит"</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$false</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$null</ID>
+    <ID>NamedLiteralArgument:GitSpec.kt:GitSpec$true</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"# План X\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"# План П\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:".github"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:".github/pull_request_template.md"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:".gitignore"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"1\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"2\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"&lt;a/&gt;\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"Closes #\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"a.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"b.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"build"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"build/\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"build/out.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"build/x"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"build/x/local.properties"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"c.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"clone"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"conf"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"conf/a.xml"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"f.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"f\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"final\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"git"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"include"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"local.properties"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"local.properties\nbuild/\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"local.properties\nconf/\nbuild/\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"local.properties\nconf/\nnotes.txt\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"long\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"message.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"new.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"notes.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"other"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"out\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"plans"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"plans/p.md"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"plans/x.md"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"r.txt"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"sdk.dir=/other\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"sdk.dir=/sdk\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"worktree"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"Добавить c\n\nЗадача плана: Задача 1\nФайлы:\n- `a.txt` — изменён\n- `c.txt` — создан\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"заметки\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"новый файл\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"новый\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:"файл проекта\n"</ID>
+    <ID>NamedLiteralArgument:GitSpecData.kt:true</ID>
+    <ID>NamedLiteralArgument:GitignoreBlockSpecData.kt:".gitignore"</ID>
+    <ID>NamedLiteralArgument:GitignoreBlockSpecData.kt:"setup"</ID>
+    <ID>NamedLiteralArgument:GitignoreBlockSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:GroomedCommandSpec.kt:GroomedCommandSpec$"13"</ID>
+    <ID>NamedLiteralArgument:GroomedCommandSpec.kt:GroomedCommandSpec$"x"</ID>
+    <ID>NamedLiteralArgument:GroomedCommandSpec.kt:GroomedCommandSpec$"использование: task groomed ${command.usage}"</ID>
+    <ID>NamedLiteralArgument:GroomedCommandSpec.kt:GroomedCommandSpec$"открытая задача в Backlog"</ID>
+    <ID>NamedLiteralArgument:GroomingSpec.kt:GroomingSpec$"задача в Backlog"</ID>
+    <ID>NamedLiteralArgument:InitialBranchSpec.kt:InitialBranchSpec$"main с историей"</ID>
+    <ID>NamedLiteralArgument:InitialBranchSpec.kt:InitialBranchSpec$"main с одним коммитом и --confirm: dev от main, основная, main удалена"</ID>
+    <ID>NamedLiteralArgument:InitialBranchSpec.kt:InitialBranchSpec$"пустой репозиторий: первый коммит делает setup"</ID>
+    <ID>NamedLiteralArgument:IssuePartsSpec.kt:IssuePartsSpec$"в задаче нет раздела «Решено» — исправьте заголовок в файле частей"</ID>
+    <ID>NamedLiteralArgument:IssuePartsSpec.kt:IssuePartsSpec$"в разделе «Отклонено» метка &lt;!-- план --&gt; без пары — поправьте тело задачи"</ID>
+    <ID>NamedLiteralArgument:IssueTemplateSpec.kt:IssueTemplateSpec$"type:task"</ID>
+    <ID>NamedLiteralArgument:IssueTemplateSpecData.kt:".github/ISSUE_TEMPLATE/$type.md"</ID>
+    <ID>NamedLiteralArgument:IssueTemplateSpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:IssuesSpec.kt:IssuesSpec$"9013"</ID>
+    <ID>NamedLiteralArgument:IssuesSpec.kt:IssuesSpec$"I_kwDOissue13"</ID>
+    <ID>NamedLiteralArgument:IssuesSpec.kt:IssuesSpec$"Тело задачи"</ID>
+    <ID>NamedLiteralArgument:IssuesSpec.kt:IssuesSpec$40</ID>
+    <ID>NamedLiteralArgument:IssuesSpec.kt:IssuesSpec$41</ID>
+    <ID>NamedLiteralArgument:IssuesSpec.kt:IssuesSpec$null</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"\"\\u0001 \\\" \\\\ \\n\""</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"a.json:1: комментарии JSON не поддерживает — уберите их"</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"a.json:1: ожидается «,» или «]»"</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"a.json:1: ожидается «:» после ключа a"</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"a.json:1: строка без закрывающей кавычки"</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"a.json:2: ожидается конец файла"</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"a.json:3: ожидается ключ в кавычках"</ID>
+    <ID>NamedLiteralArgument:JsonSpec.kt:JsonSpec$"{\n \"a\": {},\n \"b\": []\n}"</ID>
+    <ID>NamedLiteralArgument:LabelsSpec.kt:LabelsSpec$"labels.yml: у метки type:task нужны name, color и description"</ID>
+    <ID>NamedLiteralArgument:LabelsSpec.kt:LabelsSpec$"применение без --confirm"</ID>
+    <ID>NamedLiteralArgument:LabelsSpec.kt:LabelsSpec$"применение с --confirm: метка с задачами удаляется"</ID>
+    <ID>NamedLiteralArgument:MarkersSpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:NewCommandSpec.kt:NewCommandSpec$"story"</ID>
+    <ID>NamedLiteralArgument:NewCommandSpec.kt:NewCommandSpec$"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:NewCommandSpec.kt:NewCommandSpec$"«x» — не номер задачи"</ID>
+    <ID>NamedLiteralArgument:NewCommandSpec.kt:NewCommandSpec$"задача сразу в Backlog"</ID>
+    <ID>NamedLiteralArgument:NewCommandSpec.kt:NewCommandSpec$"подзадача эпика с блокерами"</ID>
+    <ID>NamedLiteralArgument:OptionsSpec.kt:OptionsSpec$"--title"</ID>
+    <ID>NamedLiteralArgument:OptionsSpec.kt:OptionsSpec$"использование: task x"</ID>
+    <ID>NamedLiteralArgument:OptionsSpec.kt:OptionsSpec$"нет файла no-such.md — сначала запишите текст"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpec.kt:PlanArchiveSpec$"plans/commit-commands.md"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpec.kt:PlanArchiveSpec$"plans/done"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpec.kt:PlanArchiveSpec$"plans/done/commit-commands.md"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpec.kt:PlanArchiveSpec$"scripts/a.kt"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpec.kt:PlanArchiveSpec$"в ветке добавлен план"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpec.kt:PlanArchiveSpec$"плана в ветке нет"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"# Команды коммита\n\n- [x] Задача 1\n"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"archive"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"main"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"plans"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"plans/commit-commands.md"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:PlanArchiveSpecData.kt:"worktree"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"#53 закрыта"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"#53 — эпик: план — на подзадачу"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$".git"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"parts.md"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"plans/commit-commands.md"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"worktree не удалился"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"ветка $PLAN_BRANCH открыта в /work/wt — выполнение начато, план правит исполнитель"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"ветка есть, локальная отстала"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"ветки нет"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"задача в Backlog"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"использование: task plan ${command.usage}"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"коммит упал"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"локальная $PLAN_BRANCH не отправлена в origin — отправьте её или удалите"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"локальная $PLAN_BRANCH расходится с origin/$PLAN_BRANCH — сведите вручную"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"нет plans/other.md — сначала напишите план"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"план не изменился"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"план не изменился, локальная отстала"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"план сохранён, тело задачи — нет: повторите task plan (gh issue: сбой)"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"статус не сменился"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpec.kt:PlanCommandSpec$"статус не сменился: доска не переместила"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"# Команды коммита\n"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"## Отклонено\n- вариант — причина\n"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:".git"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"parts.md"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"plan"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"plans"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"plans/commit-commands.md"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"task-plan/commit-commands"</ID>
+    <ID>NamedLiteralArgument:PlanCommandSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:PluginSettingsSpec.kt:PluginSettingsSpec$".claude/settings.json"</ID>
+    <ID>NamedLiteralArgument:PluginSettingsSpec.kt:PluginSettingsSpec$".claude/settings.json: enabledPlugins — ожидается объект {…}"</ID>
+    <ID>NamedLiteralArgument:PluginSettingsSpec.kt:PluginSettingsSpec$".claude/settings.json: permissions.allow — ожидается массив […]"</ID>
+    <ID>NamedLiteralArgument:PluginSettingsSpec.kt:PluginSettingsSpec$".claude/settings.json: ожидается объект {…} на верхнем уровне"</ID>
+    <ID>NamedLiteralArgument:PluginSettingsSpec.kt:PluginSettingsSpec$".claude/settings.json:3: ожидается ключ в кавычках"</ID>
+    <ID>NamedLiteralArgument:PluginSettingsSpec.kt:PluginSettingsSpec$false</ID>
+    <ID>NamedLiteralArgument:PrBodySpec.kt:PrBodySpec$"./gradlew :scripts:test"</ID>
+    <ID>NamedLiteralArgument:PrBodySpec.kt:PrBodySpec$"Closes #13"</ID>
+    <ID>NamedLiteralArgument:PrBodySpecData.kt:"./gradlew test"</ID>
+    <ID>NamedLiteralArgument:PrBodySpecData.kt:"Closes #13"</ID>
+    <ID>NamedLiteralArgument:PrBodySpecData.kt:"task.prTemplate"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"--ready у PR с Part of"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"--ready у последнего PR задачи"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"--ready"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"PR в dev с --part"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"PR в dev"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"«dev» — не ветка задачи: task pr запускается из task/&lt;N&gt;-…"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"ветку начали от long-ветки"</ID>
+    <ID>NamedLiteralArgument:PrCommandSpec.kt:PrCommandSpec$"из long-ветки PR в dev открывает task final 13"</ID>
+    <ID>NamedLiteralArgument:ProcessShellSpecData.kt:"java.io.tmpdir"</ID>
+    <ID>NamedLiteralArgument:PublisherSpec.kt:PublisherSpec$"PR #32 уже слит — task done"</ID>
+    <ID>NamedLiteralArgument:PublisherSpec.kt:PublisherSpec$"PR --part в dev"</ID>
+    <ID>NamedLiteralArgument:PublisherSpec.kt:PublisherSpec$"PR блока в long-ветку"</ID>
+    <ID>NamedLiteralArgument:PublisherSpec.kt:PublisherSpec$"PR ещё нет"</ID>
+    <ID>NamedLiteralArgument:PublisherSpec.kt:PublisherSpec$"PR уже открыт"</ID>
+    <ID>NamedLiteralArgument:PublisherSpec.kt:PublisherSpec$"проверка не прошла"</ID>
+    <ID>NamedLiteralArgument:PullRequestDraftSpec.kt:PullRequestDraftSpec$"использование: task pr …"</ID>
+    <ID>NamedLiteralArgument:PullRequestDraftSpec.kt:PullRequestDraftSpec$"нет файла no-such.md — сначала запишите текст PR по шаблону"</ID>
+    <ID>NamedLiteralArgument:PullRequestDraftSpecData.kt:"pr/body.md"</ID>
+    <ID>NamedLiteralArgument:PullRequestsSpec.kt:PullRequestsSpec$"Part of #13"</ID>
+    <ID>NamedLiteralArgument:PullRequestsSpec.kt:PullRequestsSpec$"из черновика"</ID>
+    <ID>NamedLiteralArgument:RepositorySettingsSpec.kt:RepositorySettingsSpec$"применение: тело squash-коммита отличается — заголовок уходит парой"</ID>
+    <ID>NamedLiteralArgument:RulesetsSpec.kt:RulesetsSpec$"применение с --confirm: классическая защита удаляется"</ID>
+    <ID>NamedLiteralArgument:RulesetsSpec.kt:RulesetsSpec$"применение: прогон check есть, ruleset'ов нет, классическая защита есть"</ID>
+    <ID>NamedLiteralArgument:RulesetsSpecData.kt:"rulesets"</ID>
+    <ID>NamedLiteralArgument:RulesetsSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:""</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"CLAUDE_ENV_FILE"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"cache"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"engineering-standards/roots/${makeRootKey(project = project)}"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"env"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"git"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"hooks/session-start"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"plugin"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"rules/$name"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:true</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"--check"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"--confirm"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"--force"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"--help"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"неизвестный аргумент"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"непредвиденная ошибка шага"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"нет ответа"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"окружение не готово"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"применение с --confirm"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"применение: остался шаг, которому нужен --confirm"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"проверка: всё соответствует или не исправляется запуском"</ID>
+    <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"справка"</ID>
+    <ID>NamedLiteralArgument:StageBodySpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:StageBodySpecData.kt:"templates/github/stage.md"</ID>
+    <ID>NamedLiteralArgument:StageCommandSpec.kt:StageCommandSpec$"list"</ID>
+    <ID>NamedLiteralArgument:StageCommandSpec.kt:StageCommandSpec$"все разделы заполнены, со сроком"</ID>
+    <ID>NamedLiteralArgument:StageCommandSpec.kt:StageCommandSpec$"срок «1 декабря» — в формате ГГГГ-ММ-ДД"</ID>
+    <ID>NamedLiteralArgument:StageCommandSpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:StageCommandSpecData.kt:"templates/github/stage.md"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"#13 закрыта"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"#13 — исследование: ветка и копия не нужны"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--from long/… --worktree: ветка блока в своей копии"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--long --worktree: новая long-ветка в копии"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--long --worktree: своя копия long-ветки отсоединена после task done ветки блока"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--worktree повторно: копия уже есть, ветка отстала от origin"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--worktree, ветка есть только в origin"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--worktree, ветки нет, основная папка грязная"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"--worktree, локальная ветка отстала от origin, копии нет"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"/repo"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"13"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"ветка есть только в origin"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"задача Groomed, ветки нет"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"исследование"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"локальная long-ветка отстала от origin: в неё слили PR блока"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"локальная ветка разошлась с origin"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"новая long-ветка"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"повторный запуск: long-ветка есть и не отстала от origin, задача уже In progress"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpec.kt:StartCommandSpec$"часть long-ветки: --from"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpecData.kt:"start"</ID>
+    <ID>NamedLiteralArgument:StartCommandSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpec.kt:TaskLauncherSpec$"--help"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"#!/bin/sh\necho 'info: kotlinc-jvm 2.1.20 (JRE 17.0.21)' &gt;&amp;2\n"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"PATH"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"kotlinc"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"old-kotlin"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.launcher"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.setupLauncher"</ID>
+    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:true</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"--help"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"nope"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"команда отказывает"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"команда падает с непредвиденной ошибкой"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"команда получает аргументы без своего имени"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"неизвестная команда"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"нет ответа"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"сбой с TASK_DEBUG=1"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"справка без команд"</ID>
+    <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"справка с командой"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpec.kt:TaskWrapperScriptSpec$"removed"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"${root.path}\n"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:".claude-plugin/plugin.json"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"copy"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"engineering-standards/roots/${makeRootKey(project = project)}"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"scripts/task"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"scripts/task-wrapper"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"task"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:"{\n \"name\": \"engineering-standards\"\n}\n"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperScriptSpecData.kt:true</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpec.kt:TaskWrapperSpec$".local/bin"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpec.kt:TaskWrapperSpec$".local/bin/task"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpec.kt:TaskWrapperSpec$"~/.local/bin/task: не записана — проверьте права на ~/.local/bin"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpecData.kt:".local/bin"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpecData.kt:".local/bin/task"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpecData.kt:"scripts/task-wrapper"</ID>
+    <ID>NamedLiteralArgument:TaskWrapperSpecData.kt:false</ID>
+    <ID>NamedLiteralArgument:TemplatesSpecData.kt:"ISSUE_TEMPLATE"</ID>
+    <ID>NamedLiteralArgument:TemplatesSpecData.kt:"labels.yml"</ID>
+    <ID>NamedLiteralArgument:TemplatesSpecData.kt:"task.repoRoot"</ID>
+    <ID>NamedLiteralArgument:TemplatesSpecData.kt:"templates"</ID>
+    <ID>NamedLiteralArgument:TemplatesSpecData.kt:"templates/github"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpec.kt:WorkingDirectorySpec$"-C missing: нет такой папки — проверьте путь"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpec.kt:WorkingDirectorySpec$"-C без папки — task -C &lt;папка&gt; &lt;команда&gt;"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpec.kt:WorkingDirectorySpec$"-C"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpec.kt:WorkingDirectorySpec$"copy"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpecData.kt:"cli"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpecData.kt:"copy"</ID>
+    <ID>NamedLiteralArgument:WorkingDirectorySpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpec.kt:WorktreeFilesSpec$".idea/x.xml"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpec.kt:WorktreeFilesSpec$".worktreeinclude"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpec.kt:WorktreeFilesSpec$"local.properties"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpec.kt:WorktreeFilesSpec$"нет .worktreeinclude"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpec.kt:WorktreeFilesSpec$"список — файл и папка"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpec.kt:WorktreeFilesSpec$"строки-пути, которых нет в основной папке; шаблоны, комментарии и исключения не проверяются"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:".idea"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:".idea/x.xml"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:".worktreeinclude"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:"&lt;x/&gt;\n"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:"local.properties"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:"sdk.dir=/sdk\n"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:"task.cache"</ID>
+    <ID>NamedLiteralArgument:WorktreeFilesSpecData.kt:"worktree-files"</ID>
+    <ID>NoBlankLineBeforeRbrace:StartCommandSpec.kt:StartCommandSpec$ </ID>
+    <ID>SpecDataContent:GitSpecData.kt:fun readHeadFiles: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:GitSpecData.kt:fun readHeadSubject: String</ID>
+    <ID>SpecDataContent:GitSpecData.kt:private fun git</ID>
+    <ID>SpecDataContent:GitignoreBlockSpecData.kt:fun readGitignore: String</ID>
+    <ID>SpecDataContent:GitignoreBlockSpecData.kt:fun writeGitignore</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:// Блок: `&lt;!-- &gt;&gt;&gt; &lt;префикс&gt;:&lt;имя&gt; --&gt;` + перевод строки + текст + `&lt;!-- &lt;&lt;&lt; &lt;префикс&gt;:&lt;имя&gt; --&gt;`; `\1` — то же имя. private val BLOCK = Regex( pattern = "&lt;!-- &gt;&gt;&gt; ([a-z]+:[a-z-]+) --&gt;\\n(.*?)&lt;!-- &lt;&lt;&lt; \\1 --&gt;", option = RegexOption.DOT_MATCHES_ALL, )</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:fun findMarkerMismatches: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:fun findSourceMarkers: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:private fun blocks: Map&lt;String, String&gt;</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:private val COPIES = listOf( Copies(source = "skills/decompose/SKILL.md", copy = "agents/plan-reviewer.md", prefix = "plan"), Copies(source = "skills/execute/SKILL.md", copy = "agents/plan-executor.md", prefix = "execute"), ) + listOf("plan-executor", "implementation-reviewer", "test-reviewer", "standards-reviewer").map { agent -&gt; Copies(source = "rules/bash-commands.md", copy = "agents/$agent.md", prefix = "rules") } + listOf("implementation-reviewer", "test-reviewer", "standards-reviewer").map { reviewer -&gt; Copies(source = "agents/plan-executor.md", copy = "agents/$reviewer.md", prefix = "agents") }</ID>
+    <ID>SpecDataContent:PluginSettingsSpecData.kt:fun readSettings: String</ID>
+    <ID>SpecDataContent:PluginSettingsSpecData.kt:fun writeSettings</ID>
+    <ID>SpecDataContent:PrBodySpecData.kt:fun readTemplateChecks: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:PrBodySpecData.kt:fun readTemplateHead: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:PrBodySpecData.kt:fun readTemplateLinks: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:SessionStartHookSpecData.kt:fun readRootRecord: String</ID>
+    <ID>SpecDataContent:SessionStartHookSpecData.kt:fun runGit: String</ID>
+    <ID>SpecDataContent:SessionStartHookSpecData.kt:fun runHook: LauncherRun</ID>
+    <ID>SpecDataContent:StandardFilesSpecData.kt:fun readProjectFiles: Map&lt;String, String&gt;</ID>
+    <ID>SpecDataContent:StandardFilesSpecData.kt:fun writeProjectFile</ID>
+    <ID>SpecDataContent:TaskLauncherSpecData.kt:fun runLauncher: LauncherRun</ID>
+    <ID>SpecDataContent:TaskWrapperScriptSpecData.kt:fun runWrapper: LauncherRun</ID>
+    <ID>SpecDataContent:TaskWrapperScriptSpecData.kt:fun writeRootRecord</ID>
+    <ID>SpecDataContent:TaskWrapperScriptSpecData.kt:private fun writeScript</ID>
+    <ID>SpecDataContent:TaskWrapperSpecData.kt:fun readWrapper: String</ID>
+    <ID>SpecDataContent:TaskWrapperSpecData.kt:fun writeWrapper</ID>
+    <ID>SpecDataContent:TemplatesSpecData.kt:fun findConcreteContent: Map&lt;String, List&lt;String&gt;&gt;</ID>
+    <ID>SpecDataContent:TemplatesSpecData.kt:fun findTemplatesWithoutLabel: List&lt;String&gt;</ID>
+    <ID>SpecDataContent:TemplatesSpecData.kt:private val COMMENT = Regex(pattern = "&lt;!--.*?--&gt;", option = RegexOption.DOT_MATCHES_ALL)</ID>
+    <ID>SpecDataContent:TemplatesSpecData.kt:private val CONCRETE = Regex(pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2}|#[0-9]+")</ID>
+  </CurrentIssues>
+</SmellBaseline>

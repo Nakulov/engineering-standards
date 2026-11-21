@@ -1,0 +1,200 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:DoneCommand.kt:DoneCommand$(message = "ветка $name открыта в $folder — переключите там ветку и повторите task done")</ID>
+    <ID>ArgumentListWrapping:FinalCommand.kt:FinalCommand$(message = "task final $issue запускается из long/$issue-… или $final, сейчас «$current»")</ID>
+    <ID>ArgumentListWrapping:JsonParser.kt:JsonParser.Companion$("true" to JsonBoolean(value = true), "false" to JsonBoolean(value = false), "null" to JsonNull)</ID>
+    <ID>ArgumentListWrapping:JsonParser.kt:JsonParser.Companion$(value = false)</ID>
+    <ID>ArgumentListWrapping:JsonParser.kt:JsonParser.Companion$(value = true)</ID>
+    <ID>ArgumentListWrapping:PluginSettings.kt:PluginSettings$(fields = emptyMap())</ID>
+    <ID>ArgumentListWrapping:PluginSettings.kt:PluginSettings$(text = text, file = SETTINGS)</ID>
+    <ID>ArgumentListWrapping:TaskWrapper.kt:TaskWrapper$(status = Finding.Status.DEVIATION, text = "обёртка отличается от стандарта — обновит setup")</ID>
+    <ID>ArgumentListWrapping:TaskWrapper.kt:TaskWrapper$(status = Finding.Status.FIXED, text = "обёртка $action — запись вне репозитория, одна на машину")</ID>
+    <ID>ArgumentListWrapping:TaskWrapper.kt:TaskWrapper$(status = Finding.Status.NOTE, text = "обёртки нет — task из терминала не найдётся, поставит setup")</ID>
+    <ID>BinaryExpressionWrapping:JsonParser.kt:JsonParser.Companion$"null" to JsonNull</ID>
+    <ID>BlankLineBetweenWhenConditions:BoardSetup.kt:BoardSetup$when (boards.size) { 0 -&gt; listOf( create( mode = mode, templateId = reference.first(), ownerId = ownerId, repositoryId = repositoryId, name = name, ), ) 1 -&gt; check(board = boards.first().split("\t"), reference = reference, mode = mode) else -&gt; listOf( Finding( status = Finding.Status.DEVIATION, area = AREA, text = "с репозиторием связано досок: ${boards.size} — task работает с одной, лишние отвяжите", ), ) }</ID>
+    <ID>BlankLineBetweenWhenConditions:InitialBranch.kt:InitialBranch$when { !mode.apply -&gt; Finding( status = Finding.Status.DEVIATION, area = AREA, text = "основная ветка $current с одним начальным коммитом — заменяется на $DEV", ) !mode.confirmed -&gt; Finding( status = Finding.Status.NEEDS_CONFIRM, area = AREA, text = "заменит основную ветку $current (один начальный коммит) на $DEV и удалит $current", ) else -&gt; { replace(current = current) val text = "$DEV создана от $current и стала основной, $current удалена — " + "локально: git fetch --prune &amp;&amp; git switch $DEV" Finding(status = Finding.Status.FIXED, area = AREA, text = text) } }</ID>
+    <ID>BlankLineBetweenWhenConditions:JsonValue.kt:when (value) { is JsonObject -&gt; if (value.fields.isEmpty()) { "{}" } else { value.fields.entries.joinToString(separator = ",\n", prefix = "{\n", postfix = "\n$indent}") { entry -&gt; "$inner${quote(text = entry.key)}: ${render(value = entry.value, indent = inner)}" } } is JsonArray -&gt; if (value.items.isEmpty()) { "[]" } else { value.items.joinToString(separator = ",\n", prefix = "[\n", postfix = "\n$indent]") { item -&gt; inner + render(value = item, indent = inner) } } is JsonString -&gt; quote(text = value.value) is JsonNumber -&gt; value.raw is JsonBoolean -&gt; value.value.toString() JsonNull -&gt; "null" }</ID>
+    <ID>BlankLineBetweenWhenConditions:PluginSettings.kt:PluginSettings$when { plugins.fields[PLUGIN] == JsonBoolean(value = true) -&gt; finding(status = Finding.Status.OK, text = "плагин $PLUGIN включён") plugins.fields[PLUGIN] == JsonBoolean(value = false) -&gt; finding( status = Finding.Status.DEVIATION, text = "плагин $PLUGIN выключен проектом (false) — стандарт не переписывает решение проекта", ) !mode.apply -&gt; finding(status = Finding.Status.DEVIATION, text = "плагин $PLUGIN не включён") else -&gt; { fields[ENABLED] = JsonObject(fields = plugins.fields + (PLUGIN to JsonBoolean(value = true))) finding(status = Finding.Status.FIXED, text = "плагин $PLUGIN включён$COMMIT") } }</ID>
+    <ID>BlankLineBetweenWhenConditions:PluginSettings.kt:PluginSettings$when { was == null &amp;&amp; !mode.apply -&gt; Finding.Status.DEVIATION to "нет маркетплейса $NAME" was == null -&gt; Finding.Status.FIXED to "маркетплейс $NAME добавлен$COMMIT" !mode.apply -&gt; Finding.Status.DEVIATION to "источник маркетплейса $NAME отличается: $was" !mode.confirmed -&gt; Finding.Status.NEEDS_CONFIRM to "источник маркетплейса $NAME отличается: $was — заменит на github $REPOSITORY" else -&gt; Finding.Status.FIXED to "источник маркетплейса $NAME заменён, было: $was$COMMIT" }</ID>
+    <ID>BlankLineBetweenWhenConditions:Rulesets.kt:Rulesets$when { !protected -&gt; null !mode.apply -&gt; Finding( status = Finding.Status.DEVIATION, area = AREA, text = "классическая защита dev — заменяется ruleset $DEV", ) !mode.confirmed -&gt; Finding( status = Finding.Status.NEEDS_CONFIRM, area = AREA, text = "удалит классическую защиту dev (ruleset $DEV уже действует)", ) else -&gt; { gitHub.write(args = listOf("api", "--method", "DELETE", "$REPOSITORY/branches/dev/protection")) Finding(status = Finding.Status.FIXED, area = AREA, text = "классическая защита dev удалена") } }</ID>
+    <ID>BlankLineBetweenWhenConditions:StartCommand.kt:StartCommand$when { info.type == RESEARCH -&gt; { research(request = request, console = console) null } request.worktree -&gt; openCopy(request = request, console = console) else -&gt; { switchToBranch(request = request, console = console) null } }</ID>
+    <ID>BlankLineBetweenWhenConditions:TaskWrapper.kt:TaskWrapper$when { current == source -&gt; finding(status = Finding.Status.OK, text = "обёртка по стандарту") current != null &amp;&amp; MARKER !in current -&gt; finding( status = Finding.Status.NOTE, text = "чужая программа, не трогаю — task из терминала: ${File(pluginRoot, "scripts/task").path}", ) !mode.apply &amp;&amp; current == null -&gt; finding(status = Finding.Status.NOTE, text = "обёртки нет — task из терминала не найдётся, поставит setup") !mode.apply -&gt; finding(status = Finding.Status.DEVIATION, text = "обёртка отличается от стандарта — обновит setup") else -&gt; { install(target = target, source = source) val action = if (current == null) "установлена" else "обновлена" finding(status = Finding.Status.FIXED, text = "обёртка $action — запись вне репозитория, одна на машину") } }</ID>
+    <ID>CyclomaticComplexMethod:PlanCommand.kt:PlanCommand$override fun run</ID>
+    <ID>DestructuringDeclarationWithTooManyEntries:Board.kt:Board$val (id, projectId, fieldId, status, options) = rows.first().split("\t")</ID>
+    <ID>DestructuringDeclarationWithTooManyEntries:BoardSetup.kt:BoardSetup$val (_, url, fieldId, optionsText, workflowsText) = board</ID>
+    <ID>DestructuringDeclarationWithTooManyEntries:BoardSetup.kt:BoardSetup$val (id, name, color, description) = "$line\t\t\t".split("\t")</ID>
+    <ID>FunctionSignature:Board.kt:Board$fun add: BoardItem</ID>
+    <ID>FunctionSignature:Board.kt:Board$fun item: BoardItem</ID>
+    <ID>FunctionSignature:Board.kt:Board$fun move</ID>
+    <ID>FunctionSignature:Board.kt:Board$private fun isVisible: Boolean</ID>
+    <ID>FunctionSignature:BoardSetup.kt:BoardSetup$private fun addStatuses</ID>
+    <ID>FunctionSignature:BoardSetup.kt:BoardSetup$private fun check: List&lt;Finding&gt;</ID>
+    <ID>FunctionSignature:BoardSetup.kt:BoardSetup.Companion$fun parse: Template</ID>
+    <ID>FunctionSignature:BranchName.kt:BranchName.Companion$fun of: BranchName</ID>
+    <ID>FunctionSignature:Command.kt:Command$fun run</ID>
+    <ID>FunctionSignature:CommitCommand.kt:CommitCommand$override fun run</ID>
+    <ID>FunctionSignature:CommitMessage.kt:CommitMessage.Companion$fun parse: CommitMessage</ID>
+    <ID>FunctionSignature:DoneCommand.kt:DoneCommand$override fun run</ID>
+    <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun finishIssue</ID>
+    <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun leaveBranch: Boolean</ID>
+    <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun removeLong</ID>
+    <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun removeOwnCopy</ID>
+    <ID>FunctionSignature:FinalCommand.kt:FinalCommand$override fun run</ID>
+    <ID>FunctionSignature:FinalCommand.kt:FinalCommand$private fun longBranch: String</ID>
+    <ID>FunctionSignature:FinalCommand.kt:FinalCommand$private fun prepare</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun addBranchWorktree</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun addWorktree</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun addWorktreeOn</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun commitAll</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun commitPaths</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun createBranch</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun fastForwardIn</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun firstCommit</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun includedPaths: List&lt;String&gt;</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun isAncestor: Boolean</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun moveBranch</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun pushHead</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun removeAndCommit</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun setBase</ID>
+    <ID>FunctionSignature:Git.kt:Git$fun switchIn</ID>
+    <ID>FunctionSignature:Git.kt:Git$private fun readIn: String</ID>
+    <ID>FunctionSignature:GitHub.kt:GitHub$fun listGraphql: List&lt;String&gt;</ID>
+    <ID>FunctionSignature:GitHub.kt:GitHub$fun listRest: List&lt;String&gt;</ID>
+    <ID>FunctionSignature:GitHub.kt:GitHub$private fun output: String</ID>
+    <ID>FunctionSignature:GroomedCommand.kt:GroomedCommand$override fun run</ID>
+    <ID>FunctionSignature:IssueParts.kt:IssueParts$fun merge: String</ID>
+    <ID>FunctionSignature:IssueParts.kt:IssueParts$private fun place: List&lt;String&gt;</ID>
+    <ID>FunctionSignature:IssueTemplate.kt:IssueTemplate$fun typeLabel: String</ID>
+    <ID>FunctionSignature:Issues.kt:Issues$fun create: Int</ID>
+    <ID>FunctionSignature:Issues.kt:Issues$fun editBody</ID>
+    <ID>FunctionSignature:JsonValue.kt:private fun render: String</ID>
+    <ID>FunctionSignature:Labels.kt:Labels$private fun removeDefault: Finding</ID>
+    <ID>FunctionSignature:Labels.kt:Labels$private fun syncType: Finding?</ID>
+    <ID>FunctionSignature:Labels.kt:Labels.Companion$fun parse: List&lt;Label&gt;</ID>
+    <ID>FunctionSignature:Labels.kt:Labels.Companion$private fun value: String</ID>
+    <ID>FunctionSignature:NewCommand.kt:NewCommand$override fun run</ID>
+    <ID>FunctionSignature:Options.kt:Options$fun parse: Map&lt;String, String&gt;</ID>
+    <ID>FunctionSignature:Options.kt:Options$fun readFile: String</ID>
+    <ID>FunctionSignature:PlanCommand.kt:PlanCommand$override fun run</ID>
+    <ID>FunctionSignature:PlanCommand.kt:PlanCommand$private fun save: String?</ID>
+    <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun enabled: Finding</ID>
+    <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun finding: Finding</ID>
+    <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun marketplace: Finding</ID>
+    <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun objectAt: JsonObject</ID>
+    <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun permissions: List&lt;Finding&gt;</ID>
+    <ID>FunctionSignature:PrBody.kt:PrBody$fun compose: String</ID>
+    <ID>FunctionSignature:PrBody.kt:PrBody$private fun commentEnd: Int</ID>
+    <ID>FunctionSignature:PrBody.kt:PrBody$private fun withLink: List&lt;String&gt;</ID>
+    <ID>FunctionSignature:PrCommand.kt:PrCommand$override fun run</ID>
+    <ID>FunctionSignature:PrCommand.kt:PrCommand$private fun ready</ID>
+    <ID>FunctionSignature:Publisher.kt:Publisher$fun publish</ID>
+    <ID>FunctionSignature:PullRequests.kt:PullRequests$fun create: String</ID>
+    <ID>FunctionSignature:PullRequests.kt:PullRequests$fun edit: String</ID>
+    <ID>FunctionSignature:Rulesets.kt:Rulesets$private fun countOrZero: Int</ID>
+    <ID>FunctionSignature:Rulesets.kt:Rulesets$private fun send</ID>
+    <ID>FunctionSignature:Rulesets.kt:Rulesets$private fun sync: Finding</ID>
+    <ID>FunctionSignature:Setup.kt:Setup$private fun report</ID>
+    <ID>FunctionSignature:StageBody.kt:StageBody$fun emptySections: List&lt;String&gt;</ID>
+    <ID>FunctionSignature:StageCommand.kt:StageCommand$override fun run</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$override fun run</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun checkReady</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun createBranch</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun isSamePath: Boolean</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun openCopy: String</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun openedRefusal: TaskError.Refusal</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun research</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun switchOwnCopy</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun switchToBranch</ID>
+    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun switchToExisting</ID>
+    <ID>FunctionSignature:Task.kt:Task$private fun report</ID>
+    <ID>FunctionSignature:TaskWrapper.kt:TaskWrapper$private fun finding: Finding</ID>
+    <ID>FunctionSignature:TaskWrapper.kt:TaskWrapper$private fun install</ID>
+    <ID>FunctionSignature:WorktreeFiles.kt:WorktreeFiles$fun copyInto</ID>
+    <ID>FunctionSignature:WorktreeFiles.kt:WorktreeFiles$private fun missing: List&lt;String&gt;</ID>
+    <ID>ImplicitDefaultLocale:JsonValue.kt:"\\u%04x".format(char.code)</ID>
+    <ID>LargeClass:Git.kt:Git</ID>
+    <ID>LongMethod:Main.kt:fun main</ID>
+    <ID>LongMethod:PlanCommand.kt:PlanCommand$override fun run</ID>
+    <ID>LongMethod:StartCommand.kt:StartCommand$private fun openCopy: String</ID>
+    <ID>LongParameterList:PullRequestDraft.kt:PullRequestDraft.Companion$fun of: PullRequestDraft</ID>
+    <ID>MaxLineLength:DoneCommand.kt:DoneCommand$*</ID>
+    <ID>MaxLineLength:DoneCommand.kt:DoneCommand$throw TaskError.Refusal(message = "ветка $name открыта в $folder — переключите там ветку и повторите task done")</ID>
+    <ID>MaxLineLength:FinalCommand.kt:FinalCommand$throw TaskError.Refusal(message = "task final $issue запускается из long/$issue-… или $final, сейчас «$current»")</ID>
+    <ID>MaxLineLength:Git.kt:Git$/** Копию [path] — на существующую ветку [name]: копия long-ветки отсоединена после `task done` ветки блока (#52). */</ID>
+    <ID>MaxLineLength:JsonParser.kt:JsonParser.Companion$val LITERALS = mapOf("true" to JsonBoolean(value = true), "false" to JsonBoolean(value = false), "null" to JsonNull)</ID>
+    <ID>MaxLineLength:PluginSettings.kt:PluginSettings$val parsed = if (text.isBlank()) JsonObject(fields = emptyMap()) else JsonParser(text = text, file = SETTINGS).parse()</ID>
+    <ID>MaxLineLength:SetupMain.kt:*</ID>
+    <ID>MaxLineLength:StartCommand.kt:StartCommand$*</ID>
+    <ID>MaxLineLength:TaskWrapper.kt:TaskWrapper$!mode.apply -&gt; finding(status = Finding.Status.DEVIATION, text = "обёртка отличается от стандарта — обновит setup")</ID>
+    <ID>MaxLineLength:TaskWrapper.kt:TaskWrapper$finding(status = Finding.Status.FIXED, text = "обёртка $action — запись вне репозитория, одна на машину")</ID>
+    <ID>MaxLineLength:TaskWrapper.kt:TaskWrapper$finding(status = Finding.Status.NOTE, text = "обёртки нет — task из терминала не найдётся, поставит setup")</ID>
+    <ID>MaximumLineLength:DoneCommand.kt:DoneCommand$)</ID>
+    <ID>MaximumLineLength:FinalCommand.kt:FinalCommand$)</ID>
+    <ID>MaximumLineLength:JsonParser.kt:JsonParser.Companion$)</ID>
+    <ID>MaximumLineLength:PluginSettings.kt:PluginSettings$)</ID>
+    <ID>MaximumLineLength:TaskWrapper.kt:TaskWrapper$)</ID>
+    <ID>NamedLiteralArgument:Board.kt:Board$"="</ID>
+    <ID>NamedLiteralArgument:BoardSetup.kt:BoardSetup$"board-statuses.json"</ID>
+    <ID>NamedLiteralArgument:Git.kt:Git$"$WORKTREES/$slug"</ID>
+    <ID>NamedLiteralArgument:Git.kt:Git$"git"</ID>
+    <ID>NamedLiteralArgument:GitHub.kt:GitHub$"gh"</ID>
+    <ID>NamedLiteralArgument:GitignoreBlock.kt:GitignoreBlock$""</ID>
+    <ID>NamedLiteralArgument:IssueParts.kt:IssueParts$""</ID>
+    <ID>NamedLiteralArgument:IssueTemplate.kt:IssueTemplate$1</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:"\""</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:"\\\""</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:"\\\\"</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:"\\n"</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:"\\r"</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:"\\t"</ID>
+    <ID>NamedLiteralArgument:JsonValue.kt:'"'</ID>
+    <ID>NamedLiteralArgument:Main.kt:"TASK_DEBUG"</ID>
+    <ID>NamedLiteralArgument:Main.kt:"TASK_PLUGIN_ROOT"</ID>
+    <ID>NamedLiteralArgument:Main.kt:"templates/github/stage.md"</ID>
+    <ID>NamedLiteralArgument:Main.kt:"user.dir"</ID>
+    <ID>NamedLiteralArgument:NewCommand.kt:NewCommand$"$type.md"</ID>
+    <ID>NamedLiteralArgument:PlanCommand.kt:PlanCommand$"plans/$slug.md"</ID>
+    <ID>NamedLiteralArgument:PlanCommand.kt:PlanCommand$"plans/${plan.name}"</ID>
+    <ID>NamedLiteralArgument:PlanCommand.kt:PlanCommand$"task-plan/${plan.nameWithoutExtension}"</ID>
+    <ID>NamedLiteralArgument:PrBody.kt:PrBody$"$AUTOMATIC нет"</ID>
+    <ID>NamedLiteralArgument:Rulesets.kt:Rulesets$"ruleset-${ruleset.name.substringAfter(delimiter = "/")}.json"</ID>
+    <ID>NamedLiteralArgument:Rulesets.kt:Rulesets.Ruleset$"$RULE$type"</ID>
+    <ID>NamedLiteralArgument:Setup.kt:Setup.Companion$"--check"</ID>
+    <ID>NamedLiteralArgument:Setup.kt:Setup.Companion$"--confirm"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"PATH"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"TASK_DEBUG"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"TASK_PLUGIN_ROOT"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"engineering-standards"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"java.io.tmpdir"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"user.dir"</ID>
+    <ID>NamedLiteralArgument:SetupMain.kt:"user.home"</ID>
+    <ID>NamedLiteralArgument:TaskWrapper.kt:TaskWrapper$"scripts/task"</ID>
+    <ID>NamedLiteralArgument:TaskWrapper.kt:TaskWrapper$true</ID>
+    <ID>OneClassPerFile:JsonValue.kt:JsonArray : JsonValue</ID>
+    <ID>OneClassPerFile:JsonValue.kt:JsonBoolean : JsonValue</ID>
+    <ID>OneClassPerFile:JsonValue.kt:JsonNull : JsonValue</ID>
+    <ID>OneClassPerFile:JsonValue.kt:JsonNumber : JsonValue</ID>
+    <ID>OneClassPerFile:JsonValue.kt:JsonObject : JsonValue</ID>
+    <ID>OneClassPerFile:JsonValue.kt:JsonString : JsonValue</ID>
+    <ID>PropertyWrapping:JsonParser.kt:JsonParser.Companion$val LITERALS = mapOf("true" to JsonBoolean(value = true), "false" to JsonBoolean(value = false), "null" to JsonNull)</ID>
+    <ID>ReturnCount:Rulesets.kt:Rulesets$private fun sync: Finding</ID>
+    <ID>SpacingAroundComma:JsonParser.kt:JsonParser$,</ID>
+    <ID>SwallowedException:PlanCommand.kt:PlanCommand$error: TaskError</ID>
+    <ID>SwallowedException:ProcessShell.kt:ProcessShell$error: IOException</ID>
+    <ID>ThrowsCount:CommitCommand.kt:CommitCommand$override fun run</ID>
+    <ID>ThrowsCount:CommitMessage.kt:CommitMessage.Companion$fun parse: CommitMessage</ID>
+    <ID>ThrowsCount:DoneCommand.kt:DoneCommand$override fun run</ID>
+    <ID>ThrowsCount:GroomedCommand.kt:GroomedCommand$override fun run</ID>
+    <ID>ThrowsCount:PlanCommand.kt:PlanCommand$override fun run</ID>
+    <ID>ThrowsCount:StageCommand.kt:StageCommand$override fun run</ID>
+    <ID>TooManyFunctions:Git.kt:Git</ID>
+    <ID>TooManyFunctions:JsonParser.kt:JsonParser</ID>
+    <ID>TooManyFunctions:StartCommand.kt:StartCommand : Command</ID>
+    <ID>UseOrEmpty:NewCommand.kt:NewCommand$options[BLOCKED_BY]?.split(",")?.map { value -&gt; number(value = value) } ?: emptyList()</ID>
+    <ID>UseOrEmpty:NewCommand.kt:NewCommand$parent?.let { number -&gt; ", подзадача #$number" } ?: ""</ID>
+    <ID>UseOrEmpty:StageCommand.kt:StageCommand$due?.let { date -&gt; listOf("-f", "due_on=${date}T00:00:00Z") } ?: emptyList()</ID>
+    <ID>Wrapping:PluginSettings.kt:PluginSettings$-&gt;</ID>
+  </CurrentIssues>
+</SmellBaseline>
