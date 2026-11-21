@@ -62,7 +62,10 @@ internal class NamedLiteralArgument(
     private fun reportArgument(argument: KtValueArgument, hasStableNames: Boolean) {
         if (!hasStableNames && hasNameComment(argument)) return
         val hint = if (hasStableNames) "назовите параметр" else "добавьте комментарий /* имя = */ (метод Java)"
-        report(Finding(Entity.from(argument), message = "$RULE_ID. Литерал ${argument.text} без имени: $hint."))
+        val entity = Entity.from(argument)
+        val message = "$RULE_ID. Литерал ${argument.text} без имени: $hint."
+        val finding = Finding(entity, message)
+        report(finding)
     }
 
     private fun isUnnamedLiteral(argument: KtValueArgument): Boolean {
