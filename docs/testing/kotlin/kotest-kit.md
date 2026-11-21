@@ -5,7 +5,7 @@
 
 ### KT-KIT-1. Спеки — только `BehaviorSpec`
 Почему: один стиль тестов во всех проектах — тесты не смешивают разные стили Kotest.
-Проверка: ревью
+Проверка: detekt `BehaviorSpecOnly` (своё правило из engineering-standards)
 ```kotlin
 // Разрешено
 class OrderServiceSpec : BehaviorSpec({

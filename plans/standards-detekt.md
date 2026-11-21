@@ -132,7 +132,7 @@
   - [x] Задача 4: `OneClassPerFile`
   - [x] Приёмка
 - PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
-  - [ ] Задача 5: `BehaviorSpecOnly`
+  - [x] Задача 5: `BehaviorSpecOnly`
   - [ ] Задача 6: `SpecDataContent`
   - [ ] Приёмка
 - PR 4: Плагин `standards.kotlin` подключает detekt стандарта
@@ -803,7 +803,7 @@
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt`
 - Изменить: `docs/testing/kotlin/kotest-kit.md:8` — «Проверка»
 
-- [ ] 1. Падающий тест: `FunSpec` — находка; `BehaviorSpec` с полным именем и класс-не-спека — нет.
+- [x] 1. Падающий тест: `FunSpec` — находка; `BehaviorSpec` с полным именем и класс-не-спека — нет.
   ```kotlin
   // BehaviorSpecOnlySpecData.kt
   package io.github.nakulov.standards.detekt
@@ -849,8 +849,8 @@
   })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "BehaviorSpecOnly"),`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*BehaviorSpecOnlySpec*'` — падает: `Unresolved reference 'BehaviorSpecOnly'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*BehaviorSpecOnlySpec*'` — падает: `Unresolved reference 'BehaviorSpecOnly'`
+- [x] 3. Минимальный код:
   ```kotlin
   // FindSpecSuperType.kt
   package io.github.nakulov.standards.detekt
@@ -907,8 +907,8 @@
   `docs/testing/kotlin/kotest-kit.md:8`:
   - было: `Проверка: ревью`
   - стало: `Проверка: detekt \`BehaviorSpecOnly\` (своё правило из engineering-standards)`
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест, код и строка стандарта вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест, код и строка стандарта вместе
 
 ### Задача 6: `SpecDataContent` — KT-TEST-2, KT-TEST-3, KT-TEST-5
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/SpecDataContent.kt`

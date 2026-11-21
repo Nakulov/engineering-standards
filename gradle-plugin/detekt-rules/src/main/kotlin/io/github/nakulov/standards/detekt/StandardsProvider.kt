@@ -13,6 +13,7 @@ class StandardsProvider : RuleSetProvider {
         return RuleSet(
             ruleSetId,
             listOf(
+                { config -> BehaviorSpecOnly(config) },
                 { config -> NamedLiteralArgument(config) },
                 { config -> NoImplicitIt(config) },
                 { config -> OneClassPerFile(config) },

@@ -9,6 +9,7 @@ fun makeStandardsRuleSetId(): RuleSetId {
 
 fun makeStandardsRuleNames(): Set<RuleName> {
     return setOf(
+        RuleName(value = "BehaviorSpecOnly"),
         RuleName(value = "NamedLiteralArgument"),
         RuleName(value = "NoImplicitIt"),
         RuleName(value = "OneClassPerFile"),
