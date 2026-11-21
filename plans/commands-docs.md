@@ -139,10 +139,10 @@
   - [x] Задача 9: `setup.md`
   - [x] Приёмка
 - PR 2: скиллы ссылаются на справочник вместо пересказа
-  - [ ] Задача 10: `worktree` и `groom`
-  - [ ] Задача 11: `execute`
-  - [ ] Задача 12: `decompose`
-  - [ ] Приёмка
+  - [x] Задача 10: `worktree` и `groom`
+  - [x] Задача 11: `execute`
+  - [x] Задача 12: `decompose`
+  - [x] Приёмка
 - `task final 34` — итоговый PR `long/34-commands-docs` → `dev`.
 
 **После завершения** (внешнее, без чекбоксов):
@@ -437,9 +437,9 @@
 ### Задача 10: `worktree` и `groom` — ссылки на `start.md`, `done.md`, `commit.md`, `groomed.md`
 - Изменить: `skills/worktree/SKILL.md:20`, `:22`, `skills/groom/SKILL.md:31`, `:35`
 
-- [ ] 1. Проверка: `grep -c 'docs/commands/' skills/worktree/SKILL.md skills/groom/SKILL.md` → `skills/worktree/SKILL.md:2`, `skills/groom/SKILL.md:2`
-- [ ] 2. Запустить — `:0` у обоих
-- [ ] 3. Правки:
+- [x] 1. Проверка: `grep -c 'docs/commands/' skills/worktree/SKILL.md skills/groom/SKILL.md` → `skills/worktree/SKILL.md:2`, `skills/groom/SKILL.md:2`
+- [x] 2. Запустить — `:0` у обоих
+- [x] 3. Правки:
   - `skills/worktree/SKILL.md:20`
     было: ``1. `task start <N> <slug> [--long] --worktree` — копия `.worktrees/<slug>` основной папки на ветке задачи; основная папка не переключается; файлы из `.worktreeinclude` копируются. Последняя строка вывода — путь копии. Ветка открыта в другой папке — команда откажет с путём: сообщи и предложи перейти туда; сам не чини.``
     стало: ``1. `task start <N> <slug> [--long] --worktree` — копия `.worktrees/<slug>` на ветке задачи; что делает и когда отказывает — `${CLAUDE_PLUGIN_ROOT}/docs/commands/start.md`. Последняя строка вывода — путь копии. Отказ «ветка … открыта в <папка>» — сообщи и предложи перейти туда; сам не чини.``
@@ -452,15 +452,15 @@
   - `skills/groom/SKILL.md:35`
     было: ``Пользователь выбрал «план» или «сразу в работу» — только тогда вызови `task groomed <N>` и покажи его ответ до «Продолжи в новой сессии…» или до работы: задача переходит из Backlog в Groomed, иначе `task start` откажет. Тема без задачи — не вызывай. Отказ (закрыта, эпик) — покажи ответ и продолжай шаг 4.``
     стало: ``Пользователь выбрал «план» или «сразу в работу» — только тогда вызови `task groomed <N>` и покажи его ответ до «Продолжи в новой сессии…» или до работы: без него `task start` откажет; что делает и когда отказывает — `${CLAUDE_PLUGIN_ROOT}/docs/commands/groomed.md`. Тема без задачи — не вызывай. Отказ — покажи ответ и продолжай шаг 4.``
-- [ ] 4. Запустить проверку — `:1` и `:2`
-- [ ] 5. Коммит
+- [x] 4. Запустить проверку — `:1` и `:2`
+- [x] 5. Коммит
 
 ### Задача 11: `execute` — ссылки на `start.md`, `pr.md`, `final.md`
 - Изменить: `skills/execute/SKILL.md:20`, `:36`, `:38`, `:91`, `:112`
 
-- [ ] 1. Проверка: `grep -c 'docs/commands/' skills/execute/SKILL.md` → `5` (`grep -c` считает строки; в `:38` две ссылки в одной строке)
-- [ ] 2. Запустить — `0`
-- [ ] 3. Правки:
+- [x] 1. Проверка: `grep -c 'docs/commands/' skills/execute/SKILL.md` → `5` (`grep -c` считает строки; в `:38` две ссылки в одной строке)
+- [x] 2. Запустить — `0`
+- [x] 3. Правки:
   - `:20`
     было: ``- Готовность задачи проверяет `task start` (шаг 0): закрыта, эпик, не Groomed / In progress, открытые блокеры — команда откажет; сообщи её ответ и остановись.``
     стало: ``- Готовность задачи проверяет `task start` (шаг 0); когда откажет — `${CLAUDE_PLUGIN_ROOT}/docs/commands/start.md`. Отказ — сообщи её ответ и остановись.``
@@ -477,15 +477,15 @@
   - `:112` — фрагмент
     было: ``Команда создаёт ветку `task/<N>-final` от long-ветки, убирает на ней план (копия — в `plans/done/` основной папки) и открывает PR `task/<N>-final` → `dev` с `Closes #N` сразу к ревью; в long-ветку ничего не пушит. Рабочая папка остаётся на `task/<N>-final`: правки по ревью — на ней, повтор `task -C <рабочая папка> final` вливает в неё свежую long-ветку; после слияния — `task -C <рабочая папка> done`, он удаляет и long-ветку.``
     стало: ``PR открывается сразу к ревью; что делает команда — `${CLAUDE_PLUGIN_ROOT}/docs/commands/final.md`. Рабочая папка остаётся на `task/<N>-final`: правки по ревью — на ней, затем повтор `task -C <рабочая папка> final`; после слияния — `task -C <рабочая папка> done`.``
-- [ ] 4. Запустить проверку — `5`
-- [ ] 5. Коммит
+- [x] 4. Запустить проверку — `5`
+- [x] 5. Коммит
 
 ### Задача 12: `decompose` — ссылки на `plan.md`, `pr.md`
 - Изменить: `skills/decompose/SKILL.md:95`, `:190`, `:214`
 
-- [ ] 1. Проверка: `grep -c 'docs/commands/' skills/decompose/SKILL.md` → `3`
-- [ ] 2. Запустить — `0`
-- [ ] 3. Правки:
+- [x] 1. Проверка: `grep -c 'docs/commands/' skills/decompose/SKILL.md` → `3`
+- [x] 2. Запустить — `0`
+- [x] 3. Правки:
   - `:95` — фрагмент
     было: ``Заменить — тот же slug: `task plan` с ним делает «Обновить план», другой slug дал бы вторую ветку плана.``
     стало: ``Заменить — тот же slug: другой slug дал бы вторую ветку плана; повтор `task plan` — `${CLAUDE_PLUGIN_ROOT}/docs/commands/plan.md`.``
@@ -495,16 +495,16 @@
   - `:214` — фрагмент
     было: ``PR — `task pr`: он сам перенесёт план в `plans/done/` и уберёт его из ветки.``
     стало: ``PR — `task pr`; план он переносит сам — `${CLAUDE_PLUGIN_ROOT}/docs/commands/pr.md`.``
-- [ ] 4. Запустить проверку — `3`
-- [ ] 5. Коммит
+- [x] 4. Запустить проверку — `3`
+- [x] 5. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `grep -c 'docs/commands/' skills/*/SKILL.md` → worktree 2, groom 2, execute 5, decompose 3
-- [ ] Пересказа нет: `grep -n "перематывает\|кладут\|другой статус не трогает\|Команда удаляет\|команда удаляет\|убирает сама команда\|Команда создаёт\|закрыта, эпик" skills/groom/SKILL.md skills/execute/SKILL.md skills/decompose/SKILL.md skills/worktree/SKILL.md` → пусто (до PR 2 — 8 строк: worktree:22, execute:20, :36, :38, :91, :112, groom:35, decompose:190)
-- [ ] Блоки меток не тронуты: `./gradlew :scripts:test --tests '*MarkersSpec*'` → `BUILD SUCCESSFUL`
-- [ ] `agents/plan-reviewer.md` и `scripts/` не тронуты: `git diff --stat origin/dev -- scripts/ agents/` → пусто
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам
+- [x] Что даёт этот PR — проверено: `grep -c 'docs/commands/' skills/*/SKILL.md` → worktree 2, groom 2, execute 5, decompose 3
+- [x] Пересказа нет: `grep -n "перематывает\|кладут\|другой статус не трогает\|Команда удаляет\|команда удаляет\|убирает сама команда\|Команда создаёт\|закрыта, эпик" skills/groom/SKILL.md skills/execute/SKILL.md skills/decompose/SKILL.md skills/worktree/SKILL.md` → пусто (до PR 2 — 8 строк: worktree:22, execute:20, :36, :38, :91, :112, groom:35, decompose:190)
+- [x] Блоки меток не тронуты: `./gradlew :scripts:test --tests '*MarkersSpec*'` → `BUILD SUCCESSFUL`
+- [x] `agents/plan-reviewer.md` и `scripts/` не тронуты: `git diff --stat origin/dev -- scripts/ agents/` → пусто
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам
 
 ## Открыто
 - нет
