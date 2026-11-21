@@ -143,7 +143,7 @@
   - [x] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
   - [x] Приёмка
 - PR 6: Плагин проверяет покрытие по порогу проекта
-  - [ ] Задача 10: Kover с порогом `coverageMinBound`
+  - [x] Задача 10: Kover с порогом `coverageMinBound`
   - [ ] Приёмка
 - PR 7: `scripts/` проверяется стандартом
   - [ ] Перед блоком: «Почему» от пользователя
@@ -1601,7 +1601,7 @@
 - Создать: `gradle-plugin/conventions/src/test/fixtures/low-coverage/settings.gradle.kts`, `build.gradle.kts`, `src/main/kotlin/sample/Greeting.kt`
 - Изменить: `…/gradle/StandardsKotlinPluginSpec.kt`, `StandardsKotlinPluginSpecData.kt` — случай `low-coverage`
 
-- [ ] 1. Падающий тест: порог 100 при непокрытом коде — `check` падает в `koverVerify`.
+- [x] 1. Падающий тест: порог 100 при непокрытом коде — `check` падает в `koverVerify`.
   ```kotlin
   // fixtures/low-coverage/settings.gradle.kts
   dependencyResolutionManagement {
@@ -1644,8 +1644,8 @@
   ```kotlin
               case(arg1 = makeLowCoverageOutput(), arg2 = "low-coverage", arg3 = "Rule violated"),
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*StandardsKotlinPluginSpec*'` — падает: у `low-coverage` сборка не падает (`UnexpectedBuildSuccess`: Kover ещё не применён)
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*StandardsKotlinPluginSpec*'` — падает: у `low-coverage` сборка не падает (`UnexpectedBuildSuccess`: Kover ещё не применён)
+- [x] 3. Минимальный код:
   `gradle/libs.versions.toml` — в `[versions]` `kover = "0.9.11"`, в `[libraries]`:
   ```toml
   kover-gradle-plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
@@ -1688,8 +1688,8 @@
       }
   ```
   KDoc класса — дописать: «и Kover с порогом проекта `standards { coverageMinBound }`».
-- [ ] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — три образца, `FindMissingSetupSpec`, правила). Строка `low-coverage` разошлась форматом сообщения Kover 0.9.11 — поправить ожидание в `makeLowCoverageOutput()` по выводу, порог 100 и факт 0 в строке должны остаться.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — три образца, `FindMissingSetupSpec`, правила). Строка `low-coverage` разошлась форматом сообщения Kover 0.9.11 — поправить ожидание в `makeLowCoverageOutput()` по выводу, порог 100 и факт 0 в строке должны остаться.
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Плагин проверяет покрытие: порог выше покрытия роняет `koverVerify` (образец `low-coverage`)

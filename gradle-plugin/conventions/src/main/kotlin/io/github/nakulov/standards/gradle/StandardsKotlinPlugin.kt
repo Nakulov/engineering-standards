@@ -1,11 +1,14 @@
 package io.github.nakulov.standards.gradle
 
 import dev.detekt.gradle.extensions.DetektExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverVerificationRulesConfig
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.testing.Test
 import java.io.File
 import java.net.JarURLConnection
 
@@ -18,13 +21,16 @@ private const val KTLINT_WRAPPER = "dev.detekt:detekt-rules-ktlint-wrapper"
 private const val CONFIG_RESOURCE = "/standards/detekt.yml"
 private const val RULES_CLASS = "io/github/nakulov/standards/detekt/StandardsProvider.class"
 private const val BASELINE = "detekt-baseline.xml"
+private const val KOVER_PLUGIN = "org.jetbrains.kotlinx.kover"
+private const val KOVER_HTML_REPORT = "koverHtmlReport"
 private const val CHECK = "check"
 private const val PLAIN_DETEKT = "detekt"
 private const val DETEKT_MAIN = "detektMain"
 private const val DETEKT_TEST = "detektTest"
 
 /**
- * Плагин соглашений Kotlin `standards.kotlin`: detekt с конфигом стандарта, своими правилами и ktlint.
+ * Плагин соглашений Kotlin `standards.kotlin`: detekt с конфигом стандарта, своими правилами и ktlint,
+ * и Kover с порогом проекта `standards { coverageMinBound }`.
  * Kotlin не применяет — версия, toolchain и `languageVersion` остаются в проекте.
  * Без `kotlin("jvm")` или без порога `standards { coverageMinBound }` — ошибка конфигурации.
  */
@@ -34,7 +40,10 @@ class StandardsKotlinPlugin : Plugin<Project> {
         val standards = project.extensions
             .create(EXTENSION, StandardsExtension::class.java)
         project.pluginManager
-            .withPlugin(KOTLIN_PLUGIN) { _ -> applyDetekt(project) }
+            .withPlugin(KOTLIN_PLUGIN) { _ ->
+                applyDetekt(project)
+                applyKover(project, standards)
+            }
         project.afterEvaluate { evaluated -> checkSetup(evaluated, standards) }
     }
 
@@ -77,6 +86,24 @@ class StandardsKotlinPlugin : Plugin<Project> {
         // NamedArguments и NamedLiteralArgument работают только с анализом типов: check — detektMain и detektTest.
         project.tasks
             .named(CHECK) { check -> dependOnTypedDetekt(check) }
+    }
+
+    // koverVerify Kover сам ставит в check; HTML-отчёт — после каждого прогона тестов: build/reports/kover/html.
+    private fun applyKover(project: Project, standards: StandardsExtension) {
+        project.pluginManager
+            .apply(KOVER_PLUGIN)
+        val kover = project.extensions
+            .getByType(KoverProjectExtension::class.java)
+        kover.reports { reports ->
+            reports.verify { rules -> addCoverageRule(rules, standards) }
+        }
+        project.tasks
+            .withType(Test::class.java)
+            .configureEach { test -> test.finalizedBy(KOVER_HTML_REPORT) }
+    }
+
+    private fun addCoverageRule(rules: KoverVerificationRulesConfig, standards: StandardsExtension) {
+        rules.rule { rule -> rule.minBound(standards.coverageMinBound) }
     }
 
     private fun dependOnTypedDetekt(check: Task) {
