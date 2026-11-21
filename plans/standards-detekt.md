@@ -128,7 +128,7 @@
   - [x] Задача 2: `NamedLiteralArgument`
   - [x] Приёмка
 - PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
-  - [ ] Задача 3: `NoImplicitIt`
+  - [x] Задача 3: `NoImplicitIt`
   - [ ] Задача 4: `OneClassPerFile`
   - [ ] Приёмка
 - PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
@@ -537,7 +537,7 @@
 - Создать: `…/detekt/NoImplicitItSpec.kt`, `NoImplicitItSpecData.kt`
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt` — правило в наборе
 
-- [ ] 1. Падающий тест: неявный `it`, `it` во вложенной лямбде, именованный параметр и `by lazy { }` без `it`.
+- [x] 1. Падающий тест: неявный `it`, `it` во вложенной лямбде, именованный параметр и `by lazy { }` без `it`.
   ```kotlin
   // FindLintLinesInFile.kt
   package io.github.nakulov.standards.detekt
@@ -616,8 +616,8 @@
   })
   ```
   В `StandardsProviderSpecData.makeStandardsRuleNames()` — добавить `RuleName(value = "NoImplicitIt"),` после `NamedLiteralArgument`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NoImplicitItSpec*'` — падает: `Unresolved reference 'NoImplicitIt'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NoImplicitItSpec*'` — падает: `Unresolved reference 'NoImplicitIt'`
+- [x] 3. Минимальный код:
   ```kotlin
   // NoImplicitIt.kt
   package io.github.nakulov.standards.detekt
@@ -661,8 +661,8 @@
   }
   ```
   В `StandardsProvider.instance()` — добавить `{ config -> NoImplicitIt(config) },` после `NamedLiteralArgument`.
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 4: `OneClassPerFile` — KT-NAME-3
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/OneClassPerFile.kt`

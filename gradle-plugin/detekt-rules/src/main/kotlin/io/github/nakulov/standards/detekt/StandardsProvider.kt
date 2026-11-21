@@ -14,6 +14,7 @@ class StandardsProvider : RuleSetProvider {
             ruleSetId,
             listOf(
                 { config -> NamedLiteralArgument(config) },
+                { config -> NoImplicitIt(config) },
             ),
         )
     }

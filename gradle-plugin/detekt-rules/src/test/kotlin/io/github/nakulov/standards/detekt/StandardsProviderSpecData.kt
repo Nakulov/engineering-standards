@@ -10,5 +10,6 @@ fun makeStandardsRuleSetId(): RuleSetId {
 fun makeStandardsRuleNames(): Set<RuleName> {
     return setOf(
         RuleName(value = "NamedLiteralArgument"),
+        RuleName(value = "NoImplicitIt"),
     )
 }
