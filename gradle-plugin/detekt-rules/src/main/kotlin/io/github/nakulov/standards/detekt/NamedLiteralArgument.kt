@@ -20,19 +20,16 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.KtValueArgument
 
+private const val RULE_ID = "KT-FUN-4"
+
 private val NAME_COMMENT = Regex(pattern = """/\*\s*\w+\s*=\s*\*/""")
 
-/**
- * KT-FUN-4: литерал в аргументе вызова (число, `Boolean`, `Char`, строка, `null`) — с именем параметра. У вызова
- * Java-метода имена параметров не стабильны: перед литералом комментарий `/* имя = */`. Не затрагиваются аргументы
- * аннотаций, `vararg` и инфиксные вызовы.
- */
 internal class NamedLiteralArgument(
     config: Config,
 ) : Rule(
-        config = config,
-        description = "KT-FUN-4. Литерал в аргументе вызова — с именем параметра.",
-    ),
+    config = config,
+    description = "$RULE_ID. Литерал в аргументе вызова — с именем параметра.",
+),
     RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -46,28 +43,30 @@ internal class NamedLiteralArgument(
     }
 
     private fun reportUnnamedLiterals(call: KtCallElement) {
-        val literals = call.valueArguments
-            .filterIsInstance<KtValueArgument>()
+        val literals = call.valueArguments.filterIsInstance<KtValueArgument>()
             .filter { argument -> isUnnamedLiteral(argument = argument) }
         if (literals.isEmpty()) {
             return
         }
         analyze(call) {
-            val functionCall = call.resolveToCall()?.singleFunctionCallOrNull() ?: return@analyze
-            val stableNames = functionCall.symbol.hasStableParameterNames
-            literals
-                .filter { argument ->
-                    functionCall.valueArgumentMapping[argument.getArgumentExpression()]?.symbol?.isVararg == false
-                }
-                .forEach { argument -> reportArgument(argument = argument, stableNames = stableNames) }
+            val functionCall = call.resolveToCall()
+                ?.singleFunctionCallOrNull() ?: return@analyze
+            // У метода Java имена параметров не стабильны: вместо имени — комментарий /* имя = */.
+            val hasStableNames = functionCall.symbol.hasStableParameterNames
+            val nonVarargLiterals = literals.filter { argument ->
+                functionCall.valueArgumentMapping[argument.getArgumentExpression()]?.symbol?.isVararg == false
+            }
+            nonVarargLiterals.forEach { argument ->
+                reportArgument(argument = argument, hasStableNames = hasStableNames)
+            }
         }
     }
 
-    private fun reportArgument(argument: KtValueArgument, stableNames: Boolean) {
-        if (!stableNames && hasNameComment(argument = argument)) {
+    private fun reportArgument(argument: KtValueArgument, hasStableNames: Boolean) {
+        if (!hasStableNames && hasNameComment(argument = argument)) {
             return
         }
-        val hint = if (stableNames) {
+        val hint = if (hasStableNames) {
             "назовите параметр"
         } else {
             "добавьте комментарий /* имя = */ (метод Java)"
@@ -75,7 +74,7 @@ internal class NamedLiteralArgument(
         report(
             Finding(
                 entity = Entity.from(argument),
-                message = "KT-FUN-4. Литерал ${argument.text} без имени: $hint.",
+                message = "$RULE_ID. Литерал ${argument.text} без имени: $hint.",
             ),
         )
     }

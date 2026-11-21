@@ -51,10 +51,11 @@
 - Создать: `…/detekt/NamedLiteralArgument.kt` — KT-FUN-4
 - Создать: `…/detekt/NoImplicitIt.kt` — KT-FUN-6
 - Создать: `…/detekt/OneClassPerFile.kt` — KT-NAME-3: второй класс верхнего уровня
-- Создать: `…/detekt/SpecSuperType.kt` — имя супертипа-спеки Kotest; вход: `KtClass.specSuperType(): String?`
+- Создать: `…/detekt/FindSpecSuperType.kt` — имя супертипа-спеки Kotest; вход: `KtClass.findSpecSuperType(): String?`
 - Создать: `…/detekt/BehaviorSpecOnly.kt` — KT-KIT-1
 - Создать: `…/detekt/SpecDataContent.kt` — KT-TEST-2, KT-TEST-3, KT-TEST-5
-- Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/RuleLint.kt` — запуск правила на коде; вход: `Rule.lintCode(code: String, filename: String): List<String>`, `T.lintCodeWithContext(code: String): List<String>`
+- Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/FindLintLines.kt` — запуск правила с анализом типов; вход: `T.findLintLines(code: String): List<String>`
+- Создать: `…/detekt/FindLintLinesInFile.kt` — запуск правила без анализа типов на коде из файла; вход: `Rule.findLintLinesInFile(code: String, filename: String): List<String>`
 - Создать: `…/detekt/StandardsProviderSpec.kt`, `StandardsProviderSpecData.kt` — id и состав набора
 - Создать: `…/detekt/<Правило>Spec.kt`, `<Правило>SpecData.kt` — по паре на каждое из 5 правил
 
@@ -63,11 +64,11 @@
 - Создать: `gradle-plugin/conventions/build.gradle.kts` — модуль плагина, TestKit
 - Создать: `gradle-plugin/conventions/src/main/kotlin/io/github/nakulov/standards/gradle/StandardsKotlinPlugin.kt` — плагин `standards.kotlin`
 - Создать: `…/gradle/StandardsExtension.kt` — `standards { coverageMinBound }`
-- Создать: `…/gradle/MissingSetup.kt` — чего не хватает проекту; вход: `missingSetup(hasKotlin: Boolean, coverageMinBound: Int?): String?`
+- Создать: `…/gradle/FindMissingSetup.kt` — чего не хватает проекту; вход: `findMissingSetup(hasKotlin: Boolean, coverageMinBound: Int?): String?`
 - Создать: `gradle-plugin/conventions/src/main/resources/standards/detekt.yml` — конфиг detekt стандарта
-- Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/CheckRun.kt` — запуск упавшего `check` в проекте-образце; вход: `failedCheckLines(fixture: String, mark: String): List<String>`
+- Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/FindFailedCheckLines.kt` — запуск упавшего `check` в проекте-образце; вход: `findFailedCheckLines(fixture: String, mark: String): List<String>`
 - Создать: `…/gradle/StandardsKotlinPluginSpec.kt`, `StandardsKotlinPluginSpecData.kt` — что роняет `check` в образцах
-- Создать: `…/gradle/MissingSetupSpec.kt`, `MissingSetupSpecData.kt` — тексты ошибок конфигурации
+- Создать: `…/gradle/FindMissingSetupSpec.kt`, `FindMissingSetupSpecData.kt` — тексты ошибок конфигурации
 - Создать: `gradle-plugin/conventions/src/test/fixtures/violation/settings.gradle.kts`, `build.gradle.kts`, `src/main/kotlin/sample/Names.kt` — образец с неявным `it`
 - Создать: `gradle-plugin/conventions/src/test/fixtures/no-bound/settings.gradle.kts`, `build.gradle.kts` — образец без порога
 - Создать: `gradle-plugin/conventions/src/test/fixtures/low-coverage/settings.gradle.kts`, `build.gradle.kts`, `src/main/kotlin/sample/Greeting.kt` — образец с порогом выше покрытия
@@ -97,8 +98,9 @@
   - Свои правила подключаются файлом jar правил с classpath плагина (`detektPlugins(files(…))`), а не координатами — работает и из `includeBuild`, и в TestKit, без `includeBuild` вне `pluginManagement`.
   - Конфиг — ресурс плагина `standards/detekt.yml`, передаётся detekt через `TextResource.asFile()`; проект сужает своим файлом поверх (`detekt { config.from(…) }`).
   - Метаданные Kotlin в `conventions` — версии 2.2: Kotlin DSL проекта читает расширение `standards { }` компилятором Gradle, а он не читает метаданные новее себя.
-  - Ошибки конфигурации — чистая функция `missingSetup` (все случаи — `shouldReturnTest`), плагин бросает `GradleException` в `afterEvaluate`.
-  - TestKit — три проекта-образца, как в груминге, но без `kotlin("jvm")` — только `MissingSetupSpec` (образец без Kotlin — ещё 2 файла, а вызов `afterEvaluate` уже проверяет образец без порога): `violation` — нарушение `NoImplicitIt` роняет `check` с KT-FUN-6; `no-bound` — без `coverageMinBound` ошибка конфигурации; `low-coverage` — порог выше покрытия роняет `koverVerify`.
+  - Образцы кода — по стандарту, изменено по ревью PR 1: цепочки по KT-FMT-2, `class … : BehaviorSpec({` одной строкой, аргументы супертипа с отступом 4, булевы с префиксом (KT-NAME-7), функции с результатом — `find…`/`get…` (KT-NAME-9), KDoc только у публичного с нетривиальной логикой (KT-DOC-2), ID правила в константе `RULE_ID` (KT-CLASS-3). Вспомогательные функции тестов — по файлу на функцию с её именем (KT-NAME-3); `map`/`filter` в них — с комментарием «Вне стандарта» (KT-TEST-6): находку detekt и вывод Gradle целиком не сравнить.
+  - Ошибки конфигурации — чистая функция `findMissingSetup` (все случаи — `shouldReturnTest`), плагин бросает `GradleException` в `afterEvaluate`.
+  - TestKit — три проекта-образца, как в груминге, но без `kotlin("jvm")` — только `FindMissingSetupSpec` (образец без Kotlin — ещё 2 файла, а вызов `afterEvaluate` уже проверяет образец без порога): `violation` — нарушение `NoImplicitIt` роняет `check` с KT-FUN-6; `no-bound` — без `coverageMinBound` ошибка конфигурации; `low-coverage` — порог выше покрытия роняет `koverVerify`.
 - Как вписывается в систему: `scripts/task` по-прежнему собирается `kotlinc`; Gradle — только для тестов и проверок.
 - Обратная совместимость: не нужна — проверок в `scripts/` не было, бейзлайн держит текущие нарушения.
 - Запасной: подключение правил координатами `io.github.nakulov.standards:detekt-rules` и `includeBuild("gradle-plugin")` ещё и вне `pluginManagement` — переходим, если jar правил не находится на classpath плагина (ошибка «правила detekt не в jar»).
@@ -131,7 +133,7 @@
   - [ ] Задача 7: Плагин с detekt, конфигом и своими правилами
   - [ ] Приёмка
 - PR 5: Плагин требует настроек проекта
-  - [ ] Задача 8: Ошибки конфигурации `missingSetup`
+  - [ ] Задача 8: Ошибки конфигурации `findMissingSetup`
   - [ ] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
   - [ ] Приёмка
 - PR 6: Плагин проверяет покрытие по порогу проекта
@@ -148,7 +150,7 @@
 - #107 снимает бейзлайн и поднимает порог — связь уже записана в #107.
 
 ## PR 1: Сборка правил detekt с правилом KT-FUN-4
-**Объём:** `gradle-plugin/settings.gradle.kts`, `detekt-rules/build.gradle.kts`, провайдер, регистрация, `NamedLiteralArgument`, `RuleLint.kt`, спеки и данные провайдера и правила; ≈ 10 файлов
+**Объём:** `gradle-plugin/settings.gradle.kts`, `detekt-rules/build.gradle.kts`, провайдер, регистрация, `NamedLiteralArgument`, `FindLintLines.kt`, спеки и данные провайдера и правила; ≈ 10 файлов
 
 ### Задача 1: Сборка `gradle-plugin/` и набор `standards`
 - Создать: `gradle-plugin/settings.gradle.kts` — сборка
@@ -218,12 +220,10 @@
   import dev.detekt.api.RuleName
   import dev.detekt.api.RuleSetId
 
-  /** Набор правил в `detekt.yml`: `standards`. */
   fun makeStandardsRuleSetId(): RuleSetId {
       return RuleSetId(value = "standards")
   }
 
-  /** Правила набора — по имени класса, как они включаются в `detekt.yml`. */
   fun makeStandardsRuleNames(): Set<RuleName> {
       return setOf(
       )
@@ -236,12 +236,11 @@
   import io.github.nakulov.kotestkit.shouldReturnTest
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class StandardsProviderSpec :
-      BehaviorSpec({
-          shouldReturnTest(makeStandardsRuleSetId()) { StandardsProvider().ruleSetId }
+  class StandardsProviderSpec : BehaviorSpec({
+      shouldReturnTest(makeStandardsRuleSetId()) { StandardsProvider().ruleSetId }
 
-          shouldReturnTest(makeStandardsRuleNames()) { StandardsProvider().instance().rules.keys }
-      })
+      shouldReturnTest(makeStandardsRuleNames()) { StandardsProvider().instance().rules.keys }
+  })
   ```
 - [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — падает: `Unresolved reference 'StandardsProvider'`
 - [x] 3. Минимальный код: провайдер и регистрация:
@@ -277,36 +276,24 @@
 
 ### Задача 2: `NamedLiteralArgument` — KT-FUN-4
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/NamedLiteralArgument.kt` — правило
-- Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/RuleLint.kt` — запуск правила на коде
+- Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/FindLintLines.kt` — запуск правила с анализом типов на коде
 - Создать: `…/detekt/NamedLiteralArgumentSpec.kt`, `NamedLiteralArgumentSpecData.kt` — случаи
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt` — правило в наборе
 
 - [x] 1. Падающий тест: литерал без имени (Kotlin и Java), с именем, исключения (`vararg`, инфикс, аннотация); в `makeStandardsRuleNames()` — `RuleName(value = "NamedLiteralArgument"),`.
   ```kotlin
-  // RuleLint.kt
+  // FindLintLines.kt
   package io.github.nakulov.standards.detekt
 
-  import dev.detekt.api.Finding
   import dev.detekt.api.RequiresAnalysisApi
   import dev.detekt.api.Rule
-  import dev.detekt.test.lint
   import dev.detekt.test.lintWithContext
-  import dev.detekt.test.utils.compileContentForTest
   import dev.detekt.test.utils.createEnvironment
 
-  /** Находки правила на коде [code] из файла [filename]: строки «строка:столбец сообщение». */
-  internal fun Rule.lintCode(code: String, filename: String): List<String> {
-      val file = compileContentForTest(content = code, filename = filename)
-      return lint(file).toLines()
-  }
-
-  /** То же для правила с анализом типов: код компилируется с classpath тестов (JDK, stdlib). */
-  internal fun <T> T.lintCodeWithContext(code: String): List<String> where T : Rule, T : RequiresAnalysisApi {
-      return lintWithContext(environment = createEnvironment(), content = code).toLines()
-  }
-
-  private fun List<Finding>.toLines(): List<String> {
-      return map { finding ->
+  // Вне стандарта (KT-TEST-6): находку detekt не сравнить с ожидаемым целиком — в ней PSI-элемент файла,
+  // поэтому тесты сравнивают строки «строка:столбец сообщение».
+  internal fun <T> T.findLintLines(code: String): List<String> where T : Rule, T : RequiresAnalysisApi {
+      return lintWithContext(environment = createEnvironment(), content = code).map { finding ->
           val source = finding.entity.location.source
           "${source.line}:${source.column} ${finding.message}"
       }
@@ -395,18 +382,17 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class NamedLiteralArgumentSpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "код: ${case.arg2}" },
-              case(arg1 = makeUnnamedLiteralFindings(), arg2 = "литералы без имени", arg3 = makeUnnamedLiteralCode()),
-              case(arg1 = makeJavaLiteralFindings(), arg2 = "метод Java", arg3 = makeJavaLiteralCode()),
-              case(arg1 = emptyList(), arg2 = "литералы с именем", arg3 = makeNamedLiteralCode()),
-              case(arg1 = emptyList(), arg2 = "vararg, инфикс, аннотация", arg3 = makeLiteralExceptionsCode()),
-          ) { expected, _, code ->
-              shouldReturnTest(expected) { NamedLiteralArgument(config = Config.empty).lintCodeWithContext(code = code) }
-          }
-      })
+  class NamedLiteralArgumentSpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "код: ${case.arg2}" },
+          case(arg1 = makeUnnamedLiteralFindings(), arg2 = "литералы без имени", arg3 = makeUnnamedLiteralCode()),
+          case(arg1 = makeJavaLiteralFindings(), arg2 = "метод Java", arg3 = makeJavaLiteralCode()),
+          case(arg1 = emptyList(), arg2 = "литералы с именем", arg3 = makeNamedLiteralCode()),
+          case(arg1 = emptyList(), arg2 = "vararg, инфикс, аннотация", arg3 = makeLiteralExceptionsCode()),
+      ) { expected, _, code ->
+          shouldReturnTest(expected) { NamedLiteralArgument(config = Config.empty).findLintLines(code = code) }
+      }
+  })
   ```
 - [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NamedLiteralArgumentSpec*'` — падает: `Unresolved reference 'NamedLiteralArgument'`
 - [x] 3. Минимальный код:
@@ -434,19 +420,16 @@
   import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
   import org.jetbrains.kotlin.psi.KtValueArgument
 
+  private const val RULE_ID = "KT-FUN-4"
+
   private val NAME_COMMENT = Regex(pattern = """/\*\s*\w+\s*=\s*\*/""")
 
-  /**
-   * KT-FUN-4: литерал в аргументе вызова (число, `Boolean`, `Char`, строка, `null`) — с именем параметра. У вызова
-   * Java-метода имена параметров не стабильны: перед литералом комментарий `/* имя = */`. Не затрагиваются аргументы
-   * аннотаций, `vararg` и инфиксные вызовы.
-   */
   internal class NamedLiteralArgument(
       config: Config,
   ) : Rule(
-          config = config,
-          description = "KT-FUN-4. Литерал в аргументе вызова — с именем параметра.",
-      ),
+      config = config,
+      description = "$RULE_ID. Литерал в аргументе вызова — с именем параметра.",
+  ),
       RequiresAnalysisApi {
 
       override fun visitCallExpression(expression: KtCallExpression) {
@@ -460,28 +443,30 @@
       }
 
       private fun reportUnnamedLiterals(call: KtCallElement) {
-          val literals = call.valueArguments
-              .filterIsInstance<KtValueArgument>()
+          val literals = call.valueArguments.filterIsInstance<KtValueArgument>()
               .filter { argument -> isUnnamedLiteral(argument = argument) }
           if (literals.isEmpty()) {
               return
           }
           analyze(call) {
-              val functionCall = call.resolveToCall()?.singleFunctionCallOrNull() ?: return@analyze
-              val stableNames = functionCall.symbol.hasStableParameterNames
-              literals
-                  .filter { argument ->
-                      functionCall.valueArgumentMapping[argument.getArgumentExpression()]?.symbol?.isVararg == false
-                  }
-                  .forEach { argument -> reportArgument(argument = argument, stableNames = stableNames) }
+              val functionCall = call.resolveToCall()
+                  ?.singleFunctionCallOrNull() ?: return@analyze
+              // У метода Java имена параметров не стабильны: вместо имени — комментарий /* имя = */.
+              val hasStableNames = functionCall.symbol.hasStableParameterNames
+              val nonVarargLiterals = literals.filter { argument ->
+                  functionCall.valueArgumentMapping[argument.getArgumentExpression()]?.symbol?.isVararg == false
+              }
+              nonVarargLiterals.forEach { argument ->
+                  reportArgument(argument = argument, hasStableNames = hasStableNames)
+              }
           }
       }
 
-      private fun reportArgument(argument: KtValueArgument, stableNames: Boolean) {
-          if (!stableNames && hasNameComment(argument = argument)) {
+      private fun reportArgument(argument: KtValueArgument, hasStableNames: Boolean) {
+          if (!hasStableNames && hasNameComment(argument = argument)) {
               return
           }
-          val hint = if (stableNames) {
+          val hint = if (hasStableNames) {
               "назовите параметр"
           } else {
               "добавьте комментарий /* имя = */ (метод Java)"
@@ -489,7 +474,7 @@
           report(
               Finding(
                   entity = Entity.from(argument),
-                  message = "KT-FUN-4. Литерал ${argument.text} без имени: $hint.",
+                  message = "$RULE_ID. Литерал ${argument.text} без имени: $hint.",
               ),
           )
       }
@@ -525,14 +510,33 @@
 - [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check` и `./gradlew :scripts:test`
 
 ## PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
-**Объём:** `NoImplicitIt`, `OneClassPerFile` с парами спека + данные, провайдер и его данные, `naming.md`; ≈ 9 файлов
+**Объём:** `FindLintLinesInFile`, `NoImplicitIt`, `OneClassPerFile` с парами спека + данные, провайдер и его данные, `naming.md`; ≈ 10 файлов
 
 ### Задача 3: `NoImplicitIt` — KT-FUN-6
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/NoImplicitIt.kt`
+- Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/FindLintLinesInFile.kt` — запуск правила без анализа типов на коде из файла
 - Создать: `…/detekt/NoImplicitItSpec.kt`, `NoImplicitItSpecData.kt`
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt` — правило в наборе
 
 - [ ] 1. Падающий тест: неявный `it`, `it` во вложенной лямбде, именованный параметр и `by lazy { }` без `it`.
+  ```kotlin
+  // FindLintLinesInFile.kt
+  package io.github.nakulov.standards.detekt
+
+  import dev.detekt.api.Rule
+  import dev.detekt.test.lint
+  import dev.detekt.test.utils.compileContentForTest
+
+  // Вне стандарта (KT-TEST-6): находку detekt не сравнить с ожидаемым целиком — в ней PSI-элемент файла,
+  // поэтому тесты сравнивают строки «строка:столбец сообщение».
+  internal fun Rule.findLintLinesInFile(code: String, filename: String): List<String> {
+      val file = compileContentForTest(content = code, filename = filename)
+      return lint(file).map { finding ->
+          val source = finding.entity.location.source
+          "${source.line}:${source.column} ${finding.message}"
+      }
+  }
+  ```
   ```kotlin
   // NoImplicitItSpecData.kt
   package io.github.nakulov.standards.detekt
@@ -584,19 +588,18 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class NoImplicitItSpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "код: ${case.arg2}" },
-              case(arg1 = makeImplicitItFindings(), arg2 = "неявный it", arg3 = makeImplicitItCode()),
-              case(arg1 = makeNestedItFindings(), arg2 = "it во вложенной лямбде", arg3 = makeNestedItCode()),
-              case(arg1 = emptyList(), arg2 = "параметр с именем", arg3 = makeNamedParameterCode()),
-          ) { expected, _, code ->
-              shouldReturnTest(expected) {
-                  NoImplicitIt(config = Config.empty).lintCode(code = code, filename = "Sample.kt")
-              }
+  class NoImplicitItSpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "код: ${case.arg2}" },
+          case(arg1 = makeImplicitItFindings(), arg2 = "неявный it", arg3 = makeImplicitItCode()),
+          case(arg1 = makeNestedItFindings(), arg2 = "it во вложенной лямбде", arg3 = makeNestedItCode()),
+          case(arg1 = emptyList(), arg2 = "параметр с именем", arg3 = makeNamedParameterCode()),
+      ) { expected, _, code ->
+          shouldReturnTest(expected) {
+              NoImplicitIt(config = Config.empty).findLintLinesInFile(code = code, filename = "Sample.kt")
           }
-      })
+      }
+  })
   ```
   В `StandardsProviderSpecData.makeStandardsRuleNames()` — добавить `RuleName(value = "NoImplicitIt"),` после `NamedLiteralArgument`.
 - [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NoImplicitItSpec*'` — падает: `Unresolved reference 'NoImplicitIt'`
@@ -613,16 +616,16 @@
   import org.jetbrains.kotlin.psi.KtLambdaExpression
   import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 
+  private const val RULE_ID = "KT-FUN-6"
   private const val IMPLICIT_IT = "it"
-  private const val MESSAGE = "KT-FUN-6. Лямбда с неявным it: назовите параметр (`{ item -> … }`)."
+  private const val MESSAGE = "$RULE_ID. Лямбда с неявным it: назовите параметр (`{ item -> … }`)."
 
-  /** KT-FUN-6: параметр лямбды — с именем; лямбда без параметров, которая читает `it`, — находка. */
   internal class NoImplicitIt(
       config: Config,
   ) : Rule(
-          config = config,
-          description = "KT-FUN-6. Параметр лямбды — с именем, неявный it не пишется.",
-      ) {
+      config = config,
+      description = "$RULE_ID. Параметр лямбды — с именем, неявный it не пишется.",
+  ) {
 
       override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
           super.visitLambdaExpression(lambdaExpression)
@@ -718,19 +721,18 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class OneClassPerFileSpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "код: ${case.arg2}" },
-              case(arg1 = makeTwoClassesFindings(), arg2 = "три класса", arg3 = makeTwoClassesCode()),
-              case(arg1 = makeSealedBesideFindings(), arg2 = "наследник sealed рядом", arg3 = makeSealedBesideCode()),
-              case(arg1 = emptyList(), arg2 = "вложенные классы", arg3 = makeNestedClassesCode()),
-          ) { expected, _, code ->
-              shouldReturnTest(expected) {
-                  OneClassPerFile(config = Config.empty).lintCode(code = code, filename = "Sample.kt")
-              }
+  class OneClassPerFileSpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "код: ${case.arg2}" },
+          case(arg1 = makeTwoClassesFindings(), arg2 = "три класса", arg3 = makeTwoClassesCode()),
+          case(arg1 = makeSealedBesideFindings(), arg2 = "наследник sealed рядом", arg3 = makeSealedBesideCode()),
+          case(arg1 = emptyList(), arg2 = "вложенные классы", arg3 = makeNestedClassesCode()),
+      ) { expected, _, code ->
+          shouldReturnTest(expected) {
+              OneClassPerFile(config = Config.empty).findLintLinesInFile(code = code, filename = "Sample.kt")
           }
-      })
+      }
+  })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "OneClassPerFile"),`.
 - [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*OneClassPerFileSpec*'` — падает: `Unresolved reference 'OneClassPerFile'`
@@ -746,18 +748,18 @@
   import org.jetbrains.kotlin.psi.KtClassOrObject
   import org.jetbrains.kotlin.psi.KtFile
 
-  /** KT-NAME-3: один класс, объект или интерфейс верхнего уровня на файл; вложенные не считаются. */
+  private const val RULE_ID = "KT-NAME-3"
+
   internal class OneClassPerFile(
       config: Config,
   ) : Rule(
-          config = config,
-          description = "KT-NAME-3. Одна верхнеуровневая декларация на файл: второй класс — в свой файл.",
-      ) {
+      config = config,
+      description = "$RULE_ID. Одна верхнеуровневая декларация на файл: второй класс — в свой файл.",
+  ) {
 
       override fun visitKtFile(file: KtFile) {
           super.visitKtFile(file)
-          file.declarations
-              .filterIsInstance<KtClassOrObject>()
+          file.declarations.filterIsInstance<KtClassOrObject>()
               .drop(n = 1)
               .forEach { declaration -> reportSecond(declaration = declaration) }
       }
@@ -766,7 +768,7 @@
           report(
               Finding(
                   entity = Entity.atName(declaration),
-                  message = "KT-NAME-3. «${declaration.name}» — второй класс верхнего уровня в файле: вынесите в свой файл.",
+                  message = "$RULE_ID. «${declaration.name}» — второй класс верхнего уровня в файле: вынесите в свой файл.",
               ),
           )
       }
@@ -785,10 +787,10 @@
 - [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
-**Объём:** `SpecSuperType`, `BehaviorSpecOnly`, `SpecDataContent` с парами спека + данные, провайдер и его данные, `kotest-kit.md`; ≈ 10 файлов
+**Объём:** `FindSpecSuperType`, `BehaviorSpecOnly`, `SpecDataContent` с парами спека + данные, провайдер и его данные, `kotest-kit.md`; ≈ 10 файлов
 
 ### Задача 5: `BehaviorSpecOnly` — KT-KIT-1
-- Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/SpecSuperType.kt` — общее для двух правил тестов
+- Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/FindSpecSuperType.kt` — общее для двух правил тестов
 - Создать: `…/detekt/BehaviorSpecOnly.kt`
 - Создать: `…/detekt/BehaviorSpecOnlySpec.kt`, `BehaviorSpecOnlySpecData.kt`
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt`
@@ -801,9 +803,8 @@
 
   fun makeFunSpecCode(): String {
       return """
-  class ExampleSpec :
-      FunSpec({
-      })
+  class ExampleSpec : FunSpec({
+  })
   """
   }
 
@@ -815,9 +816,8 @@
 
   fun makeBehaviorSpecCode(): String {
       return """
-  class ExampleSpec :
-      io.kotest.core.spec.style.BehaviorSpec({
-      })
+  class ExampleSpec : io.kotest.core.spec.style.BehaviorSpec({
+  })
 
   class Child : Base()
   """
@@ -833,33 +833,34 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class BehaviorSpecOnlySpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "код: ${case.arg2}" },
-              case(arg1 = makeFunSpecFindings(), arg2 = "FunSpec", arg3 = makeFunSpecCode()),
-              case(arg1 = emptyList(), arg2 = "BehaviorSpec и не спека", arg3 = makeBehaviorSpecCode()),
-          ) { expected, _, code ->
-              shouldReturnTest(expected) {
-                  BehaviorSpecOnly(config = Config.empty).lintCode(code = code, filename = "ExampleSpec.kt")
-              }
+  class BehaviorSpecOnlySpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "код: ${case.arg2}" },
+          case(arg1 = makeFunSpecFindings(), arg2 = "FunSpec", arg3 = makeFunSpecCode()),
+          case(arg1 = emptyList(), arg2 = "BehaviorSpec и не спека", arg3 = makeBehaviorSpecCode()),
+      ) { expected, _, code ->
+          shouldReturnTest(expected) {
+              BehaviorSpecOnly(config = Config.empty).findLintLinesInFile(code = code, filename = "ExampleSpec.kt")
           }
-      })
+      }
+  })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "BehaviorSpecOnly"),`.
 - [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*BehaviorSpecOnlySpec*'` — падает: `Unresolved reference 'BehaviorSpecOnly'`
 - [ ] 3. Минимальный код:
   ```kotlin
-  // SpecSuperType.kt
+  // FindSpecSuperType.kt
   package io.github.nakulov.standards.detekt
 
   import org.jetbrains.kotlin.psi.KtClass
 
-  /** Короткое имя супертипа-спеки Kotest (оканчивается на `Spec`) или `null`, если класс — не спека. */
-  internal fun KtClass.specSuperType(): String? {
-      return superTypeListEntries
-          .map { entry -> entry.typeReference?.text.orEmpty() }
-          .map { name -> name.substringBefore(delimiter = '<').substringAfterLast(delimiter = '.') }
+  // Короткое имя супертипа: спеку пишут и с полным именем (`io.kotest…BehaviorSpec`), и с параметрами типа.
+  internal fun KtClass.findSpecSuperType(): String? {
+      return superTypeListEntries.map { entry -> entry.typeReference?.text.orEmpty() }
+          .map { name ->
+              name.substringBefore(delimiter = '<')
+                  .substringAfterLast(delimiter = '.')
+          }
           .firstOrNull { name -> name.endsWith(suffix = "Spec") }
   }
   ```
@@ -873,24 +874,24 @@
   import dev.detekt.api.Rule
   import org.jetbrains.kotlin.psi.KtClass
 
+  private const val RULE_ID = "KT-KIT-1"
   private const val BEHAVIOR_SPEC = "BehaviorSpec"
 
-  /** KT-KIT-1: спека Kotest — только `BehaviorSpec`. В `detekt.yml` — только для тестов. */
   internal class BehaviorSpecOnly(
       config: Config,
   ) : Rule(
-          config = config,
-          description = "KT-KIT-1. Спеки — только BehaviorSpec.",
-      ) {
+      config = config,
+      description = "$RULE_ID. Спеки — только $BEHAVIOR_SPEC.",
+  ) {
 
       override fun visitClass(klass: KtClass) {
           super.visitClass(klass)
-          val spec = klass.specSuperType() ?: return
+          val spec = klass.findSpecSuperType() ?: return
           if (spec != BEHAVIOR_SPEC) {
               report(
                   Finding(
                       entity = Entity.atName(klass),
-                      message = "KT-KIT-1. «${klass.name}» наследует $spec: спека — только BehaviorSpec.",
+                      message = "$RULE_ID. «${klass.name}» наследует $spec: спека — только $BEHAVIOR_SPEC.",
                   ),
               )
           }
@@ -930,9 +931,8 @@
       return NAME
   }
 
-  class ExampleSpec :
-      BehaviorSpec({
-      })
+  class ExampleSpec : BehaviorSpec({
+  })
   """
   }
 
@@ -989,19 +989,18 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class SpecDataContentSpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "файл: ${case.arg2}" },
-              case(arg1 = makeBrokenSpecDataFindings(), arg2 = "BrokenSpecData.kt", arg3 = makeBrokenSpecDataCode()),
-              case(arg1 = emptyList(), arg2 = "ExampleSpecData.kt", arg3 = makeValidSpecDataCode()),
-              case(arg1 = emptyList(), arg2 = "Example.kt", arg3 = makePlainFileCode()),
-          ) { expected, filename, code ->
-              shouldReturnTest(expected) {
-                  SpecDataContent(config = Config.empty).lintCode(code = code, filename = filename)
-              }
+  class SpecDataContentSpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "файл: ${case.arg2}" },
+          case(arg1 = makeBrokenSpecDataFindings(), arg2 = "BrokenSpecData.kt", arg3 = makeBrokenSpecDataCode()),
+          case(arg1 = emptyList(), arg2 = "ExampleSpecData.kt", arg3 = makeValidSpecDataCode()),
+          case(arg1 = emptyList(), arg2 = "Example.kt", arg3 = makePlainFileCode()),
+      ) { expected, filename, code ->
+          shouldReturnTest(expected) {
+              SpecDataContent(config = Config.empty).findLintLinesInFile(code = code, filename = filename)
           }
-      })
+      }
+  })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "SpecDataContent"),`.
 - [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*SpecDataContentSpec*'` — падает: `Unresolved reference 'SpecDataContent'`
@@ -1021,61 +1020,61 @@
   import org.jetbrains.kotlin.psi.KtNamedFunction
   import org.jetbrains.kotlin.psi.KtProperty
 
+  private const val SPEC_CLASS_RULE_ID = "KT-TEST-2"
+  private const val MAKE_RULE_ID = "KT-TEST-3"
+  private const val CONST_VAL_RULE_ID = "KT-TEST-5"
   private const val SPEC_DATA_SUFFIX = "SpecData.kt"
+
   private val MAKE = Regex(pattern = "make[A-Z].*")
 
-  /**
-   * Тестовые данные `*SpecData.kt`: классов-спек нет (KT-TEST-2), функции — `make…` (KT-TEST-3),
-   * `val` — только `const val` (KT-TEST-5). В `detekt.yml` — только для тестов.
-   */
   internal class SpecDataContent(
       config: Config,
   ) : Rule(
-          config = config,
-          description = "KT-TEST-2, KT-TEST-3, KT-TEST-5. В *SpecData.kt нет классов-спек, функции — make…, val — const.",
-      ) {
+      config = config,
+      description = "$SPEC_CLASS_RULE_ID, $MAKE_RULE_ID, $CONST_VAL_RULE_ID. " +
+          "В *$SPEC_DATA_SUFFIX нет классов-спек, функции — make…, val — const.",
+  ) {
 
       override fun visitKtFile(file: KtFile) {
           super.visitKtFile(file)
           if (!file.name.endsWith(suffix = SPEC_DATA_SUFFIX)) {
               return
           }
-          file.declarations
-              .filterIsInstance<KtNamedDeclaration>()
+          file.declarations.filterIsInstance<KtNamedDeclaration>()
               .forEach { declaration -> reportProblem(declaration = declaration) }
       }
 
       private fun reportProblem(declaration: KtNamedDeclaration) {
-          val problem = problemOf(declaration = declaration) ?: return
+          val problem = findProblem(declaration = declaration) ?: return
           report(Finding(entity = Entity.atName(declaration), message = problem))
       }
 
-      private fun problemOf(declaration: KtNamedDeclaration): String? {
+      private fun findProblem(declaration: KtNamedDeclaration): String? {
           return when (declaration) {
-              is KtClass -> specClassProblem(klass = declaration)
-              is KtNamedFunction -> functionProblem(function = declaration)
-              is KtProperty -> propertyProblem(property = declaration)
+              is KtClass -> findSpecClassProblem(klass = declaration)
+              is KtNamedFunction -> findFunctionProblem(function = declaration)
+              is KtProperty -> findPropertyProblem(property = declaration)
               else -> null
           }
       }
 
-      private fun specClassProblem(klass: KtClass): String? {
-          val spec = klass.specSuperType() ?: return null
-          return "KT-TEST-2. «${klass.name}»: класс-спека ($spec) в файле данных."
+      private fun findSpecClassProblem(klass: KtClass): String? {
+          val spec = klass.findSpecSuperType() ?: return null
+          return "$SPEC_CLASS_RULE_ID. «${klass.name}»: класс-спека ($spec) в файле данных."
       }
 
-      private fun functionProblem(function: KtNamedFunction): String? {
+      private fun findFunctionProblem(function: KtNamedFunction): String? {
           if (MAKE.matches(input = function.name.orEmpty())) {
               return null
           }
-          return "KT-TEST-3. «${function.name}»: функция без префикса make."
+          return "$MAKE_RULE_ID. «${function.name}»: функция без префикса make."
       }
 
-      private fun propertyProblem(property: KtProperty): String? {
+      private fun findPropertyProblem(property: KtProperty): String? {
           if (property.hasModifier(KtTokens.CONST_KEYWORD)) {
               return null
           }
-          return "KT-TEST-5. «${property.name}»: val без const."
+          return "$CONST_VAL_RULE_ID. «${property.name}»: val без const."
       }
   }
   ```
@@ -1089,14 +1088,14 @@
 - [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 4: Плагин `standards.kotlin` подключает detekt стандарта
-**Объём:** `gradle-plugin/settings.gradle.kts`, модуль `conventions` (сборка, плагин, `detekt.yml`, спека, данные, `CheckRun.kt`), проект-образец из 3 файлов; ≈ 10 файлов
+**Объём:** `gradle-plugin/settings.gradle.kts`, модуль `conventions` (сборка, плагин, `detekt.yml`, спека, данные, `FindFailedCheckLines.kt`), проект-образец из 3 файлов; ≈ 10 файлов
 
 ### Задача 7: Плагин с detekt, конфигом и своими правилами
 - Изменить: `gradle-plugin/settings.gradle.kts` — `include("conventions")`
 - Создать: `gradle-plugin/conventions/build.gradle.kts`
 - Создать: `gradle-plugin/conventions/src/main/kotlin/io/github/nakulov/standards/gradle/StandardsKotlinPlugin.kt`
 - Создать: `gradle-plugin/conventions/src/main/resources/standards/detekt.yml`
-- Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/CheckRun.kt`
+- Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/FindFailedCheckLines.kt`
 - Создать: `…/gradle/StandardsKotlinPluginSpec.kt`, `StandardsKotlinPluginSpecData.kt`
 - Создать: `gradle-plugin/conventions/src/test/fixtures/violation/settings.gradle.kts`, `build.gradle.kts`, `src/main/kotlin/sample/Names.kt`
 
@@ -1182,7 +1181,7 @@
   }
   ```
   ```kotlin
-  // CheckRun.kt
+  // FindFailedCheckLines.kt
   package io.github.nakulov.standards.gradle
 
   import org.gradle.testkit.runner.GradleRunner
@@ -1191,19 +1190,16 @@
   private const val FIXTURES = "standards.fixtures"
   private const val CHECK = "check"
 
-  /**
-   * Строки вывода упавшего `check` в проекте-образце [fixture], где есть [mark]; путь к образцу из строк убран.
-   * Образцы задач 9 и 10 используют её же: находка detekt, ошибка конфигурации, нарушение порога Kover.
-   */
-  internal fun failedCheckLines(fixture: String, mark: String): List<String> {
+  // Вне стандарта (KT-TEST-6): вывод Gradle — сотни строк с абсолютным путём образца; тест сравнивает только строки
+  // с [mark] без пути. Образцы задач 9 и 10 используют её же: находка detekt, ошибка конфигурации, порог Kover.
+  internal fun findFailedCheckLines(fixture: String, mark: String): List<String> {
       val project = File(System.getProperty(FIXTURES), fixture)
       val result = GradleRunner.create()
           .withProjectDir(project)
           .withPluginClasspath()
           .withArguments(CHECK)
           .buildAndFail()
-      return result.output
-          .lines()
+      return result.output.lines()
           .filter { line -> mark in line }
           .map { line -> line.replace(oldValue = project.absolutePath, newValue = "") }
   }
@@ -1212,7 +1208,6 @@
   // StandardsKotlinPluginSpecData.kt
   package io.github.nakulov.standards.gradle
 
-  /** Находка `NoImplicitIt` в образце `violation`: строка консольного отчёта detekt. */
   fun makeViolationFindings(): List<String> {
       return listOf(
           "/src/main/kotlin/sample/Names.kt:4:22: KT-FUN-6. Лямбда с неявным it: назовите параметр (`{ item -> … }`). [NoImplicitIt]",
@@ -1228,15 +1223,14 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class StandardsKotlinPluginSpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "образец: ${case.arg2}" },
-              case(arg1 = makeViolationFindings(), arg2 = "violation", arg3 = ".kt:"),
-          ) { expected, fixture, mark ->
-              shouldReturnTest(expected) { failedCheckLines(fixture = fixture, mark = mark) }
-          }
-      })
+  class StandardsKotlinPluginSpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "образец: ${case.arg2}" },
+          case(arg1 = makeViolationFindings(), arg2 = "violation", arg3 = ".kt:"),
+      ) { expected, fixture, mark ->
+          shouldReturnTest(expected) { findFailedCheckLines(fixture = fixture, mark = mark) }
+      }
+  })
   ```
 - [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test` — падает: в выводе образца `Could not find implementation class 'io.github.nakulov.standards.gradle.StandardsKotlinPlugin'` (класса ещё нет; дескриптор плагина `gradlePlugin { }` уже есть)
 - [ ] 3. Минимальный код — плагин и конфиг:
@@ -1251,6 +1245,7 @@
   import java.io.File
   import java.net.JarURLConnection
 
+  private const val PLUGIN_ID = "standards.kotlin"
   private const val KOTLIN_PLUGIN = "org.jetbrains.kotlin.jvm"
   private const val DETEKT_PLUGIN = "dev.detekt"
   private const val DETEKT_PLUGINS = "detektPlugins"
@@ -1279,10 +1274,15 @@
           project.pluginManager.apply(DETEKT_PLUGIN)
           val detekt = project.extensions.getByType(DetektExtension::class.java)
           detekt.buildUponDefaultConfig.set(/* value = */ true)
-          detekt.config.from(project.provider { project.resources.text.fromString(configText()).asFile() })
+          detekt.config.from(
+              project.provider {
+                  project.resources.text.fromString(getConfigText())
+                      .asFile()
+              },
+          )
           // Бейзлайн проекта: detekt берёт detekt-baseline-main.xml / -test.xml, отсутствующий файл пропускает.
           detekt.baseline.set(project.file(BASELINE))
-          project.dependencies.add(DETEKT_PLUGINS, project.files(rulesJar()))
+          project.dependencies.add(DETEKT_PLUGINS, project.files(findRulesJar()))
           project.dependencies.add(DETEKT_PLUGINS, KTLINT_WRAPPER)
           // NamedArguments и NamedLiteralArgument работают только с анализом типов: check — detektMain и detektTest.
           project.tasks.named(CHECK) { check ->
@@ -1293,20 +1293,20 @@
           }
       }
 
-      private fun configText(): String {
+      private fun getConfigText(): String {
           val resource = requireNotNull(javaClass.getResource(/* name = */ CONFIG_RESOURCE)) {
-              "standards.kotlin: в плагине нет $CONFIG_RESOURCE"
+              "$PLUGIN_ID: в плагине нет $CONFIG_RESOURCE"
           }
           return resource.readText()
       }
 
       // Свои правила — jar модуля detekt-rules с classpath плагина: так они находятся и из includeBuild, и в TestKit.
-      private fun rulesJar(): File {
+      private fun findRulesJar(): File {
           val resource = requireNotNull(javaClass.classLoader.getResource(/* name = */ RULES_CLASS)) {
-              "standards.kotlin: правил detekt стандарта нет на classpath плагина"
+              "$PLUGIN_ID: правил detekt стандарта нет на classpath плагина"
           }
           val connection = resource.openConnection()
-          require(connection is JarURLConnection) { "standards.kotlin: правила detekt не в jar: $resource" }
+          require(connection is JarURLConnection) { "$PLUGIN_ID: правила detekt не в jar: $resource" }
           return File(connection.jarFileURL.toURI())
       }
   }
@@ -1403,7 +1403,7 @@
       active: true
       includes: ['**/test/**']
   ```
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :conventions:test` — зелёный. Строка находки разошлась только форматом консольного отчёта detekt 2.0 (порядок пути, `[NoImplicitIt]`) — поправить ожидание в `makeViolationFindings()` по выводу, ID и текст сообщения не менять; строка повторяется дважды — ожидание с двумя строками, не фильтр в `CheckRun.kt`. Нет находки — разобраться (jar правил, конфиг) до коммита; ошибка «правила detekt не в jar» — запасной вариант из «Обзора решения», ⚠️ и вопрос пользователю.
+- [ ] 4. Запустить `./gradlew -p gradle-plugin :conventions:test` — зелёный. Строка находки разошлась только форматом консольного отчёта detekt 2.0 (порядок пути, `[NoImplicitIt]`) — поправить ожидание в `makeViolationFindings()` по выводу, ID и текст сообщения не менять; строка повторяется дважды — ожидание с двумя строками, не фильтр в `FindFailedCheckLines.kt`. Нет находки — разобраться (jar правил, конфиг) до коммита; ошибка «правила detekt не в jar» — запасной вариант из «Обзора решения», ⚠️ и вопрос пользователю.
   Опыт без коммита (настройка `EmptyFunctionBlock`, KT-DOC-6): временно добавить в образец `src/main/kotlin/sample/Listener.kt` — `internal interface Listener {\n\n    fun onShow() {\n        // По умолчанию делать нечего.\n    }\n}` и `src/main/kotlin/sample/QuietListener.kt` — `internal class QuietListener : Listener {\n\n    override fun onShow() {\n    }\n}`, запустить тест — в выводе нет `EmptyFunctionBlock`; удалить оба файла. Есть находка — ⚠️ и вопрос пользователю.
   Опыт без коммита (правила подключаются из `includeBuild`, до задачи 11): временно в корневом `settings.gradle.kts` — `includeBuild("gradle-plugin")` первой строкой в `pluginManagement { }`, в `scripts/build.gradle.kts` — `id("standards.kotlin")` в `plugins { }`; запустить `./gradlew :scripts:detektMain` — нет ошибки «правила detekt не в jar» и «нет на classpath плагина», в выводе отчёт detekt (находки и падение допустимы, бейзлайна ещё нет); вернуть оба файла (`git -C /Users/nakulov/projects/engineering-standards diff --stat` — пусто вне `gradle-plugin/`). Ошибка про jar — запасной вариант из «Обзора решения», ⚠️ и вопрос пользователю.
 - [ ] 5. Коммит — тест, плагин, конфиг и образец вместе
@@ -1414,15 +1414,15 @@
 - [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 5: Плагин требует настроек проекта
-**Объём:** `MissingSetup.kt` с парой спека + данные, `StandardsExtension.kt`, плагин, `StandardsKotlinPluginSpec.kt` и данные, `fixtures/violation/build.gradle.kts`, образец `no-bound` (2 файла); ≈ 10 файлов
+**Объём:** `FindMissingSetup.kt` с парой спека + данные, `StandardsExtension.kt`, плагин, `StandardsKotlinPluginSpec.kt` и данные, `fixtures/violation/build.gradle.kts`, образец `no-bound` (2 файла); ≈ 10 файлов
 
-### Задача 8: Ошибки конфигурации `missingSetup`
-- Создать: `gradle-plugin/conventions/src/main/kotlin/io/github/nakulov/standards/gradle/MissingSetup.kt`
-- Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/MissingSetupSpec.kt`, `MissingSetupSpecData.kt`
+### Задача 8: Ошибки конфигурации `findMissingSetup`
+- Создать: `gradle-plugin/conventions/src/main/kotlin/io/github/nakulov/standards/gradle/FindMissingSetup.kt`
+- Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/FindMissingSetupSpec.kt`, `FindMissingSetupSpecData.kt`
 
 - [ ] 1. Падающий тест: нет `kotlin("jvm")` — текст ошибки; нет порога — текст ошибки; всё задано — `null`.
   ```kotlin
-  // MissingSetupSpecData.kt
+  // FindMissingSetupSpecData.kt
   package io.github.nakulov.standards.gradle
 
   const val COVERAGE_MIN_BOUND = 80
@@ -1440,7 +1440,7 @@
   }
   ```
   ```kotlin
-  // MissingSetupSpec.kt
+  // FindMissingSetupSpec.kt
   package io.github.nakulov.standards.gradle
 
   import io.github.nakulov.kotestkit.case
@@ -1448,31 +1448,29 @@
   import io.github.nakulov.kotestkit.withGivens
   import io.kotest.core.spec.style.BehaviorSpec
 
-  class MissingSetupSpec :
-      BehaviorSpec({
-          withGivens(
-              nameFn = { case -> "kotlin: ${case.arg2}, порог: ${case.arg3}" },
-              case(arg1 = makeNoKotlinError(), arg2 = false, arg3 = COVERAGE_MIN_BOUND),
-              case(arg1 = makeNoBoundError(), arg2 = true, arg3 = null),
-              case(arg1 = makeCompleteSetup(), arg2 = true, arg3 = COVERAGE_MIN_BOUND),
-          ) { expected, hasKotlin, coverageMinBound ->
-              shouldReturnTest(expected) { missingSetup(hasKotlin = hasKotlin, coverageMinBound = coverageMinBound) }
-          }
-      })
+  class FindMissingSetupSpec : BehaviorSpec({
+      withGivens(
+          nameFn = { case -> "kotlin: ${case.arg2}, порог: ${case.arg3}" },
+          case(arg1 = makeNoKotlinError(), arg2 = false, arg3 = COVERAGE_MIN_BOUND),
+          case(arg1 = makeNoBoundError(), arg2 = true, arg3 = null),
+          case(arg1 = makeCompleteSetup(), arg2 = true, arg3 = COVERAGE_MIN_BOUND),
+      ) { expected, hasKotlin, coverageMinBound ->
+          shouldReturnTest(expected) { findMissingSetup(hasKotlin = hasKotlin, coverageMinBound = coverageMinBound) }
+      }
+  })
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*MissingSetupSpec*'` — падает: `Unresolved reference 'missingSetup'`
+- [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*FindMissingSetupSpec*'` — падает: `Unresolved reference 'findMissingSetup'`
 - [ ] 3. Минимальный код:
   ```kotlin
-  // MissingSetup.kt
+  // FindMissingSetup.kt
   package io.github.nakulov.standards.gradle
 
-  private const val NO_KOTLIN = "standards.kotlin требует kotlin(\"jvm\"): " +
-      "примените его в plugins рядом со standards.kotlin."
-  private const val NO_BOUND = "standards.kotlin: задайте порог покрытия — " +
+  private const val PLUGIN_ID = "standards.kotlin"
+  private const val NO_KOTLIN = "$PLUGIN_ID требует kotlin(\"jvm\"): примените его в plugins рядом со $PLUGIN_ID."
+  private const val NO_BOUND = "$PLUGIN_ID: задайте порог покрытия — " +
       "standards { coverageMinBound = <замер, %> } (KT-TEST-7)."
 
-  /** Чего не хватает проекту для `standards.kotlin`: текст ошибки конфигурации или `null`, если всё задано. */
-  internal fun missingSetup(hasKotlin: Boolean, coverageMinBound: Int?): String? {
+  internal fun findMissingSetup(hasKotlin: Boolean, coverageMinBound: Int?): String? {
       if (!hasKotlin) {
           return NO_KOTLIN
       }
@@ -1482,7 +1480,7 @@
       return null
   }
   ```
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*MissingSetupSpec*'` — зелёный
+- [ ] 4. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*FindMissingSetupSpec*'` — зелёный
 - [ ] 5. Коммит — тест и код вместе
 
 ### Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
@@ -1492,7 +1490,7 @@
 - Создать: `gradle-plugin/conventions/src/test/fixtures/no-bound/settings.gradle.kts`, `build.gradle.kts`
 - Изменить: `…/gradle/StandardsKotlinPluginSpec.kt`, `StandardsKotlinPluginSpecData.kt` — случай `no-bound`
 
-- [ ] 1. Падающий тест: образец без порога — ошибка конфигурации с текстом `missingSetup`; образец `violation` задаёт порог и падает по-прежнему только на находке detekt.
+- [ ] 1. Падающий тест: образец без порога — ошибка конфигурации с текстом `findMissingSetup`; образец `violation` задаёт порог и падает по-прежнему только на находке detekt.
   ```kotlin
   // fixtures/violation/build.gradle.kts
   plugins {
@@ -1524,7 +1522,6 @@
   ```
   В `StandardsKotlinPluginSpecData.kt`:
   ```kotlin
-  /** Ошибка конфигурации образца `no-bound`: строка вывода Gradle с текстом `missingSetup`. */
   fun makeNoBoundOutput(): List<String> {
       return listOf(
           "> standards.kotlin: задайте порог покрытия — standards { coverageMinBound = <замер, %> } (KT-TEST-7).",
@@ -1562,7 +1559,7 @@
               applyDetekt(project = project)
           }
           project.afterEvaluate { evaluated ->
-              val problem = missingSetup(
+              val problem = findMissingSetup(
                   hasKotlin = evaluated.pluginManager.hasPlugin(KOTLIN_PLUGIN),
                   coverageMinBound = standards.coverageMinBound.orNull,
               )
@@ -1573,11 +1570,11 @@
       }
   ```
   KDoc класса — дописать: «без `kotlin("jvm")` или без порога `standards { coverageMinBound }` — ошибка конфигурации».
-- [ ] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — оба образца, `MissingSetupSpec`, правила). Строка ошибки `no-bound` разошлась только префиксом вывода Gradle (`>`, отступ) — поправить ожидание в `makeNoBoundOutput()` по выводу, текст `missingSetup` не менять.
+- [ ] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — оба образца, `FindMissingSetupSpec`, правила). Строка ошибки `no-bound` разошлась только префиксом вывода Gradle (`>`, отступ) — поправить ожидание в `makeNoBoundOutput()` по выводу, текст `findMissingSetup` не менять.
 - [ ] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Плагин требует настроек: без порога — ошибка конфигурации с текстом (образец `no-bound`), без `kotlin("jvm")` — текст из `MissingSetupSpec`
+- [ ] Плагин требует настроек: без порога — ошибка конфигурации с текстом (образец `no-bound`), без `kotlin("jvm")` — текст из `FindMissingSetupSpec`
 - [ ] Крайние случаи: `violation` с порогом по-прежнему падает только на находке detekt
 - [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
@@ -1623,7 +1620,6 @@
   ```
   В `StandardsKotlinPluginSpecData.kt`:
   ```kotlin
-  /** Нарушение порога в образце `low-coverage`: строка вывода koverVerify. */
   fun makeLowCoverageOutput(): List<String> {
       return listOf(
           "  Rule violated: lines covered percentage is 0.000000, but expected minimum is 100",
@@ -1654,7 +1650,8 @@
           kover.reports { reports ->
               reports.verify { rules -> addCoverageRule(rules = rules, standards = standards) }
           }
-          project.tasks.withType(Test::class.java).configureEach { test -> test.finalizedBy(KOVER_HTML_REPORT) }
+          project.tasks.withType(Test::class.java)
+              .configureEach { test -> test.finalizedBy(KOVER_HTML_REPORT) }
       }
 
       private fun addCoverageRule(rules: KoverVerificationRulesConfig, standards: StandardsExtension) {
@@ -1662,7 +1659,7 @@
       }
   ```
   KDoc класса — дописать: «и Kover с порогом проекта `standards { coverageMinBound }`».
-- [ ] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — три образца, `MissingSetupSpec`, правила). Строка `low-coverage` разошлась форматом сообщения Kover 0.9.11 — поправить ожидание в `makeLowCoverageOutput()` по выводу, порог 100 и факт 0 в строке должны остаться.
+- [ ] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — три образца, `FindMissingSetupSpec`, правила). Строка `low-coverage` разошлась форматом сообщения Kover 0.9.11 — поправить ожидание в `makeLowCoverageOutput()` по выводу, порог 100 и факт 0 в строке должны остаться.
 - [ ] 5. Коммит — тест и код вместе
 
 ### Приёмка
@@ -1851,7 +1848,7 @@
 ## Открыто
 - «Почему» для KT-FUN-7, KT-FUN-8, KT-CLASS-10 — пользователь — остановка перед PR 7
 - «Почему» KT-TEST-7 — предложен текст в задаче 12, пользователь подтверждает или пишет свой — остановка перед PR 7
-- Формат строк вывода (консольный отчёт detekt 2.0, ошибка конфигурации Gradle, сообщение Kover) — исполнитель по выводу — шаг 4 задач 7, 9, 10 (ожидания в `make…Findings`/`make…Output`, тексты правил и `missingSetup` не меняются)
+- Формат строк вывода (консольный отчёт detekt 2.0, ошибка конфигурации Gradle, сообщение Kover) — исполнитель по выводу — шаг 4 задач 7, 9, 10 (ожидания в `make…Findings`/`make…Output`, тексты правил и `findMissingSetup` не меняются)
 - Имена файлов бейзлайна для `detektMain`/`detektTest` — исполнитель по выводу — шаг 2 задачи 11
 <!-- Дошёл до этого места — остановись и спроси. -->
 
