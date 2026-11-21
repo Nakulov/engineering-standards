@@ -1,6 +1,7 @@
 package io.github.nakulov.standards.gradle
 
 import dev.detekt.gradle.extensions.DetektExtension
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -9,6 +10,7 @@ import java.io.File
 import java.net.JarURLConnection
 
 private const val PLUGIN_ID = "standards.kotlin"
+private const val EXTENSION = "standards"
 private const val KOTLIN_PLUGIN = "org.jetbrains.kotlin.jvm"
 private const val DETEKT_PLUGIN = "dev.detekt"
 private const val DETEKT_PLUGINS = "detektPlugins"
@@ -24,12 +26,25 @@ private const val DETEKT_TEST = "detektTest"
 /**
  * Плагин соглашений Kotlin `standards.kotlin`: detekt с конфигом стандарта, своими правилами и ktlint.
  * Kotlin не применяет — версия, toolchain и `languageVersion` остаются в проекте.
+ * Без `kotlin("jvm")` или без порога `standards { coverageMinBound }` — ошибка конфигурации.
  */
 class StandardsKotlinPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
+        val standards = project.extensions
+            .create(EXTENSION, StandardsExtension::class.java)
         project.pluginManager
             .withPlugin(KOTLIN_PLUGIN) { _ -> applyDetekt(project) }
+        project.afterEvaluate { evaluated -> checkSetup(evaluated, standards) }
+    }
+
+    private fun checkSetup(project: Project, standards: StandardsExtension) {
+        val hasKotlin = project.pluginManager
+            .hasPlugin(KOTLIN_PLUGIN)
+        val coverageMinBound = standards.coverageMinBound
+            .orNull
+        val problem = findMissingSetup(hasKotlin, coverageMinBound) ?: return
+        throw GradleException(problem)
     }
 
     private fun applyDetekt(project: Project) {
