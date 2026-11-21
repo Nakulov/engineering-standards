@@ -24,8 +24,8 @@
   - покрытие ниже порога роняет `check` (`koverVerify`);
   - плагин без `kotlin("jvm")` и без `coverageMinBound` — ошибка конфигурации с текстом;
   - `./gradlew -p gradle-plugin check` зелёный: тесты правил и плагина;
-  - правила стандарта KT-FUN-7, KT-FUN-8, KT-CLASS-10, KT-TEST-7 описаны; «Проверка:» у KT-NAME-3, KT-KIT-1, KT-TEST-2, KT-TEST-3, KT-TEST-5 называет правило detekt;
-  - `.editorconfig` (источник `templates/project/editorconfig` и копия в корне) выключает `no-empty-first-line-in-class-body` с KT-FMT-3;
+  - правила стандарта KT-FUN-7, KT-FUN-8, KT-CLASS-10, KT-TEST-7 описаны; «Проверка:» у KT-NAME-3, KT-KIT-1, KT-TEST-2, KT-TEST-3, KT-TEST-5, KT-FMT-1 называет правило detekt;
+  - `.editorconfig` (источник `templates/project/editorconfig` и копия в корне) выключает `no-empty-first-line-in-class-body` с KT-FMT-3, задаёт стиль ktlint `intellij_idea` и `class-signature` по KT-FMT-1;
   - README кодстайла: бейзлайн только уменьшается, порог покрытия не снижается.
 
 ## Контекст
@@ -84,6 +84,7 @@
 - Изменить: `docs/testing/kotlin/kotest-kit.md:8` — «Проверка» KT-KIT-1
 - Изменить: `docs/testing/kotlin/organization.md:19,38,95` — «Проверка» KT-TEST-2/3/5, KT-TEST-7
 - Изменить: `docs/code-style/kotlin/README.md:47` — бейзлайн и порог
+- Изменить: `docs/code-style/kotlin/formatting.md:7` — «Проверка» KT-FMT-1
 
 ## Прогресс
 - `[x]` — сразу после завершения; ➕ — новая задача (только с согласия пользователя); ⚠️ — проблема или блокер.
@@ -99,6 +100,7 @@
   - Конфиг — ресурс плагина `standards/detekt.yml`, передаётся detekt через `TextResource.asFile()`; проект сужает своим файлом поверх (`detekt { config.from(…) }`).
   - Метаданные Kotlin в `conventions` — версии 2.2: Kotlin DSL проекта читает расширение `standards { }` компилятором Gradle, а он не читает метаданные новее себя.
   - Образцы кода — по стандарту, изменено по ревью PR 1: цепочки по KT-FMT-2, `class … : BehaviorSpec({` одной строкой, аргументы супертипа с отступом 4, булевы с префиксом (KT-NAME-7), функции с результатом — `find…`/`get…` (KT-NAME-9), KDoc только у публичного с нетривиальной логикой (KT-DOC-2), ID правила в константе `RULE_ID` (KT-CLASS-3). Вспомогательные функции тестов — по файлу на функцию с её именем (KT-NAME-3); `map`/`filter` в них — с комментарием «Вне стандарта» (KT-TEST-6): находку detekt и вывод Gradle целиком не сравнить.
+  - ktlint — стиль `intellij_idea` (по умолчанию в detekt 2.0, `ChainMethodContinuation` и `MultilineExpressionWrapping` в нём выключены), изменено по ревью PR 1: `ktlint_official` расходится с KT-FMT-1/2 (проверено ktlint 1.5.0). `ClassSignature` настроен на KT-FMT-1 (с 1 параметра) и выключен в тестах — переноса супертипа при многострочном аргументе (`BehaviorSpec({`) настройка не снимает. KT-FMT-2 остаётся ревью: `ChainMethodContinuation` переносит и первый вызов цепочки.
   - Ошибки конфигурации — чистая функция `findMissingSetup` (все случаи — `shouldReturnTest`), плагин бросает `GradleException` в `afterEvaluate`.
   - TestKit — три проекта-образца, как в груминге, но без `kotlin("jvm")` — только `FindMissingSetupSpec` (образец без Kotlin — ещё 2 файла, а вызов `afterEvaluate` уже проверяет образец без порога): `violation` — нарушение `NoImplicitIt` роняет `check` с KT-FUN-6; `no-bound` — без `coverageMinBound` ошибка конфигурации; `low-coverage` — порог выше покрытия роняет `koverVerify`.
 - Как вписывается в систему: `scripts/task` по-прежнему собирается `kotlinc`; Gradle — только для тестов и проверок.
@@ -1382,6 +1384,9 @@
       excludeGuardClauses: true
 
   ktlint:
+    ClassSignature: # KT-FMT-1: каждый параметр конструктора с новой строки, даже один; спеки — `class … : BehaviorSpec({` одной строкой
+      forceMultilineWhenParameterCountGreaterOrEqualThan: 1
+      excludes: ['**/test/**']
     CommentWrapping: # KT-FUN-4: комментарий /* имя = */ перед литералом у аргумента Java-метода
       active: false
     FunctionExpressionBody: # KT-FMT-6: тело-выражение разрешено, но не обязательно
@@ -1410,7 +1415,7 @@
 
 ### Приёмка
 - [ ] Плагин подключает detekt стандарта: нарушение `NoImplicitIt` роняет `check` с KT-FUN-6
-- [ ] Крайние случаи: пустой `override` и реализация по умолчанию в интерфейсе не находка (опыт шага 4); без бейзлайна detekt работает
+- [ ] Крайние случаи: пустой `override` и реализация по умолчанию в интерфейсе не находка (опыт шага 4); без бейзлайна detekt работает; `ClassSignature` — опыт без коммита: в образец `violation` временно `internal class Holder(val name: String)` в `src/main/kotlin/sample/Holder.kt` → находка `ClassSignature`; удалить файл. Нет находки или находки на коде по стандарту — ⚠️ и вопрос пользователю
 - [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 5: Плагин требует настроек проекта
@@ -1668,7 +1673,7 @@
 - [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 7: `scripts/` проверяется стандартом
-**Объём:** `settings.gradle.kts`, `scripts/build.gradle.kts`, 2 файла бейзлайна, `.editorconfig` (источник + копия), `functions.md`, `classes.md`, `organization.md`, `README.md` кодстайла; ≈ 10 файлов
+**Объём:** `settings.gradle.kts`, `scripts/build.gradle.kts`, 2 файла бейзлайна, `.editorconfig` (источник + копия), `functions.md`, `classes.md`, `formatting.md`, `organization.md`, `README.md` кодстайла; ≈ 11 файлов
 
 - [ ] Перед блоком — остановка: тексты «Почему» для KT-FUN-7, KT-FUN-8, KT-CLASS-10 и подтверждение «Почему» KT-TEST-7 (предложен в задаче 12) — у пользователя. Без них задача 12 не выполнима: правило без причины не добавляется (`docs/code-style/kotlin/README.md:46`). Тексты пользователя — в шаги 1–2 задачи 12 этого плана, затем блок.
 
@@ -1724,6 +1729,7 @@
 - Изменить: `docs/code-style/kotlin/classes.md` — KT-CLASS-10 в конце файла
 - Изменить: `docs/testing/kotlin/organization.md:19,38,95` — «Проверка»; KT-TEST-7 в конце файла
 - Изменить: `docs/code-style/kotlin/README.md:47` — бейзлайн и порог
+- Изменить: `docs/code-style/kotlin/formatting.md:7` — «Проверка» KT-FMT-1
 - Изменить: `templates/project/editorconfig`, `.editorconfig` — одинаково
 
 - тест: не применим — текст стандарта и `.editorconfig`; проверка формата — копия `.editorconfig` совпадает с источником (`./gradlew :scripts:test` — тесты `setup`).
@@ -1830,10 +1836,23 @@
   ```markdown
   - **Бейзлайн detekt** (`detekt-baseline-*.xml` проекта) — нарушения, которые были при подключении проверок. Он только уменьшается: ради нового кода не пополняется, пустой — удаляется. Новое нарушение в файле из бейзлайна всё равно роняет сборку: бейзлайн держит находки (правило + место), а не файлы. Порог покрытия (KT-TEST-7) не снижается.
   ```
+  `docs/code-style/kotlin/formatting.md:7` (KT-FMT-1):
+  - было: `Проверка: ревью`
+  - стало: `Проверка: detekt \`ClassSignature\` (ktlint, основной код) + ревью (тесты: правило там выключено, чтобы спека писалась \`class … : BehaviorSpec({\` одной строкой)`
 - [ ] 4. `templates/project/editorconfig` и `.editorconfig`, в конец секции `[*.{kt,kts}]`:
   ```
+  # Стиль ktlint — как в detekt стандарта: ktlint_official расходится с KT-FMT-1 и KT-FMT-2.
+  ktlint_code_style = intellij_idea
   # Тело класса начинается с пустой строки (KT-FMT-3): правило ktlint из стиля ktlint_official требует обратного.
   ktlint_standard_no-empty-first-line-in-class-body = disabled
+  # Каждый параметр конструктора — с новой строки, даже один (KT-FMT-1).
+  ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 1
+  ```
+  и новой секцией в конец файла:
+  ```
+  # Спека — `class … : BehaviorSpec({` одной строкой: class-signature переносит супертип при многострочном аргументе.
+  [**/test/**.{kt,kts}]
+  ktlint_standard_class-signature = disabled
   ```
   Запустить `./gradlew :scripts:test` — зелёный (копия совпадает с источником); `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
 - [ ] 5. Коммит — правила стандарта и `.editorconfig` вместе
