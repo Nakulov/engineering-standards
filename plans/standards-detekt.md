@@ -116,7 +116,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: Сборка правил detekt с правилом KT-FUN-4
-  - [ ] Задача 1: Сборка `gradle-plugin/` и набор `standards`
+  - [x] Задача 1: Сборка `gradle-plugin/` и набор `standards`
   - [ ] Задача 2: `NamedLiteralArgument`
   - [ ] Приёмка
 - PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
@@ -157,7 +157,7 @@
 - Создать: `gradle-plugin/detekt-rules/src/main/resources/META-INF/services/dev.detekt.api.RuleSetProvider` — регистрация
 - Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/StandardsProviderSpec.kt`, `StandardsProviderSpecData.kt` — id и состав
 
-- [ ] 1. Падающий тест: набор называется `standards`, правил в нём пока нет (правила добавляет каждая следующая задача). Сборка:
+- [x] 1. Падающий тест: набор называется `standards`, правил в нём пока нет (правила добавляет каждая следующая задача). Сборка:
   ```kotlin
   // gradle-plugin/settings.gradle.kts
   // Общая сборка стандарта: свои правила detekt и плагин соглашений. Отдельная сборка, а не buildSrc,
@@ -243,8 +243,8 @@
           shouldReturnTest(makeStandardsRuleNames()) { StandardsProvider().instance().rules.keys }
       })
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — падает: `Unresolved reference 'StandardsProvider'`
-- [ ] 3. Минимальный код: провайдер и регистрация:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — падает: `Unresolved reference 'StandardsProvider'`
+- [x] 3. Минимальный код: провайдер и регистрация:
   ```kotlin
   // StandardsProvider.kt
   package io.github.nakulov.standards.detekt
@@ -272,8 +272,8 @@
   io.github.nakulov.standards.detekt.StandardsProvider
   ```
   Пустые `listOf()`/`setOf()` с переносом — место, куда задачи 2–6 добавляют по строке; тип выводится из параметра `RuleSet` и типа результата `make…`.
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — зелёный; ошибка репозиториев или версии Kotlin — разобраться до задачи 2
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — зелёный; ошибка репозиториев или версии Kotlin — разобраться до задачи 2
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 2: `NamedLiteralArgument` — KT-FUN-4
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/NamedLiteralArgument.kt` — правило
