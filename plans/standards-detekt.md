@@ -37,14 +37,16 @@
   - `docs/code-style/kotlin/README.md:47` — формат «Проверка»; `functions.md`, `classes.md`, `naming.md:35`, `docs/testing/kotlin/organization.md`, `kotest-kit.md:8`
 - Паттерны: правила и тесты генератора `../ui-design-system-generator/generator/detekt-rules/` (правило — `Rule(config, description)`, находка — `Finding(entity, message)`; тесты — `withGivens` + `lintSample`); `detekt.yml` и `build.gradle.kts:25-62` генератора — Kover, `check` → `detektMain`/`detektTest`.
 - Отличия от генератора: образцы кода — в `…SpecData.kt` функциями `make…` (решение груминга), а не файлами `samples/`; находка в тесте — строка «строка:столбец сообщение» вместо класса `Reported`; сообщение начинается с ID стандарта; правила — `internal`, провайдер — `public` (его создаёт `ServiceLoader`); вспомогательные функции — члены класса без получателя (KT-FUN-1, KT-NAME-3).
-- Зависимости (сверено по jar в кэше Gradle): `dev.detekt.gradle.extensions.DetektExtension` — `config`, `buildUponDefaultConfig`, `baseline`; `kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension.reports` → `verify` → `rule` → `KoverVerifyRule.minBound(Provider<Int>)`; id плагинов — `dev.detekt`, `org.jetbrains.kotlinx.kover`. По умолчанию в detekt 2.0: `Undocumented*` выключены, `NoEmptyFirstLineInClassBody` (ktlint) выключено, `ForbiddenComment` — в `style`, `EmptyFunctionBlock` — в `empty-blocks`.
+- Зависимости (сверено по jar в кэше Gradle): `dev.detekt.gradle.extensions.DetektExtension` — `config`, `buildUponDefaultConfig`, `baseline`, `toolVersion`; `kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension.reports` → `verify` → `rule` → `KoverVerifyRule.minBound(Provider<Int>)`; id плагинов — `dev.detekt`, `org.jetbrains.kotlinx.kover`. По умолчанию в detekt 2.0: `Undocumented*` выключены, `NoEmptyFirstLineInClassBody` (ktlint) выключено, `ForbiddenComment` — в `style`, `EmptyFunctionBlock` — в `empty-blocks`.
 - Исключения тестов в конфиге по умолчанию (сверено по `default-detekt-config.yml` из `detekt-core-2.0.0-alpha.6.jar`): у активных правил `'**/test/**'` — `TooManyFunctions`, `InstanceOfCheckForException`, `ThrowingExceptionsWithoutMessageOrCause`, `TooGenericExceptionCaught`, `FunctionNaming`, `ForEachOnRange`, `SpreadOperator`, `UnsafeCallOnNullableType`, `MagicNumber` (у него ещё `'**/*.kts'`); у выключенных (`Undocumented*`, `KDocReferencesNonPublicProperty`, `StringLiteralDuplication`, `LateinitUsage`) — не трогаем.
 - Стандарт о `sealed`: наследники объявляются внутри (`naming.md:36`, `classes.md:232`) — `OneClassPerFile` строгий, вложенные не считает. Правила о `@Suppress` в стандарте нет — плагин его не трогает.
 
 ## Структура файлов
 
 Отвечает за свои правила detekt:
-- Создать: `gradle-plugin/settings.gradle.kts` — отдельная сборка: репозитории, версия Kotlin, модули
+- Создать: `gradle/libs.versions.toml` — каталог версий: Kotlin, detekt, Kover, KotestKit, плагины Gradle
+- Создать: `gradle-plugin/settings.gradle.kts` — отдельная сборка: репозитории, каталог `../gradle/libs.versions.toml`, модули
+- Создать: `gradle-plugin/build.gradle.kts` — плагин Kotlin один на сборку (`apply false`)
 - Создать: `gradle-plugin/detekt-rules/build.gradle.kts` — модуль правил
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/StandardsProvider.kt` — набор правил `standards`
 - Создать: `gradle-plugin/detekt-rules/src/main/resources/META-INF/services/dev.detekt.api.RuleSetProvider` — регистрация набора
@@ -84,7 +86,8 @@
 - Изменить: `docs/testing/kotlin/kotest-kit.md:8` — «Проверка» KT-KIT-1
 - Изменить: `docs/testing/kotlin/organization.md:19,38,95` — «Проверка» KT-TEST-2/3/5, KT-TEST-7
 - Изменить: `docs/code-style/kotlin/README.md:47` — бейзлайн и порог
-- Изменить: `docs/code-style/kotlin/formatting.md:7` — «Проверка» KT-FMT-1
+- Изменить: `docs/code-style/kotlin/formatting.md:7,40` — «Проверка» KT-FMT-1, звенья-свойства в KT-FMT-2
+- Изменить: `docs/testing/kotlin/organization.md:93,96,108` — KT-TEST-5 (константы тестовых данных), исключение KT-TEST-6
 
 ## Прогресс
 - `[x]` — сразу после завершения; ➕ — новая задача (только с согласия пользователя); ⚠️ — проблема или блокер.
@@ -99,7 +102,8 @@
   - Свои правила подключаются файлом jar правил с classpath плагина (`detektPlugins(files(…))`), а не координатами — работает и из `includeBuild`, и в TestKit, без `includeBuild` вне `pluginManagement`.
   - Конфиг — ресурс плагина `standards/detekt.yml`, передаётся detekt через `TextResource.asFile()`; проект сужает своим файлом поверх (`detekt { config.from(…) }`).
   - Метаданные Kotlin в `conventions` — версии 2.2: Kotlin DSL проекта читает расширение `standards { }` компилятором Gradle, а он не читает метаданные новее себя.
-  - Образцы кода — по стандарту, изменено по ревью PR 1: цепочки по KT-FMT-2, `class … : BehaviorSpec({` одной строкой, аргументы супертипа с отступом 4, булевы с префиксом (KT-NAME-7), функции с результатом — `find…`/`get…` (KT-NAME-9), KDoc только у публичного с нетривиальной логикой (KT-DOC-2), ID правила в константе `RULE_ID` (KT-CLASS-3). Вспомогательные функции тестов — по файлу на функцию с её именем (KT-NAME-3); `map`/`filter` в них — с комментарием «Вне стандарта» (KT-TEST-6): находку detekt и вывод Gradle целиком не сравнить.
+  - Образцы кода — по стандарту, изменено по ревью PR 1: цепочки по KT-FMT-2 — звенья-свойства считаются, каждое после первого с новой строки; `class … : BehaviorSpec({` одной строкой, аргументы супертипа с отступом 4, булевы с префиксом (KT-NAME-7), функции с результатом — `find…`/`get…` (KT-NAME-9), KDoc только у публичного с нетривиальной логикой (KT-DOC-2), ID правила в константе `RULE_ID` (KT-CLASS-3); у аргументов-не-литералов при ≤ 3 аргументах имён нет; терминальный `if` и двоичный `if`-выражение — одной строкой (KT-FMT-8); без вложенных вызовов вида `report(Finding(Entity.from(…), …))` — через переменные; `Regex` — приватное свойство класса (KT-CLASS-1/5). Вспомогательные функции тестов — по файлу на функцию с её именем (KT-NAME-3); `map`/`filter` в них — исключение KT-TEST-6 (дописывается в задаче 12): находку detekt и вывод Gradle целиком не сравнить. Образцы кода в тестовых данных — `const val` (KT-TEST-5 уточняется в задаче 12); `withGivens` — без аргументов только для названия, название — из самих данных.
+  - Версии `gradle-plugin/` — в каталоге `gradle/libs.versions.toml` (вариант пользователя «а»: `scripts/` на каталог не переводится в этой задаче); версия ktlint-обёртки — из `detekt.toolVersion`, не второй записью.
   - ktlint — стиль `intellij_idea` (по умолчанию в detekt 2.0, `ChainMethodContinuation` и `MultilineExpressionWrapping` в нём выключены), изменено по ревью PR 1: `ktlint_official` расходится с KT-FMT-1/2 (проверено ktlint 1.5.0). `ClassSignature` настроен на KT-FMT-1 (с 1 параметра) и выключен в тестах — переноса супертипа при многострочном аргументе (`BehaviorSpec({`) настройка не снимает. KT-FMT-2 остаётся ревью: `ChainMethodContinuation` переносит и первый вызов цепочки.
   - Ошибки конфигурации — чистая функция `findMissingSetup` (все случаи — `shouldReturnTest`), плагин бросает `GradleException` в `afterEvaluate`.
   - TestKit — три проекта-образца, как в груминге, но без `kotlin("jvm")` — только `FindMissingSetupSpec` (образец без Kotlin — ещё 2 файла, а вызов `afterEvaluate` уже проверяет образец без порога): `violation` — нарушение `NoImplicitIt` роняет `check` с KT-FUN-6; `no-bound` — без `coverageMinBound` ошибка конфигурации; `low-coverage` — порог выше покрытия роняет `koverVerify`.
@@ -152,16 +156,34 @@
 - #107 снимает бейзлайн и поднимает порог — связь уже записана в #107.
 
 ## PR 1: Сборка правил detekt с правилом KT-FUN-4
-**Объём:** `gradle-plugin/settings.gradle.kts`, `detekt-rules/build.gradle.kts`, провайдер, регистрация, `NamedLiteralArgument`, `FindLintLines.kt`, спеки и данные провайдера и правила; ≈ 10 файлов
+**Объём:** `gradle/libs.versions.toml`, `gradle-plugin/settings.gradle.kts`, `gradle-plugin/build.gradle.kts`, `detekt-rules/build.gradle.kts`, провайдер, регистрация, `NamedLiteralArgument`, `FindLintLines.kt`, спеки и данные провайдера и правила; ≈ 12 файлов
 
 ### Задача 1: Сборка `gradle-plugin/` и набор `standards`
+- Создать: `gradle/libs.versions.toml` — каталог версий
 - Создать: `gradle-plugin/settings.gradle.kts` — сборка
+- Создать: `gradle-plugin/build.gradle.kts` — плагин Kotlin один на сборку
 - Создать: `gradle-plugin/detekt-rules/build.gradle.kts` — модуль
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/StandardsProvider.kt` — набор
 - Создать: `gradle-plugin/detekt-rules/src/main/resources/META-INF/services/dev.detekt.api.RuleSetProvider` — регистрация
 - Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/StandardsProviderSpec.kt`, `StandardsProviderSpecData.kt` — id и состав
 
 - [x] 1. Падающий тест: набор называется `standards`, правил в нём пока нет (правила добавляет каждая следующая задача). Сборка:
+  ```toml
+  # gradle/libs.versions.toml
+  # Каталог версий репозитория. Сборка gradle-plugin/ читает его через versionCatalogs (gradle-plugin/settings.gradle.kts).
+  [versions]
+  kotlin = "2.4.21"
+  detekt = "2.0.0-alpha.6"
+  kotestkit = "2.2.0"
+
+  [libraries]
+  detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detekt" }
+  detekt-test = { module = "dev.detekt:detekt-test", version.ref = "detekt" }
+  kotestkit = { module = "io.github.nakulov:kotestkit", version.ref = "kotestkit" }
+
+  [plugins]
+  kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+  ```
   ```kotlin
   // gradle-plugin/settings.gradle.kts
   // Общая сборка стандарта: свои правила detekt и плагин соглашений. Отдельная сборка, а не buildSrc,
@@ -171,12 +193,15 @@
           gradlePluginPortal()
           mavenCentral()
       }
-      plugins {
-          kotlin("jvm") version "2.4.21"
-      }
   }
 
   dependencyResolutionManagement {
+      // Версии — в общем каталоге репозитория: gradle-plugin/ — отдельная сборка, сама его не видит.
+      versionCatalogs {
+          create("libs") {
+              from(files("../gradle/libs.versions.toml"))
+          }
+      }
       repositories {
           gradlePluginPortal()
           mavenCentral()
@@ -185,8 +210,10 @@
           maven {
               url = uri("https://maven.pkg.github.com/Nakulov/KotestKit")
               credentials {
-                  username = providers.gradleProperty("gpr.user").orNull
-                  password = providers.gradleProperty("gpr.key").orNull
+                  username = providers.gradleProperty("gpr.user")
+                      .orNull
+                  password = providers.gradleProperty("gpr.key")
+                      .orNull
               }
           }
       }
@@ -196,19 +223,24 @@
   include("detekt-rules")
   ```
   ```kotlin
+  // gradle-plugin/build.gradle.kts
+  // Плагин Kotlin — один на сборку: модули применяют его без своей версии.
+  plugins {
+      alias(libs.plugins.kotlin.jvm) apply false
+  }
+  ```
+  ```kotlin
   // gradle-plugin/detekt-rules/build.gradle.kts
   plugins {
-      kotlin("jvm")
+      alias(libs.plugins.kotlin.jvm)
   }
 
-  val detektVersion = "2.0.0-alpha.6"
-
   dependencies {
-      compileOnly("dev.detekt:detekt-api:$detektVersion")
+      compileOnly(libs.detekt.api)
 
-      testImplementation("dev.detekt:detekt-api:$detektVersion")
-      testImplementation("dev.detekt:detekt-test:$detektVersion")
-      testImplementation("io.github.nakulov:kotestkit:2.2.0")
+      testImplementation(libs.detekt.api)
+      testImplementation(libs.detekt.test)
+      testImplementation(libs.kotestkit)
   }
 
   tasks.test {
@@ -241,7 +273,11 @@
   class StandardsProviderSpec : BehaviorSpec({
       shouldReturnTest(makeStandardsRuleSetId()) { StandardsProvider().ruleSetId }
 
-      shouldReturnTest(makeStandardsRuleNames()) { StandardsProvider().instance().rules.keys }
+      shouldReturnTest(makeStandardsRuleNames()) {
+          StandardsProvider().instance()
+              .rules
+              .keys
+      }
   })
   ```
 - [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — падает: `Unresolved reference 'StandardsProvider'`
@@ -292,21 +328,23 @@
   import dev.detekt.test.lintWithContext
   import dev.detekt.test.utils.createEnvironment
 
-  // Вне стандарта (KT-TEST-6): находку detekt не сравнить с ожидаемым целиком — в ней PSI-элемент файла,
+  // Исключение KT-TEST-6: находку detekt не сравнить с ожидаемым целиком — в ней PSI-элемент файла,
   // поэтому тесты сравнивают строки «строка:столбец сообщение».
   internal fun <T> T.findLintLines(code: String): List<String> where T : Rule, T : RequiresAnalysisApi {
-      return lintWithContext(environment = createEnvironment(), content = code).map { finding ->
-          val source = finding.entity.location.source
-          "${source.line}:${source.column} ${finding.message}"
-      }
+      return lintWithContext(createEnvironment(), code)
+          .map { finding ->
+              val source = finding.entity
+                  .location
+                  .source
+              "${source.line}:${source.column} ${finding.message}"
+          }
   }
   ```
   ```kotlin
   // NamedLiteralArgumentSpecData.kt
   package io.github.nakulov.standards.detekt
 
-  fun makeUnnamedLiteralCode(): String {
-      return """
+  const val UNNAMED_LITERAL_CODE = """
   open class Base(
       val name: String,
   )
@@ -322,7 +360,27 @@
       repeat(-1) { }
   }
   """
+
+  const val JAVA_LITERAL_CODE = """
+  fun main() {
+      System.err.println("x")
+      System.err.println(/* p0 = */ "y")
   }
+  """
+
+  const val ALLOWED_LITERAL_CODE = """
+  fun greet(name: String, times: Int) {
+      println(message = name)
+  }
+
+  @Suppress("UNUSED")
+  fun main() {
+      greet(name = "Ann", times = -1)
+      val list = listOf("a", "b")
+      val pair = "a" to 1
+      println(message = list + pair.first)
+  }
+  """
 
   fun makeUnnamedLiteralFindings(): List<String> {
       return listOf(
@@ -336,42 +394,10 @@
       )
   }
 
-  fun makeJavaLiteralCode(): String {
-      return """
-  fun main() {
-      System.err.println("x")
-      System.err.println(/* p0 = */ "y")
-  }
-  """
-  }
-
   fun makeJavaLiteralFindings(): List<String> {
       return listOf(
           "3:24 KT-FUN-4. Литерал \"x\" без имени: добавьте комментарий /* имя = */ (метод Java).",
       )
-  }
-
-  fun makeNamedLiteralCode(): String {
-      return """
-  fun greet(name: String, times: Int) {
-      println(message = name)
-  }
-
-  fun main() {
-      greet(name = "Ann", times = -1)
-  }
-  """
-  }
-
-  fun makeLiteralExceptionsCode(): String {
-      return """
-  @Suppress("UNUSED")
-  fun main() {
-      val list = listOf("a", "b")
-      val pair = "a" to 1
-      println(message = list + pair.first)
-  }
-  """
   }
   ```
   ```kotlin
@@ -386,13 +412,12 @@
 
   class NamedLiteralArgumentSpec : BehaviorSpec({
       withGivens(
-          nameFn = { case -> "код: ${case.arg2}" },
-          case(arg1 = makeUnnamedLiteralFindings(), arg2 = "литералы без имени", arg3 = makeUnnamedLiteralCode()),
-          case(arg1 = makeJavaLiteralFindings(), arg2 = "метод Java", arg3 = makeJavaLiteralCode()),
-          case(arg1 = emptyList(), arg2 = "литералы с именем", arg3 = makeNamedLiteralCode()),
-          case(arg1 = emptyList(), arg2 = "vararg, инфикс, аннотация", arg3 = makeLiteralExceptionsCode()),
-      ) { expected, _, code ->
-          shouldReturnTest(expected) { NamedLiteralArgument(config = Config.empty).findLintLines(code = code) }
+          nameFn = { case -> case.arg2 },
+          case(arg1 = makeUnnamedLiteralFindings(), arg2 = UNNAMED_LITERAL_CODE),
+          case(arg1 = makeJavaLiteralFindings(), arg2 = JAVA_LITERAL_CODE),
+          case(arg1 = emptyList(), arg2 = ALLOWED_LITERAL_CODE),
+      ) { expected, code ->
+          shouldReturnTest(expected) { NamedLiteralArgument(Config.empty).findLintLines(code) }
       }
   })
   ```
@@ -424,67 +449,59 @@
 
   private const val RULE_ID = "KT-FUN-4"
 
-  private val NAME_COMMENT = Regex(pattern = """/\*\s*\w+\s*=\s*\*/""")
-
   internal class NamedLiteralArgument(
       config: Config,
   ) : Rule(
-      config = config,
+      config,
       description = "$RULE_ID. Литерал в аргументе вызова — с именем параметра.",
   ),
       RequiresAnalysisApi {
 
+      private val nameComment = Regex(pattern = """/\*\s*\w+\s*=\s*\*/""")
+
       override fun visitCallExpression(expression: KtCallExpression) {
           super.visitCallExpression(expression)
-          reportUnnamedLiterals(call = expression)
+          reportUnnamedLiterals(expression)
       }
 
       override fun visitSuperTypeCallEntry(call: KtSuperTypeCallEntry) {
           super.visitSuperTypeCallEntry(call)
-          reportUnnamedLiterals(call = call)
+          reportUnnamedLiterals(call)
       }
 
       private fun reportUnnamedLiterals(call: KtCallElement) {
-          val literals = call.valueArguments.filterIsInstance<KtValueArgument>()
-              .filter { argument -> isUnnamedLiteral(argument = argument) }
-          if (literals.isEmpty()) {
-              return
-          }
+          val literals = call.valueArguments
+              .filterIsInstance<KtValueArgument>()
+              .filter { argument -> isUnnamedLiteral(argument) }
+          if (literals.isEmpty()) return
           analyze(call) {
               val functionCall = call.resolveToCall()
                   ?.singleFunctionCallOrNull() ?: return@analyze
               // У метода Java имена параметров не стабильны: вместо имени — комментарий /* имя = */.
-              val hasStableNames = functionCall.symbol.hasStableParameterNames
+              val hasStableNames = functionCall.symbol
+                  .hasStableParameterNames
               val nonVarargLiterals = literals.filter { argument ->
-                  functionCall.valueArgumentMapping[argument.getArgumentExpression()]?.symbol?.isVararg == false
+                  val parameter = functionCall.valueArgumentMapping[argument.getArgumentExpression()]
+                  parameter?.symbol
+                      ?.isVararg == false
               }
-              nonVarargLiterals.forEach { argument ->
-                  reportArgument(argument = argument, hasStableNames = hasStableNames)
-              }
+              nonVarargLiterals.forEach { argument -> reportArgument(argument, hasStableNames) }
           }
       }
 
       private fun reportArgument(argument: KtValueArgument, hasStableNames: Boolean) {
-          if (!hasStableNames && hasNameComment(argument = argument)) {
-              return
-          }
-          val hint = if (hasStableNames) {
-              "назовите параметр"
-          } else {
-              "добавьте комментарий /* имя = */ (метод Java)"
-          }
-          report(
-              Finding(
-                  entity = Entity.from(argument),
-                  message = "$RULE_ID. Литерал ${argument.text} без имени: $hint.",
-              ),
-          )
+          if (!hasStableNames && hasNameComment(argument)) return
+          val hint = if (hasStableNames) "назовите параметр" else "добавьте комментарий /* имя = */ (метод Java)"
+          val entity = Entity.from(argument)
+          val message = "$RULE_ID. Литерал ${argument.text} без имени: $hint."
+          val finding = Finding(entity, message)
+          report(finding)
       }
 
       private fun isUnnamedLiteral(argument: KtValueArgument): Boolean {
           return !argument.isNamed() &&
               argument !is KtLambdaArgument &&
-              isLiteral(expression = argument.getArgumentExpression())
+              isLiteral(argument.getArgumentExpression())
       }
 
       private fun isLiteral(expression: KtExpression?): Boolean {
@@ -498,11 +515,11 @@
       private fun hasNameComment(argument: KtValueArgument): Boolean {
           val comment = argument.firstChild as? PsiComment
               ?: PsiTreeUtil.skipWhitespacesBackward(argument) as? PsiComment
-          return comment != null && NAME_COMMENT.matches(input = comment.text)
+          return comment != null && nameComment.matches(comment.text)
       }
   }
   ```
-  В `StandardsProvider.instance()` — `{ config -> NamedLiteralArgument(config = config) },` в `listOf(`.
+  В `StandardsProvider.instance()` — `{ config -> NamedLiteralArgument(config) },` в `listOf(`.
 - [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный (`NamedLiteralArgumentSpec`, `StandardsProviderSpec`); столбец или строка находки разошлись — сверить отступ образца (код с 2-й строки), не менять правило
 - [x] 5. Коммит — тест и код вместе
 
@@ -529,27 +546,41 @@
   import dev.detekt.test.lint
   import dev.detekt.test.utils.compileContentForTest
 
-  // Вне стандарта (KT-TEST-6): находку detekt не сравнить с ожидаемым целиком — в ней PSI-элемент файла,
+  // Исключение KT-TEST-6: находку detekt не сравнить с ожидаемым целиком — в ней PSI-элемент файла,
   // поэтому тесты сравнивают строки «строка:столбец сообщение».
   internal fun Rule.findLintLinesInFile(code: String, filename: String): List<String> {
-      val file = compileContentForTest(content = code, filename = filename)
-      return lint(file).map { finding ->
-          val source = finding.entity.location.source
-          "${source.line}:${source.column} ${finding.message}"
-      }
+      val file = compileContentForTest(code, filename)
+      return lint(file)
+          .map { finding ->
+              val source = finding.entity
+                  .location
+                  .source
+              "${source.line}:${source.column} ${finding.message}"
+          }
   }
   ```
   ```kotlin
   // NoImplicitItSpecData.kt
   package io.github.nakulov.standards.detekt
 
-  fun makeImplicitItCode(): String {
-      return """
+  const val IMPLICIT_IT_CODE = """
   fun upper(names: List<String>): List<String> {
       return names.map { it.uppercase() }
   }
   """
+
+  const val NESTED_IT_CODE = """
+  fun letters(names: List<String>): List<String> {
+      return names.map { name -> name.filter { it.isLetter() } }
   }
+  """
+
+  const val NAMED_PARAMETER_CODE = """
+  fun upper(names: List<String>): List<String> {
+      val size by lazy { names.size }
+      return names.map { name -> name.uppercase() }
+  }
+  """
 
   fun makeImplicitItFindings(): List<String> {
       return listOf(
@@ -557,27 +588,10 @@
       )
   }
 
-  fun makeNestedItCode(): String {
-      return """
-  fun letters(names: List<String>): List<String> {
-      return names.map { name -> name.filter { it.isLetter() } }
-  }
-  """
-  }
-
   fun makeNestedItFindings(): List<String> {
       return listOf(
           "3:44 KT-FUN-6. Лямбда с неявным it: назовите параметр (`{ item -> … }`).",
       )
-  }
-
-  fun makeNamedParameterCode(): String {
-      return """
-  fun upper(names: List<String>): List<String> {
-      val size by lazy { names.size }
-      return names.map { name -> name.uppercase() }
-  }
-  """
   }
   ```
   ```kotlin
@@ -592,14 +606,12 @@
 
   class NoImplicitItSpec : BehaviorSpec({
       withGivens(
-          nameFn = { case -> "код: ${case.arg2}" },
-          case(arg1 = makeImplicitItFindings(), arg2 = "неявный it", arg3 = makeImplicitItCode()),
-          case(arg1 = makeNestedItFindings(), arg2 = "it во вложенной лямбде", arg3 = makeNestedItCode()),
-          case(arg1 = emptyList(), arg2 = "параметр с именем", arg3 = makeNamedParameterCode()),
-      ) { expected, _, code ->
-          shouldReturnTest(expected) {
-              NoImplicitIt(config = Config.empty).findLintLinesInFile(code = code, filename = "Sample.kt")
-          }
+          nameFn = { case -> case.arg2 },
+          case(arg1 = makeImplicitItFindings(), arg2 = IMPLICIT_IT_CODE),
+          case(arg1 = makeNestedItFindings(), arg2 = NESTED_IT_CODE),
+          case(arg1 = emptyList(), arg2 = NAMED_PARAMETER_CODE),
+      ) { expected, code ->
+          shouldReturnTest(expected) { NoImplicitIt(Config.empty).findLintLinesInFile(code, filename = "Sample.kt") }
       }
   })
   ```
@@ -625,19 +637,21 @@
   internal class NoImplicitIt(
       config: Config,
   ) : Rule(
-      config = config,
+      config,
       description = "$RULE_ID. Параметр лямбды — с именем, неявный it не пишется.",
   ) {
 
       override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
           super.visitLambdaExpression(lambdaExpression)
-          if (lambdaExpression.functionLiteral.hasParameterSpecification()) {
-              return
-          }
+          val hasParameters = lambdaExpression.functionLiteral
+              .hasParameterSpecification()
+          if (hasParameters) return
           val references = PsiTreeUtil.collectElementsOfType(lambdaExpression, KtNameReferenceExpression::class.java)
-          if (references.any { reference -> isImplicitItOf(reference = reference, lambda = lambdaExpression) }) {
-              report(Finding(entity = Entity.from(lambdaExpression), message = MESSAGE))
-          }
+          val hasImplicitIt = references.any { reference -> isImplicitItOf(reference, lambdaExpression) }
+          if (!hasImplicitIt) return
+          val entity = Entity.from(lambdaExpression)
+          val finding = Finding(entity, MESSAGE)
+          report(finding)
       }
 
       private fun isImplicitItOf(reference: KtNameReferenceExpression, lambda: KtLambdaExpression): Boolean {
@@ -646,7 +660,7 @@
       }
   }
   ```
-  В `StandardsProvider.instance()` — добавить `{ config -> NoImplicitIt(config = config) },` после `NamedLiteralArgument`.
+  В `StandardsProvider.instance()` — добавить `{ config -> NoImplicitIt(config) },` после `NamedLiteralArgument`.
 - [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
 - [ ] 5. Коммит — тест и код вместе
 
@@ -661,8 +675,7 @@
   // OneClassPerFileSpecData.kt
   package io.github.nakulov.standards.detekt
 
-  fun makeTwoClassesCode(): String {
-      return """
+  const val TWO_CLASSES_CODE = """
   package sample
 
   class First
@@ -671,31 +684,14 @@
 
   interface Third
   """
-  }
 
-  fun makeTwoClassesFindings(): List<String> {
-      return listOf(
-          "6:7 KT-NAME-3. «Second» — второй класс верхнего уровня в файле: вынесите в свой файл.",
-          "8:11 KT-NAME-3. «Third» — второй класс верхнего уровня в файле: вынесите в свой файл.",
-      )
-  }
-
-  fun makeSealedBesideCode(): String {
-      return """
+  const val SEALED_BESIDE_CODE = """
   sealed interface State
 
   data object Idle : State
   """
-  }
 
-  fun makeSealedBesideFindings(): List<String> {
-      return listOf(
-          "4:13 KT-NAME-3. «Idle» — второй класс верхнего уровня в файле: вынесите в свой файл.",
-      )
-  }
-
-  fun makeNestedClassesCode(): String {
-      return """
+  const val NESTED_CLASSES_CODE = """
   package sample
 
   sealed class Shape {
@@ -711,6 +707,18 @@
       return Shape.Circle(radius = 1)
   }
   """
+
+  fun makeTwoClassesFindings(): List<String> {
+      return listOf(
+          "6:7 KT-NAME-3. «Second» — второй класс верхнего уровня в файле: вынесите в свой файл.",
+          "8:11 KT-NAME-3. «Third» — второй класс верхнего уровня в файле: вынесите в свой файл.",
+      )
+  }
+
+  fun makeSealedBesideFindings(): List<String> {
+      return listOf(
+          "4:13 KT-NAME-3. «Idle» — второй класс верхнего уровня в файле: вынесите в свой файл.",
+      )
   }
   ```
   ```kotlin
@@ -725,14 +733,12 @@
 
   class OneClassPerFileSpec : BehaviorSpec({
       withGivens(
-          nameFn = { case -> "код: ${case.arg2}" },
-          case(arg1 = makeTwoClassesFindings(), arg2 = "три класса", arg3 = makeTwoClassesCode()),
-          case(arg1 = makeSealedBesideFindings(), arg2 = "наследник sealed рядом", arg3 = makeSealedBesideCode()),
-          case(arg1 = emptyList(), arg2 = "вложенные классы", arg3 = makeNestedClassesCode()),
-      ) { expected, _, code ->
-          shouldReturnTest(expected) {
-              OneClassPerFile(config = Config.empty).findLintLinesInFile(code = code, filename = "Sample.kt")
-          }
+          nameFn = { case -> case.arg2 },
+          case(arg1 = makeTwoClassesFindings(), arg2 = TWO_CLASSES_CODE),
+          case(arg1 = makeSealedBesideFindings(), arg2 = SEALED_BESIDE_CODE),
+          case(arg1 = emptyList(), arg2 = NESTED_CLASSES_CODE),
+      ) { expected, code ->
+          shouldReturnTest(expected) { OneClassPerFile(Config.empty).findLintLinesInFile(code, filename = "Sample.kt") }
       }
   })
   ```
@@ -755,28 +761,27 @@
   internal class OneClassPerFile(
       config: Config,
   ) : Rule(
-      config = config,
+      config,
       description = "$RULE_ID. Одна верхнеуровневая декларация на файл: второй класс — в свой файл.",
   ) {
 
       override fun visitKtFile(file: KtFile) {
           super.visitKtFile(file)
-          file.declarations.filterIsInstance<KtClassOrObject>()
+          file.declarations
+              .filterIsInstance<KtClassOrObject>()
               .drop(n = 1)
-              .forEach { declaration -> reportSecond(declaration = declaration) }
+              .forEach { declaration -> reportSecond(declaration) }
       }
 
       private fun reportSecond(declaration: KtClassOrObject) {
-          report(
-              Finding(
-                  entity = Entity.atName(declaration),
-                  message = "$RULE_ID. «${declaration.name}» — второй класс верхнего уровня в файле: вынесите в свой файл.",
-              ),
-          )
+          val entity = Entity.atName(declaration)
+          val message = "$RULE_ID. «${declaration.name}» — второй класс верхнего уровня в файле: вынесите в свой файл."
+          val finding = Finding(entity, message)
+          report(finding)
       }
   }
   ```
-  В `StandardsProvider.instance()` — добавить `{ config -> OneClassPerFile(config = config) },`.
+  В `StandardsProvider.instance()` — добавить `{ config -> OneClassPerFile(config) },`.
   `docs/code-style/kotlin/naming.md:35`:
   - было: `Проверка: detekt \`MatchingDeclarationName\``
   - стало: `Проверка: detekt \`MatchingDeclarationName\` (имя файла), \`OneClassPerFile\` (своё правило: второй класс)`
@@ -803,26 +808,22 @@
   // BehaviorSpecOnlySpecData.kt
   package io.github.nakulov.standards.detekt
 
-  fun makeFunSpecCode(): String {
-      return """
+  const val FUN_SPEC_CODE = """
   class ExampleSpec : FunSpec({
   })
   """
-  }
 
-  fun makeFunSpecFindings(): List<String> {
-      return listOf(
-          "2:7 KT-KIT-1. «ExampleSpec» наследует FunSpec: спека — только BehaviorSpec.",
-      )
-  }
-
-  fun makeBehaviorSpecCode(): String {
-      return """
+  const val BEHAVIOR_SPEC_CODE = """
   class ExampleSpec : io.kotest.core.spec.style.BehaviorSpec({
   })
 
   class Child : Base()
   """
+
+  fun makeFunSpecFindings(): List<String> {
+      return listOf(
+          "2:7 KT-KIT-1. «ExampleSpec» наследует FunSpec: спека — только BehaviorSpec.",
+      )
   }
   ```
   ```kotlin
@@ -837,12 +838,12 @@
 
   class BehaviorSpecOnlySpec : BehaviorSpec({
       withGivens(
-          nameFn = { case -> "код: ${case.arg2}" },
-          case(arg1 = makeFunSpecFindings(), arg2 = "FunSpec", arg3 = makeFunSpecCode()),
-          case(arg1 = emptyList(), arg2 = "BehaviorSpec и не спека", arg3 = makeBehaviorSpecCode()),
-      ) { expected, _, code ->
+          nameFn = { case -> case.arg2 },
+          case(arg1 = makeFunSpecFindings(), arg2 = FUN_SPEC_CODE),
+          case(arg1 = emptyList(), arg2 = BEHAVIOR_SPEC_CODE),
+      ) { expected, code ->
           shouldReturnTest(expected) {
-              BehaviorSpecOnly(config = Config.empty).findLintLinesInFile(code = code, filename = "ExampleSpec.kt")
+              BehaviorSpecOnly(Config.empty).findLintLinesInFile(code, filename = "ExampleSpec.kt")
           }
       }
   })
@@ -858,7 +859,12 @@
 
   // Короткое имя супертипа: спеку пишут и с полным именем (`io.kotest…BehaviorSpec`), и с параметрами типа.
   internal fun KtClass.findSpecSuperType(): String? {
-      return superTypeListEntries.map { entry -> entry.typeReference?.text.orEmpty() }
+      return superTypeListEntries
+          .map { entry ->
+              entry.typeReference
+                  ?.text
+                  .orEmpty()
+          }
           .map { name ->
               name.substringBefore(delimiter = '<')
                   .substringAfterLast(delimiter = '.')
@@ -882,25 +888,22 @@
   internal class BehaviorSpecOnly(
       config: Config,
   ) : Rule(
-      config = config,
+      config,
       description = "$RULE_ID. Спеки — только $BEHAVIOR_SPEC.",
   ) {
 
       override fun visitClass(klass: KtClass) {
           super.visitClass(klass)
           val spec = klass.findSpecSuperType() ?: return
-          if (spec != BEHAVIOR_SPEC) {
-              report(
-                  Finding(
-                      entity = Entity.atName(klass),
-                      message = "$RULE_ID. «${klass.name}» наследует $spec: спека — только $BEHAVIOR_SPEC.",
-                  ),
-              )
-          }
+          if (spec == BEHAVIOR_SPEC) return
+          val entity = Entity.atName(klass)
+          val message = "$RULE_ID. «${klass.name}» наследует $spec: спека — только $BEHAVIOR_SPEC."
+          val finding = Finding(entity, message)
+          report(finding)
       }
   }
   ```
-  В `StandardsProvider.instance()` — добавить `{ config -> BehaviorSpecOnly(config = config) },`.
+  В `StandardsProvider.instance()` — добавить `{ config -> BehaviorSpecOnly(config) },`.
   `docs/testing/kotlin/kotest-kit.md:8`:
   - было: `Проверка: ревью`
   - стало: `Проверка: detekt \`BehaviorSpecOnly\` (своё правило из engineering-standards)`
@@ -917,8 +920,7 @@
   // SpecDataContentSpecData.kt
   package io.github.nakulov.standards.detekt
 
-  fun makeBrokenSpecDataCode(): String {
-      return """
+  const val BROKEN_SPEC_DATA_CODE = """
   package sample
 
   const val NAME = "x"
@@ -936,19 +938,8 @@
   class ExampleSpec : BehaviorSpec({
   })
   """
-  }
 
-  fun makeBrokenSpecDataFindings(): List<String> {
-      return listOf(
-          "6:5 KT-TEST-5. «shared»: val без const.",
-          "8:5 KT-TEST-3. «id»: функция без префикса make.",
-          "12:5 KT-TEST-3. «makeup»: функция без префикса make.",
-          "16:7 KT-TEST-2. «ExampleSpec»: класс-спека (BehaviorSpec) в файле данных.",
-      )
-  }
-
-  fun makeValidSpecDataCode(): String {
-      return """
+  const val VALID_SPEC_DATA_CODE = """
   package sample
 
   const val NAME = "x"
@@ -967,10 +958,8 @@
       return NAME
   }
   """
-  }
 
-  fun makePlainFileCode(): String {
-      return """
+  const val PLAIN_FILE_CODE = """
   package sample
 
   val shared = listOf(1)
@@ -979,6 +968,14 @@
       return "x"
   }
   """
+
+  fun makeBrokenSpecDataFindings(): List<String> {
+      return listOf(
+          "6:5 KT-TEST-5. «shared»: val без const.",
+          "8:5 KT-TEST-3. «id»: функция без префикса make.",
+          "12:5 KT-TEST-3. «makeup»: функция без префикса make.",
+          "16:7 KT-TEST-2. «ExampleSpec»: класс-спека (BehaviorSpec) в файле данных.",
+      )
   }
   ```
   ```kotlin
@@ -994,13 +991,11 @@
   class SpecDataContentSpec : BehaviorSpec({
       withGivens(
           nameFn = { case -> "файл: ${case.arg2}" },
-          case(arg1 = makeBrokenSpecDataFindings(), arg2 = "BrokenSpecData.kt", arg3 = makeBrokenSpecDataCode()),
-          case(arg1 = emptyList(), arg2 = "ExampleSpecData.kt", arg3 = makeValidSpecDataCode()),
-          case(arg1 = emptyList(), arg2 = "Example.kt", arg3 = makePlainFileCode()),
+          case(arg1 = makeBrokenSpecDataFindings(), arg2 = "BrokenSpecData.kt", arg3 = BROKEN_SPEC_DATA_CODE),
+          case(arg1 = emptyList(), arg2 = "ExampleSpecData.kt", arg3 = VALID_SPEC_DATA_CODE),
+          case(arg1 = emptyList(), arg2 = "Example.kt", arg3 = PLAIN_FILE_CODE),
       ) { expected, filename, code ->
-          shouldReturnTest(expected) {
-              SpecDataContent(config = Config.empty).findLintLinesInFile(code = code, filename = filename)
-          }
+          shouldReturnTest(expected) { SpecDataContent(Config.empty).findLintLinesInFile(code, filename) }
       }
   })
   ```
@@ -1027,35 +1022,38 @@
   private const val CONST_VAL_RULE_ID = "KT-TEST-5"
   private const val SPEC_DATA_SUFFIX = "SpecData.kt"
 
-  private val MAKE = Regex(pattern = "make[A-Z].*")
-
   internal class SpecDataContent(
       config: Config,
   ) : Rule(
-      config = config,
+      config,
       description = "$SPEC_CLASS_RULE_ID, $MAKE_RULE_ID, $CONST_VAL_RULE_ID. " +
           "В *$SPEC_DATA_SUFFIX нет классов-спек, функции — make…, val — const.",
   ) {
 
+      private val makeName = Regex(pattern = "make[A-Z].*")
+
       override fun visitKtFile(file: KtFile) {
           super.visitKtFile(file)
-          if (!file.name.endsWith(suffix = SPEC_DATA_SUFFIX)) {
-              return
-          }
-          file.declarations.filterIsInstance<KtNamedDeclaration>()
-              .forEach { declaration -> reportProblem(declaration = declaration) }
+          val isSpecData = file.name
+              .endsWith(SPEC_DATA_SUFFIX)
+          if (!isSpecData) return
+          file.declarations
+              .filterIsInstance<KtNamedDeclaration>()
+              .forEach { declaration -> reportProblem(declaration) }
       }
 
       private fun reportProblem(declaration: KtNamedDeclaration) {
-          val problem = findProblem(declaration = declaration) ?: return
-          report(Finding(entity = Entity.atName(declaration), message = problem))
+          val problem = findProblem(declaration) ?: return
+          val entity = Entity.atName(declaration)
+          val finding = Finding(entity, problem)
+          report(finding)
       }
 
       private fun findProblem(declaration: KtNamedDeclaration): String? {
           return when (declaration) {
-              is KtClass -> findSpecClassProblem(klass = declaration)
-              is KtNamedFunction -> findFunctionProblem(function = declaration)
-              is KtProperty -> findPropertyProblem(property = declaration)
+              is KtClass -> findSpecClassProblem(declaration)
+              is KtNamedFunction -> findFunctionProblem(declaration)
+              is KtProperty -> findPropertyProblem(declaration)
               else -> null
           }
       }
@@ -1066,21 +1064,19 @@
       }
 
       private fun findFunctionProblem(function: KtNamedFunction): String? {
-          if (MAKE.matches(input = function.name.orEmpty())) {
-              return null
-          }
+          val name = function.name
+              .orEmpty()
+          if (makeName.matches(name)) return null
           return "$MAKE_RULE_ID. «${function.name}»: функция без префикса make."
       }
 
       private fun findPropertyProblem(property: KtProperty): String? {
-          if (property.hasModifier(KtTokens.CONST_KEYWORD)) {
-              return null
-          }
+          if (property.hasModifier(KtTokens.CONST_KEYWORD)) return null
           return "$CONST_VAL_RULE_ID. «${property.name}»: val без const."
       }
   }
   ```
-  В `StandardsProvider.instance()` — добавить `{ config -> SpecDataContent(config = config) },`.
+  В `StandardsProvider.instance()` — добавить `{ config -> SpecDataContent(config) },`.
 - [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
 - [ ] 5. Коммит — тест и код вместе
 
@@ -1105,12 +1101,17 @@
   `gradle-plugin/settings.gradle.kts`:
   - было: `include("detekt-rules")`
   - стало: `include("detekt-rules", "conventions")`
+  `gradle/libs.versions.toml`, в `[libraries]`:
+  ```toml
+  detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+  kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+  ```
   ```kotlin
   // gradle-plugin/conventions/build.gradle.kts
   import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
   plugins {
-      kotlin("jvm")
+      alias(libs.plugins.kotlin.jvm)
       `java-gradle-plugin`
   }
 
@@ -1127,10 +1128,10 @@
 
   dependencies {
       implementation(project(":detekt-rules"))
-      implementation("dev.detekt:detekt-gradle-plugin:2.0.0-alpha.6")
+      implementation(libs.detekt.gradle.plugin)
 
-      testImplementation("io.github.nakulov:kotestkit:2.2.0")
-      testPluginClasspath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.21")
+      testImplementation(libs.kotestkit)
+      testPluginClasspath(libs.kotlin.gradle.plugin)
   }
 
   gradlePlugin {
@@ -1149,12 +1150,12 @@
   // Проекты-образцы TestKit: путь — тестам, содержимое — входы теста (без их build и кэшей).
   tasks.test {
       useJUnitPlatform()
-      systemProperty("standards.fixtures", file("src/test/fixtures").absolutePath)
-      inputs.files(
-          fileTree("src/test/fixtures") {
-              exclude("**/build/**", "**/.gradle/**", "**/.kotlin/**")
-          },
-      )
+      val fixtures = file("src/test/fixtures")
+      systemProperty("standards.fixtures", fixtures.absolutePath)
+      val fixtureFiles = fileTree(fixtures) {
+          exclude("**/build/**", "**/.gradle/**", "**/.kotlin/**")
+      }
+      inputs.files(fixtureFiles)
   }
   ```
   ```kotlin
@@ -1192,18 +1193,20 @@
   private const val FIXTURES = "standards.fixtures"
   private const val CHECK = "check"
 
-  // Вне стандарта (KT-TEST-6): вывод Gradle — сотни строк с абсолютным путём образца; тест сравнивает только строки
+  // Исключение KT-TEST-6: вывод Gradle — сотни строк с абсолютным путём образца; тест сравнивает только строки
   // с [mark] без пути. Образцы задач 9 и 10 используют её же: находка detekt, ошибка конфигурации, порог Kover.
   internal fun findFailedCheckLines(fixture: String, mark: String): List<String> {
-      val project = File(System.getProperty(FIXTURES), fixture)
+      val fixtures = System.getProperty(FIXTURES)
+      val project = File(fixtures, fixture)
       val result = GradleRunner.create()
           .withProjectDir(project)
           .withPluginClasspath()
           .withArguments(CHECK)
           .buildAndFail()
-      return result.output.lines()
+      return result.output
+          .lines()
           .filter { line -> mark in line }
-          .map { line -> line.replace(oldValue = project.absolutePath, newValue = "") }
+          .map { line -> line.replace(project.absolutePath, newValue = "") }
   }
   ```
   ```kotlin
@@ -1230,7 +1233,7 @@
           nameFn = { case -> "образец: ${case.arg2}" },
           case(arg1 = makeViolationFindings(), arg2 = "violation", arg3 = ".kt:"),
       ) { expected, fixture, mark ->
-          shouldReturnTest(expected) { findFailedCheckLines(fixture = fixture, mark = mark) }
+          shouldReturnTest(expected) { findFailedCheckLines(fixture, mark) }
       }
   })
   ```
@@ -1243,6 +1246,7 @@
   import dev.detekt.gradle.extensions.DetektExtension
   import org.gradle.api.Plugin
   import org.gradle.api.Project
+  import org.gradle.api.Task
   import org.gradle.api.tasks.TaskProvider
   import java.io.File
   import java.net.JarURLConnection
@@ -1251,7 +1255,7 @@
   private const val KOTLIN_PLUGIN = "org.jetbrains.kotlin.jvm"
   private const val DETEKT_PLUGIN = "dev.detekt"
   private const val DETEKT_PLUGINS = "detektPlugins"
-  private const val KTLINT_WRAPPER = "dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.6"
+  private const val KTLINT_WRAPPER = "dev.detekt:detekt-rules-ktlint-wrapper"
   private const val CONFIG_RESOURCE = "/standards/detekt.yml"
   private const val RULES_CLASS = "io/github/nakulov/standards/detekt/StandardsProvider.class"
   private const val BASELINE = "detekt-baseline.xml"
@@ -1267,49 +1271,65 @@
   class StandardsKotlinPlugin : Plugin<Project> {
 
       override fun apply(project: Project) {
-          project.pluginManager.withPlugin(KOTLIN_PLUGIN) { _ ->
-              applyDetekt(project = project)
-          }
+          project.pluginManager
+              .withPlugin(KOTLIN_PLUGIN) { _ -> applyDetekt(project) }
       }
 
       private fun applyDetekt(project: Project) {
-          project.pluginManager.apply(DETEKT_PLUGIN)
-          val detekt = project.extensions.getByType(DetektExtension::class.java)
-          detekt.buildUponDefaultConfig.set(/* value = */ true)
-          detekt.config.from(
-              project.provider {
-                  project.resources.text.fromString(getConfigText())
-                      .asFile()
-              },
-          )
-          // Бейзлайн проекта: detekt берёт detekt-baseline-main.xml / -test.xml, отсутствующий файл пропускает.
-          detekt.baseline.set(project.file(BASELINE))
-          project.dependencies.add(DETEKT_PLUGINS, project.files(findRulesJar()))
-          project.dependencies.add(DETEKT_PLUGINS, KTLINT_WRAPPER)
-          // NamedArguments и NamedLiteralArgument работают только с анализом типов: check — detektMain и detektTest.
-          project.tasks.named(CHECK) { check ->
-              check.setDependsOn(
-                  check.dependsOn.filterNot { dependency -> (dependency as? TaskProvider<*>)?.name == PLAIN_DETEKT },
-              )
-              check.dependsOn(DETEKT_MAIN, DETEKT_TEST)
+          project.pluginManager
+              .apply(DETEKT_PLUGIN)
+          val detekt = project.extensions
+              .getByType(DetektExtension::class.java)
+          detekt.buildUponDefaultConfig
+              .set(/* value = */ true)
+          val config = project.provider {
+              project.resources
+                  .text
+                  .fromString(getConfigText())
+                  .asFile()
           }
+          detekt.config
+              .from(config)
+          // Бейзлайн проекта: detekt берёт detekt-baseline-main.xml / -test.xml, отсутствующий файл пропускает.
+          val baseline = project.file(BASELINE)
+          detekt.baseline
+              .set(baseline)
+          val rules = project.files(findRulesJar())
+          project.dependencies
+              .add(DETEKT_PLUGINS, rules)
+          // Версия ktlint-обёртки — версия самого detekt: одно значение, без второй записи версии.
+          val ktlintWrapper = detekt.toolVersion
+              .map { version -> "$KTLINT_WRAPPER:$version" }
+          project.dependencies
+              .addProvider(DETEKT_PLUGINS, ktlintWrapper)
+          // NamedArguments и NamedLiteralArgument работают только с анализом типов: check — detektMain и detektTest.
+          project.tasks
+              .named(CHECK) { check -> dependOnTypedDetekt(check) }
+      }
+
+      private fun dependOnTypedDetekt(check: Task) {
+          val dependencies = check.dependsOn
+              .filterNot { dependency -> (dependency as? TaskProvider<*>)?.name == PLAIN_DETEKT }
+          check.setDependsOn(dependencies)
+          check.dependsOn(DETEKT_MAIN, DETEKT_TEST)
       }
 
       private fun getConfigText(): String {
-          val resource = requireNotNull(javaClass.getResource(/* name = */ CONFIG_RESOURCE)) {
-              "$PLUGIN_ID: в плагине нет $CONFIG_RESOURCE"
-          }
+          val resource = javaClass.getResource(CONFIG_RESOURCE)
+          requireNotNull(resource) { "$PLUGIN_ID: в плагине нет $CONFIG_RESOURCE" }
           return resource.readText()
       }
 
       // Свои правила — jar модуля detekt-rules с classpath плагина: так они находятся и из includeBuild, и в TestKit.
       private fun findRulesJar(): File {
-          val resource = requireNotNull(javaClass.classLoader.getResource(/* name = */ RULES_CLASS)) {
-              "$PLUGIN_ID: правил detekt стандарта нет на classpath плагина"
-          }
+          val resource = javaClass.classLoader
+              .getResource(RULES_CLASS)
+          requireNotNull(resource) { "$PLUGIN_ID: правил detekt стандарта нет на classpath плагина" }
           val connection = resource.openConnection()
           require(connection is JarURLConnection) { "$PLUGIN_ID: правила detekt не в jar: $resource" }
-          return File(connection.jarFileURL.toURI())
+          val jar = connection.jarFileURL
+              .toURI()
+          return File(jar)
       }
   }
   ```
@@ -1431,18 +1451,10 @@
   package io.github.nakulov.standards.gradle
 
   const val COVERAGE_MIN_BOUND = 80
-
-  fun makeNoKotlinError(): String? {
-      return "standards.kotlin требует kotlin(\"jvm\"): примените его в plugins рядом со standards.kotlin."
-  }
-
-  fun makeNoBoundError(): String? {
-      return "standards.kotlin: задайте порог покрытия — standards { coverageMinBound = <замер, %> } (KT-TEST-7)."
-  }
-
-  fun makeCompleteSetup(): String? {
-      return null
-  }
+  const val NO_KOTLIN_ERROR = "standards.kotlin требует kotlin(\"jvm\"): " +
+      "примените его в plugins рядом со standards.kotlin."
+  const val NO_BOUND_ERROR = "standards.kotlin: задайте порог покрытия — " +
+      "standards { coverageMinBound = <замер, %> } (KT-TEST-7)."
   ```
   ```kotlin
   // FindMissingSetupSpec.kt
@@ -1456,11 +1468,11 @@
   class FindMissingSetupSpec : BehaviorSpec({
       withGivens(
           nameFn = { case -> "kotlin: ${case.arg2}, порог: ${case.arg3}" },
-          case(arg1 = makeNoKotlinError(), arg2 = false, arg3 = COVERAGE_MIN_BOUND),
-          case(arg1 = makeNoBoundError(), arg2 = true, arg3 = null),
-          case(arg1 = makeCompleteSetup(), arg2 = true, arg3 = COVERAGE_MIN_BOUND),
+          case(arg1 = NO_KOTLIN_ERROR, arg2 = false, arg3 = COVERAGE_MIN_BOUND),
+          case(arg1 = NO_BOUND_ERROR, arg2 = true, arg3 = null),
+          case(arg1 = null, arg2 = true, arg3 = COVERAGE_MIN_BOUND),
       ) { expected, hasKotlin, coverageMinBound ->
-          shouldReturnTest(expected) { findMissingSetup(hasKotlin = hasKotlin, coverageMinBound = coverageMinBound) }
+          shouldReturnTest(expected) { findMissingSetup(hasKotlin, coverageMinBound) }
       }
   })
   ```
@@ -1476,12 +1488,8 @@
       "standards { coverageMinBound = <замер, %> } (KT-TEST-7)."
 
   internal fun findMissingSetup(hasKotlin: Boolean, coverageMinBound: Int?): String? {
-      if (!hasKotlin) {
-          return NO_KOTLIN
-      }
-      if (coverageMinBound == null) {
-          return NO_BOUND
-      }
+      if (!hasKotlin) return NO_KOTLIN
+      if (coverageMinBound == null) return NO_BOUND
       return null
   }
   ```
@@ -1556,22 +1564,23 @@
   ```kotlin
   private const val EXTENSION = "standards"
   ```
-  `apply` целиком:
+  `apply` целиком и новая функция после него:
   ```kotlin
       override fun apply(project: Project) {
-          val standards = project.extensions.create(/* name = */ EXTENSION, StandardsExtension::class.java)
-          project.pluginManager.withPlugin(KOTLIN_PLUGIN) { _ ->
-              applyDetekt(project = project)
-          }
-          project.afterEvaluate { evaluated ->
-              val problem = findMissingSetup(
-                  hasKotlin = evaluated.pluginManager.hasPlugin(KOTLIN_PLUGIN),
-                  coverageMinBound = standards.coverageMinBound.orNull,
-              )
-              if (problem != null) {
-                  throw GradleException(problem)
-              }
-          }
+          val standards = project.extensions
+              .create(EXTENSION, StandardsExtension::class.java)
+          project.pluginManager
+              .withPlugin(KOTLIN_PLUGIN) { _ -> applyDetekt(project) }
+          project.afterEvaluate { evaluated -> checkSetup(evaluated, standards) }
+      }
+
+      private fun checkSetup(project: Project, standards: StandardsExtension) {
+          val hasKotlin = project.pluginManager
+              .hasPlugin(KOTLIN_PLUGIN)
+          val coverageMinBound = standards.coverageMinBound
+              .orNull
+          val problem = findMissingSetup(hasKotlin, coverageMinBound) ?: return
+          throw GradleException(problem)
       }
   ```
   KDoc класса — дописать: «без `kotlin("jvm")` или без порога `standards { coverageMinBound }` — ошибка конфигурации».
@@ -1637,25 +1646,40 @@
   ```
 - [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*StandardsKotlinPluginSpec*'` — падает: у `low-coverage` сборка не падает (`UnexpectedBuildSuccess`: Kover ещё не применён)
 - [ ] 3. Минимальный код:
-  `gradle-plugin/conventions/build.gradle.kts`, в `dependencies` после `detekt-gradle-plugin`:
+  `gradle/libs.versions.toml` — в `[versions]` `kover = "0.9.11"`, в `[libraries]`:
+  ```toml
+  kover-gradle-plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
+  ```
+  `gradle-plugin/conventions/build.gradle.kts`, в `dependencies` после `libs.detekt.gradle.plugin`:
   ```kotlin
-      implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.9.11")
+      implementation(libs.kover.gradle.plugin)
   ```
   `StandardsKotlinPlugin.kt` — импорты `kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension`, `kotlinx.kover.gradle.plugin.dsl.KoverVerificationRulesConfig`, `org.gradle.api.tasks.testing.Test`; константы:
   ```kotlin
   private const val KOVER_PLUGIN = "org.jetbrains.kotlinx.kover"
   private const val KOVER_HTML_REPORT = "koverHtmlReport"
   ```
-  В `apply`, в `withPlugin(KOTLIN_PLUGIN)` после `applyDetekt(project = project)` — `applyKover(project = project, standards = standards)`; новые функции:
+  В `apply` — `withPlugin(KOTLIN_PLUGIN)` с двумя вызовами:
+  ```kotlin
+          project.pluginManager
+              .withPlugin(KOTLIN_PLUGIN) { _ ->
+                  applyDetekt(project)
+                  applyKover(project, standards)
+              }
+  ```
+  Новые функции:
   ```kotlin
       // koverVerify Kover сам ставит в check; HTML-отчёт — после каждого прогона тестов: build/reports/kover/html.
       private fun applyKover(project: Project, standards: StandardsExtension) {
-          project.pluginManager.apply(KOVER_PLUGIN)
-          val kover = project.extensions.getByType(KoverProjectExtension::class.java)
+          project.pluginManager
+              .apply(KOVER_PLUGIN)
+          val kover = project.extensions
+              .getByType(KoverProjectExtension::class.java)
           kover.reports { reports ->
-              reports.verify { rules -> addCoverageRule(rules = rules, standards = standards) }
+              reports.verify { rules -> addCoverageRule(rules, standards) }
           }
-          project.tasks.withType(Test::class.java)
+          project.tasks
+              .withType(Test::class.java)
               .configureEach { test -> test.finalizedBy(KOVER_HTML_REPORT) }
       }
 
@@ -1729,7 +1753,7 @@
 - Изменить: `docs/code-style/kotlin/classes.md` — KT-CLASS-10 в конце файла
 - Изменить: `docs/testing/kotlin/organization.md:19,38,95` — «Проверка»; KT-TEST-7 в конце файла
 - Изменить: `docs/code-style/kotlin/README.md:47` — бейзлайн и порог
-- Изменить: `docs/code-style/kotlin/formatting.md:7` — «Проверка» KT-FMT-1
+- Изменить: `docs/code-style/kotlin/formatting.md:7,40` — «Проверка» KT-FMT-1, звенья-свойства в KT-FMT-2
 - Изменить: `templates/project/editorconfig`, `.editorconfig` — одинаково
 
 - тест: не применим — текст стандарта и `.editorconfig`; проверка формата — копия `.editorconfig` совпадает с источником (`./gradlew :scripts:test` — тесты `setup`).
@@ -1802,6 +1826,8 @@
   - `:19` было `Проверка: ревью` → стало `Проверка: detekt \`SpecDataContent\` (классов-спек нет) + ревью (данные нужны, лежат рядом со спекой)`
   - `:38` было `Проверка: ревью` → стало `Проверка: detekt \`SpecDataContent\` (префикс \`make\`) + ревью (контекст в имени)`
   - `:95` было `Проверка: ревью` → стало `Проверка: detekt \`SpecDataContent\``
+  - `:93` KT-TEST-5 (по ревью PR 1): было `` ### KT-TEST-5. `val` в тестовых данных — только `const val` для повторяющихся примитивов `` → стало `` ### KT-TEST-5. `val` в тестовых данных — только `const val` `` ; в строке `:96` было `Повторяющееся значение — в константу, как в KT-CLASS-1 и KT-CLASS-3 кодстайла.` → стало `Константа — любое значение-литерал тестовых данных: повторяющийся примитив, образец кода или текста, ожидаемая строка; как в KT-CLASS-1 и KT-CLASS-3 кодстайла.`
+  - KT-TEST-6 (по ревью PR 1), после строки `- Проверить моками нельзя или встают серьёзные ограничения — это повод к обсуждению, а не логика в тесте.`: `- Исключение — вспомогательная функция теста, которая переводит результат чужой библиотеки в сравнимый вид (находку detekt — в «строка:столбец сообщение», вывод Gradle — в строки без пути): отдельный файл, комментарий «Исключение KT-TEST-6» с причиной.`
   - в конец:
   ````markdown
   ### KT-TEST-7. Непокрытая строка — повод для нового случая теста
@@ -1839,6 +1865,10 @@
   `docs/code-style/kotlin/formatting.md:7` (KT-FMT-1):
   - было: `Проверка: ревью`
   - стало: `Проверка: detekt \`ClassSignature\` (ktlint, основной код) + ревью (тесты: правило там выключено, чтобы спека писалась \`class … : BehaviorSpec({\` одной строкой)`
+
+  `docs/code-style/kotlin/formatting.md:40` (KT-FMT-2, по ревью PR 1):
+  - было: `Правило — для цепочки от двух вызовов: первый вызов остаётся на строке с получателем.`
+  - стало: `Правило — для цепочки от двух звеньев: вызовов или свойств (\`a.b.c\`, \`a?.b?.c\`). Первое звено остаётся на строке с получателем, каждое следующее — с новой строки.`
 - [ ] 4. `templates/project/editorconfig` и `.editorconfig`, в конец секции `[*.{kt,kts}]`:
   ```
   # Стиль ktlint — как в detekt стандарта: ktlint_official расходится с KT-FMT-1 и KT-FMT-2.
