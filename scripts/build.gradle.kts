@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.4.21"
+    id("standards.kotlin")
 }
 
 // Логику компилирует и `kotlinc` человека при первом запуске `scripts/task`: минимальная версия языка и API задаётся
@@ -17,6 +18,22 @@ tasks.named<KotlinCompile>("compileKotlin") {
 dependencies {
     testImplementation("io.github.nakulov:kotestkit:2.2.0")
     testImplementation("io.mockk:mockk:1.14.9")
+}
+
+// Порог покрытия — замер scripts/ с округлением вниз (KT-TEST-7); поднимает #107, не снижаем.
+standards {
+    coverageMinBound = 97
+}
+
+// Точки входа: exitProcess завершает JVM, в тестах их не вызвать (KT-TEST-7); проверяются запуском scripts/task и scripts/setup.
+kover {
+    reports {
+        filters {
+            excludes {
+                classes("io.github.nakulov.standards.task.cli.MainKt", "io.github.nakulov.standards.setup.SetupMainKt")
+            }
+        }
+    }
 }
 
 tasks.test {

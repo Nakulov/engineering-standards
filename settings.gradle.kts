@@ -1,4 +1,6 @@
 pluginManagement {
+    // Плагин соглашений стандарта standards.kotlin и свои правила detekt — сборка gradle-plugin/.
+    includeBuild("gradle-plugin")
     repositories {
         gradlePluginPortal()
         mavenCentral()

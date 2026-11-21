@@ -147,7 +147,7 @@
   - [x] Приёмка
 - PR 7: `scripts/` проверяется стандартом
   - [ ] Перед блоком: «Почему» от пользователя
-  - [ ] Задача 11: Подключение к `scripts/` с бейзлайном и порогом
+  - [x] Задача 11: Подключение к `scripts/` с бейзлайном и порогом
   - [ ] Задача 12: Правила стандарта и `.editorconfig`
   - [ ] Приёмка
 
@@ -1707,7 +1707,7 @@
 - Создать: `scripts/detekt-baseline-main.xml`, `scripts/detekt-baseline-test.xml`
 
 - тест: не применим — подключение проверяется самим `check` (шаг 4) и пробным нарушением (раздел «После завершения»); правила и плагин покрыты тестами PR 1–6.
-- [ ] 1. Подключить сборку. `settings.gradle.kts`:
+- [x] 1. Подключить сборку. `settings.gradle.kts`:
   ```kotlin
   pluginManagement {
       // Плагин соглашений стандарта standards.kotlin и свои правила detekt — сборка gradle-plugin/.
@@ -1743,10 +1743,10 @@
       }
   }
   ```
-- [ ] 2. Бейзлайн: `./gradlew :scripts:detektBaselineMain :scripts:detektBaselineTest` → `BUILD SUCCESSFUL`; `ls scripts/detekt-baseline*.xml` — сверить имена файлов с картой (другие имена — обновить карту и «Объём»; `check` после шага 4 не видит бейзлайн — плагин ставит `detekt-baseline.xml`, ⚠️ и вопрос пользователю)
-- [ ] 3. Порог: `./gradlew :scripts:koverLog` → `application line coverage: NN.NNNN%`; в `standards { coverageMinBound = … }` — `NN` (вниз до целого)
-- [ ] 4. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; `./gradlew :scripts:test` — зелёный, как до подключения
-- [ ] 5. Коммит — подключение, бейзлайн и порог одним коммитом (`check` зелёный)
+- [x] 2. Бейзлайн: `./gradlew :scripts:detektBaselineMain :scripts:detektBaselineTest` → `BUILD SUCCESSFUL`; `ls scripts/detekt-baseline*.xml` — сверить имена файлов с картой (другие имена — обновить карту и «Объём»; `check` после шага 4 не видит бейзлайн — плагин ставит `detekt-baseline.xml`, ⚠️ и вопрос пользователю)
+- [x] 3. Порог: `./gradlew :scripts:koverLog` → `application line coverage: NN.NNNN%`; в `standards { coverageMinBound = … }` — `NN` (вниз до целого)
+- [x] 4. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; `./gradlew :scripts:test` — зелёный, как до подключения
+- [x] 5. Коммит — подключение, бейзлайн и порог одним коммитом (`check` зелёный)
 
 ### Задача 12: Правила стандарта и `.editorconfig`
 - Изменить: `docs/code-style/kotlin/functions.md` — KT-FUN-7, KT-FUN-8 в конце файла
