@@ -133,7 +133,7 @@
   - [x] Задача 3: `pr.md`
   - [x] Задача 4: `done.md`
   - [x] Задача 5: `final.md`
-  - [ ] Задача 6: `stage.md` и `new.md`
+  - [x] Задача 6: `stage.md` и `new.md`
   - [ ] Задача 7: `commit.md`
   - [ ] Задача 8: `groomed.md` и `plan.md`
   - [ ] Задача 9: `setup.md`
@@ -311,9 +311,9 @@
 - Создать: `docs/commands/stage.md`, `docs/commands/new.md`
 - Источник: `task/command/StageCommand.kt`, `NewCommand.kt`; `Board.kt:15–76`
 
-- [ ] 1. Проверка: `grep -o -F -e 'пусты разделы' docs/commands/stage.md | sort -u | wc -l` → `1`; `grep -o -F -e 'нет связанной доски' -e 'несколько связанных досок' -e 'не на доске' -e 'на нескольких досках' docs/commands/new.md | sort -u | wc -l` → `4`
-- [ ] 2. Запустить обе проверки — падают: `No such file or directory`
-- [ ] 3. Написать файлы по шаблону:
+- [x] 1. Проверка: `grep -o -F -e 'пусты разделы' docs/commands/stage.md | sort -u | wc -l` → `1`; `grep -o -F -e 'нет связанной доски' -e 'несколько связанных досок' -e 'не на доске' -e 'на нескольких досках' docs/commands/new.md | sort -u | wc -l` → `4`
+- [x] 2. Запустить обе проверки — падают: `No such file or directory`
+- [x] 3. Написать файлы по шаблону:
   - `stage.md`: заголовок `# task stage`; использование `task stage create --title «…» --body-file <файл> [--due ГГГГ-ММ-ДД]`; «Когда звать» — веха этапа по шаблону `templates/github/stage.md`, раздел «Подкоманды» с одной строкой `create`; «Отказы»:
 
   | Текст | Причина | Что делать |
@@ -330,8 +330,8 @@
   | `#<N> на нескольких досках` | новая задача попала на несколько досок | убрать со всех досок, кроме доски репозитория |
 
   Строку `#<N> не на доске` сверить с `Board.add` (`Board.kt:30–50`): отказ — только если POST прошёл без сбоя.
-- [ ] 4. Запустить обе проверки — `1` и `4`
-- [ ] 5. Коммит
+- [x] 4. Запустить обе проверки — `1` и `4`
+- [x] 5. Коммит
 
 ### Задача 7: `commit.md` — отказы `task commit`
 - Создать: `docs/commands/commit.md`
