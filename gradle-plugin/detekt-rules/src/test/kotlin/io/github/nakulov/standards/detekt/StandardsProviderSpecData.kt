@@ -11,5 +11,6 @@ fun makeStandardsRuleNames(): Set<RuleName> {
     return setOf(
         RuleName(value = "NamedLiteralArgument"),
         RuleName(value = "NoImplicitIt"),
+        RuleName(value = "OneClassPerFile"),
     )
 }
