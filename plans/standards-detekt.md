@@ -132,9 +132,9 @@
   - [x] Задача 4: `OneClassPerFile`
   - [x] Приёмка
 - PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
-  - [ ] Задача 5: `BehaviorSpecOnly`
-  - [ ] Задача 6: `SpecDataContent`
-  - [ ] Приёмка
+  - [x] Задача 5: `BehaviorSpecOnly`
+  - [x] Задача 6: `SpecDataContent`
+  - [x] Приёмка
 - PR 4: Плагин `standards.kotlin` подключает detekt стандарта
   - [ ] Задача 7: Плагин с detekt, конфигом и своими правилами
   - [ ] Приёмка
@@ -803,7 +803,7 @@
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt`
 - Изменить: `docs/testing/kotlin/kotest-kit.md:8` — «Проверка»
 
-- [ ] 1. Падающий тест: `FunSpec` — находка; `BehaviorSpec` с полным именем и класс-не-спека — нет.
+- [x] 1. Падающий тест: `FunSpec` — находка; `BehaviorSpec` с полным именем и класс-не-спека — нет.
   ```kotlin
   // BehaviorSpecOnlySpecData.kt
   package io.github.nakulov.standards.detekt
@@ -849,8 +849,8 @@
   })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "BehaviorSpecOnly"),`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*BehaviorSpecOnlySpec*'` — падает: `Unresolved reference 'BehaviorSpecOnly'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*BehaviorSpecOnlySpec*'` — падает: `Unresolved reference 'BehaviorSpecOnly'`
+- [x] 3. Минимальный код:
   ```kotlin
   // FindSpecSuperType.kt
   package io.github.nakulov.standards.detekt
@@ -907,15 +907,15 @@
   `docs/testing/kotlin/kotest-kit.md:8`:
   - было: `Проверка: ревью`
   - стало: `Проверка: detekt \`BehaviorSpecOnly\` (своё правило из engineering-standards)`
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест, код и строка стандарта вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест, код и строка стандарта вместе
 
 ### Задача 6: `SpecDataContent` — KT-TEST-2, KT-TEST-3, KT-TEST-5
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/SpecDataContent.kt`
 - Создать: `…/detekt/SpecDataContentSpec.kt`, `SpecDataContentSpecData.kt`
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt`
 
-- [ ] 1. Падающий тест: в `*SpecData.kt` — `val` без `const`, функция без `make`, `makeup` (не `make` + заглавная), класс-спека; правильный файл данных (константа, `typealias`, data-класс, приватный `make…`) и обычный файл — без находок.
+- [x] 1. Падающий тест: в `*SpecData.kt` — `val` без `const`, функция без `make`, `makeup` (не `make` + заглавная), класс-спека; правильный файл данных (константа, `typealias`, data-класс, приватный `make…`) и обычный файл — без находок.
   ```kotlin
   // SpecDataContentSpecData.kt
   package io.github.nakulov.standards.detekt
@@ -1000,8 +1000,8 @@
   })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "SpecDataContent"),`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*SpecDataContentSpec*'` — падает: `Unresolved reference 'SpecDataContent'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*SpecDataContentSpec*'` — падает: `Unresolved reference 'SpecDataContent'`
+- [x] 3. Минимальный код:
   ```kotlin
   // SpecDataContent.kt
   package io.github.nakulov.standards.detekt
@@ -1077,13 +1077,13 @@
   }
   ```
   В `StandardsProvider.instance()` — добавить `{ config -> SpecDataContent(config) },`.
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Набор `standards` — 5 правил, `StandardsProviderSpec` зелёный
-- [ ] Крайние случаи: полное имя `BehaviorSpec`, приватный `make…`, `makeup`, `typealias` и data-класс в файле данных, обычный файл
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
+- [x] Набор `standards` — 5 правил, `StandardsProviderSpec` зелёный
+- [x] Крайние случаи: полное имя `BehaviorSpec`, приватный `make…`, `makeup`, `typealias` и data-класс в файле данных, обычный файл
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 4: Плагин `standards.kotlin` подключает detekt стандарта
 **Объём:** `gradle-plugin/settings.gradle.kts`, модуль `conventions` (сборка, плагин, `detekt.yml`, спека, данные, `FindFailedCheckLines.kt`), проект-образец из 3 файлов; ≈ 10 файлов
