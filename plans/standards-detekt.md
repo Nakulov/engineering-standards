@@ -128,9 +128,9 @@
   - [x] Задача 2: `NamedLiteralArgument`
   - [x] Приёмка
 - PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
-  - [ ] Задача 3: `NoImplicitIt`
-  - [ ] Задача 4: `OneClassPerFile`
-  - [ ] Приёмка
+  - [x] Задача 3: `NoImplicitIt`
+  - [x] Задача 4: `OneClassPerFile`
+  - [x] Приёмка
 - PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
   - [ ] Задача 5: `BehaviorSpecOnly`
   - [ ] Задача 6: `SpecDataContent`
@@ -537,7 +537,7 @@
 - Создать: `…/detekt/NoImplicitItSpec.kt`, `NoImplicitItSpecData.kt`
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt` — правило в наборе
 
-- [ ] 1. Падающий тест: неявный `it`, `it` во вложенной лямбде, именованный параметр и `by lazy { }` без `it`.
+- [x] 1. Падающий тест: неявный `it`, `it` во вложенной лямбде, именованный параметр и `by lazy { }` без `it`.
   ```kotlin
   // FindLintLinesInFile.kt
   package io.github.nakulov.standards.detekt
@@ -616,8 +616,8 @@
   })
   ```
   В `StandardsProviderSpecData.makeStandardsRuleNames()` — добавить `RuleName(value = "NoImplicitIt"),` после `NamedLiteralArgument`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NoImplicitItSpec*'` — падает: `Unresolved reference 'NoImplicitIt'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NoImplicitItSpec*'` — падает: `Unresolved reference 'NoImplicitIt'`
+- [x] 3. Минимальный код:
   ```kotlin
   // NoImplicitIt.kt
   package io.github.nakulov.standards.detekt
@@ -661,8 +661,8 @@
   }
   ```
   В `StandardsProvider.instance()` — добавить `{ config -> NoImplicitIt(config) },` после `NamedLiteralArgument`.
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 4: `OneClassPerFile` — KT-NAME-3
 - Создать: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/OneClassPerFile.kt`
@@ -670,7 +670,7 @@
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt`
 - Изменить: `docs/code-style/kotlin/naming.md:35` — «Проверка»
 
-- [ ] 1. Падающий тест: три класса в файле, наследник `sealed` рядом, а не внутри (стандарт: `naming.md:36`), вложенные наследники `sealed` и приватный вложенный класс не считаются.
+- [x] 1. Падающий тест: три класса в файле, наследник `sealed` рядом, а не внутри (стандарт: `naming.md:36`), вложенные наследники `sealed` и приватный вложенный класс не считаются.
   ```kotlin
   // OneClassPerFileSpecData.kt
   package io.github.nakulov.standards.detekt
@@ -743,8 +743,8 @@
   })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "OneClassPerFile"),`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*OneClassPerFileSpec*'` — падает: `Unresolved reference 'OneClassPerFile'`
-- [ ] 3. Минимальный код (сообщение без «или внутрь первого» — KT-CLASS-9 запрещает вложенные классы):
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*OneClassPerFileSpec*'` — падает: `Unresolved reference 'OneClassPerFile'`
+- [x] 3. Минимальный код (сообщение без «или внутрь первого» — KT-CLASS-9 запрещает вложенные классы):
   ```kotlin
   // OneClassPerFile.kt
   package io.github.nakulov.standards.detekt
@@ -785,13 +785,13 @@
   `docs/code-style/kotlin/naming.md:35`:
   - было: `Проверка: detekt \`MatchingDeclarationName\``
   - стало: `Проверка: detekt \`MatchingDeclarationName\` (имя файла), \`OneClassPerFile\` (своё правило: второй класс)`
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест, код и строка стандарта вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест, код и строка стандарта вместе
 
 ### Приёмка
-- [ ] Набор `standards` — 3 правила, `StandardsProviderSpec` зелёный
-- [ ] Крайние случаи: вложенная лямбда, `by lazy`, наследник `sealed` рядом и внутри, приватный вложенный класс
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
+- [x] Набор `standards` — 3 правила, `StandardsProviderSpec` зелёный
+- [x] Крайние случаи: вложенная лямбда, `by lazy`, наследник `sealed` рядом и внутри, приватный вложенный класс
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
 **Объём:** `FindSpecSuperType`, `BehaviorSpecOnly`, `SpecDataContent` с парами спека + данные, провайдер и его данные, `kotest-kit.md`; ≈ 10 файлов
