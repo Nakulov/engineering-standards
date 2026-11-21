@@ -118,7 +118,7 @@
 - PR 1: Сборка правил detekt с правилом KT-FUN-4
   - [x] Задача 1: Сборка `gradle-plugin/` и набор `standards`
   - [x] Задача 2: `NamedLiteralArgument`
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
   - [ ] Задача 3: `NoImplicitIt`
   - [ ] Задача 4: `OneClassPerFile`
@@ -520,9 +520,9 @@
 - [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
-- [ ] Набор `standards` с `NamedLiteralArgument` собирается, `./gradlew -p gradle-plugin :detekt-rules:test` → `BUILD SUCCESSFUL`
-- [ ] Крайние случаи: метод Java с комментарием и без, `vararg`, инфикс, аннотация, вызов конструктора супертипа
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check` и `./gradlew :scripts:test`
+- [x] Набор `standards` с `NamedLiteralArgument` собирается, `./gradlew -p gradle-plugin :detekt-rules:test` → `BUILD SUCCESSFUL`
+- [x] Крайние случаи: метод Java с комментарием и без, `vararg`, инфикс, аннотация, вызов конструктора супертипа
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check` и `./gradlew :scripts:test`
 
 ## PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
 **Объём:** `NoImplicitIt`, `OneClassPerFile` с парами спека + данные, провайдер и его данные, `naming.md`; ≈ 9 файлов
