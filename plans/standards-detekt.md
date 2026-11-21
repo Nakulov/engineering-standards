@@ -136,8 +136,8 @@
   - [x] Задача 6: `SpecDataContent`
   - [x] Приёмка
 - PR 4: Плагин `standards.kotlin` подключает detekt стандарта
-  - [ ] Задача 7: Плагин с detekt, конфигом и своими правилами
-  - [ ] Приёмка
+  - [x] Задача 7: Плагин с detekt, конфигом и своими правилами
+  - [x] Приёмка
 - PR 5: Плагин требует настроек проекта
   - [ ] Задача 8: Ошибки конфигурации `findMissingSetup`
   - [ ] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
@@ -1097,7 +1097,7 @@
 - Создать: `…/gradle/StandardsKotlinPluginSpec.kt`, `StandardsKotlinPluginSpecData.kt`
 - Создать: `gradle-plugin/conventions/src/test/fixtures/violation/settings.gradle.kts`, `build.gradle.kts`, `src/main/kotlin/sample/Names.kt`
 
-- [ ] 1. Падающий тест: в проекте-образце неявный `it` — `check` падает, находка с KT-FUN-6.
+- [x] 1. Падающий тест: в проекте-образце неявный `it` — `check` падает, находка с KT-FUN-6.
   `gradle-plugin/settings.gradle.kts`:
   - было: `include("detekt-rules")`
   - стало: `include("detekt-rules", "conventions")`
@@ -1237,8 +1237,8 @@
       }
   })
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test` — падает: в выводе образца `Could not find implementation class 'io.github.nakulov.standards.gradle.StandardsKotlinPlugin'` (класса ещё нет; дескриптор плагина `gradlePlugin { }` уже есть)
-- [ ] 3. Минимальный код — плагин и конфиг:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :conventions:test` — падает: в выводе образца `Could not find implementation class 'io.github.nakulov.standards.gradle.StandardsKotlinPlugin'` (класса ещё нет; дескриптор плагина `gradlePlugin { }` уже есть)
+- [x] 3. Минимальный код — плагин и конфиг:
   ```kotlin
   // StandardsKotlinPlugin.kt
   package io.github.nakulov.standards.gradle
@@ -1405,7 +1405,7 @@
 
   ktlint:
     ClassSignature: # KT-FMT-1: каждый параметр конструктора с новой строки, даже один; спеки — `class … : BehaviorSpec({` одной строкой
-      forceMultilineWhenParameterCountGreaterOrEqualThan: 1
+      forceMultilineWhenParameterCountGreaterOrEqualThan: '1'
       excludes: ['**/test/**']
     CommentWrapping: # KT-FUN-4: комментарий /* имя = */ перед литералом у аргумента Java-метода
       active: false
@@ -1428,15 +1428,15 @@
       active: true
       includes: ['**/test/**']
   ```
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :conventions:test` — зелёный. Строка находки разошлась только форматом консольного отчёта detekt 2.0 (порядок пути, `[NoImplicitIt]`) — поправить ожидание в `makeViolationFindings()` по выводу, ID и текст сообщения не менять; строка повторяется дважды — ожидание с двумя строками, не фильтр в `FindFailedCheckLines.kt`. Нет находки — разобраться (jar правил, конфиг) до коммита; ошибка «правила detekt не в jar» — запасной вариант из «Обзора решения», ⚠️ и вопрос пользователю.
+- [x] 4. Запустить `./gradlew -p gradle-plugin :conventions:test` — зелёный. Строка находки разошлась только форматом консольного отчёта detekt 2.0 (порядок пути, `[NoImplicitIt]`) — поправить ожидание в `makeViolationFindings()` по выводу, ID и текст сообщения не менять; строка повторяется дважды — ожидание с двумя строками, не фильтр в `FindFailedCheckLines.kt`. Нет находки — разобраться (jar правил, конфиг) до коммита; ошибка «правила detekt не в jar» — запасной вариант из «Обзора решения», ⚠️ и вопрос пользователю.
   Опыт без коммита (настройка `EmptyFunctionBlock`, KT-DOC-6): временно добавить в образец `src/main/kotlin/sample/Listener.kt` — `internal interface Listener {\n\n    fun onShow() {\n        // По умолчанию делать нечего.\n    }\n}` и `src/main/kotlin/sample/QuietListener.kt` — `internal class QuietListener : Listener {\n\n    override fun onShow() {\n    }\n}`, запустить тест — в выводе нет `EmptyFunctionBlock`; удалить оба файла. Есть находка — ⚠️ и вопрос пользователю.
   Опыт без коммита (правила подключаются из `includeBuild`, до задачи 11): временно в корневом `settings.gradle.kts` — `includeBuild("gradle-plugin")` первой строкой в `pluginManagement { }`, в `scripts/build.gradle.kts` — `id("standards.kotlin")` в `plugins { }`; запустить `./gradlew :scripts:detektMain` — нет ошибки «правила detekt не в jar» и «нет на classpath плагина», в выводе отчёт detekt (находки и падение допустимы, бейзлайна ещё нет); вернуть оба файла (`git -C /Users/nakulov/projects/engineering-standards diff --stat` — пусто вне `gradle-plugin/`). Ошибка про jar — запасной вариант из «Обзора решения», ⚠️ и вопрос пользователю.
-- [ ] 5. Коммит — тест, плагин, конфиг и образец вместе
+- [x] 5. Коммит — тест, плагин, конфиг и образец вместе
 
 ### Приёмка
-- [ ] Плагин подключает detekt стандарта: нарушение `NoImplicitIt` роняет `check` с KT-FUN-6
-- [ ] Крайние случаи: пустой `override` и реализация по умолчанию в интерфейсе не находка (опыт шага 4); без бейзлайна detekt работает; `ClassSignature` — опыт без коммита: в образец `violation` временно `internal class Holder(val name: String)` в `src/main/kotlin/sample/Holder.kt` → находка `ClassSignature`; удалить файл. Нет находки или находки на коде по стандарту — ⚠️ и вопрос пользователю
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
+- [x] Плагин подключает detekt стандарта: нарушение `NoImplicitIt` роняет `check` с KT-FUN-6
+- [x] Крайние случаи: пустой `override` и реализация по умолчанию в интерфейсе не находка (опыт шага 4); без бейзлайна detekt работает; `ClassSignature` — опыт без коммита: в образец `violation` временно `internal class Holder(val name: String)` в `src/main/kotlin/sample/Holder.kt` → находка `ClassSignature`; удалить файл. Нет находки или находки на коде по стандарту — ⚠️ и вопрос пользователю
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 5: Плагин требует настроек проекта
 **Объём:** `FindMissingSetup.kt` с парой спека + данные, `StandardsExtension.kt`, плагин, `StandardsKotlinPluginSpec.kt` и данные, `fixtures/violation/build.gradle.kts`, образец `no-bound` (2 файла); ≈ 10 файлов
