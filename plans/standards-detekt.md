@@ -139,7 +139,7 @@
   - [x] Задача 7: Плагин с detekt, конфигом и своими правилами
   - [x] Приёмка
 - PR 5: Плагин требует настроек проекта
-  - [ ] Задача 8: Ошибки конфигурации `findMissingSetup`
+  - [x] Задача 8: Ошибки конфигурации `findMissingSetup`
   - [ ] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
   - [ ] Приёмка
 - PR 6: Плагин проверяет покрытие по порогу проекта
@@ -1445,7 +1445,7 @@
 - Создать: `gradle-plugin/conventions/src/main/kotlin/io/github/nakulov/standards/gradle/FindMissingSetup.kt`
 - Создать: `gradle-plugin/conventions/src/test/kotlin/io/github/nakulov/standards/gradle/FindMissingSetupSpec.kt`, `FindMissingSetupSpecData.kt`
 
-- [ ] 1. Падающий тест: нет `kotlin("jvm")` — текст ошибки; нет порога — текст ошибки; всё задано — `null`.
+- [x] 1. Падающий тест: нет `kotlin("jvm")` — текст ошибки; нет порога — текст ошибки; всё задано — `null`.
   ```kotlin
   // FindMissingSetupSpecData.kt
   package io.github.nakulov.standards.gradle
@@ -1476,8 +1476,8 @@
       }
   })
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*FindMissingSetupSpec*'` — падает: `Unresolved reference 'findMissingSetup'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*FindMissingSetupSpec*'` — падает: `Unresolved reference 'findMissingSetup'`
+- [x] 3. Минимальный код:
   ```kotlin
   // FindMissingSetup.kt
   package io.github.nakulov.standards.gradle
@@ -1493,8 +1493,8 @@
       return null
   }
   ```
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*FindMissingSetupSpec*'` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*FindMissingSetupSpec*'` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
 - Создать: `gradle-plugin/conventions/src/main/kotlin/io/github/nakulov/standards/gradle/StandardsExtension.kt`
