@@ -1,0 +1,92 @@
+# Конфиг detekt стандарта — поверх конфига по умолчанию (buildUponDefaultConfig). Каждое отклонение — с ID правила
+# стандарта (docs/code-style/kotlin, docs/testing/kotlin). Проект сужает правила своим файлом поверх (detekt.config.from).
+# Тесты проверяются наравне с кодом: у активных правил сняты исключения '**/test/**' конфига по умолчанию;
+# исключения не по тестам ('**/*.kts') оставлены.
+
+complexity:
+  LargeClass: # KT-CLASS-10
+    allowedLines: 250
+  LongMethod: # KT-FUN-7
+    allowedLines: 40
+  NamedArguments: # KT-FUN-5
+    active: true
+  NestedBlockDepth: # KT-FUN-7
+    allowedDepth: 2
+  TooManyFunctions: # исключение '**/test/**' оставлено: KT-TEST-4 — в файле данных make… на каждый контекст
+    active: true
+
+empty-blocks:
+  EmptyFunctionBlock: # KT-DOC-6: пустой override и реализация по умолчанию в интерфейсе разрешены
+    ignoreOverridden: true
+
+exceptions:
+  InstanceOfCheckForException:
+    excludes: []
+  ThrowingExceptionsWithoutMessageOrCause:
+    excludes: []
+  TooGenericExceptionCaught:
+    excludes: []
+
+naming:
+  FunctionNaming:
+    excludes: []
+
+performance:
+  ForEachOnRange:
+    excludes: []
+  SpreadOperator:
+    excludes: []
+
+potential-bugs:
+  UnsafeCallOnNullableType:
+    excludes: []
+
+style:
+  ForbiddenComment: # KT-DOC-6
+    comments:
+      - reason: 'KT-DOC-6: заглушка запрещена — допишите код сейчас или заведите задачу.'
+        value: 'TODO'
+      - reason: 'KT-DOC-6: заглушка запрещена — исправьте сейчас или заведите задачу.'
+        value: 'FIXME'
+  ForbiddenMethodCall: # KT-FMT-7, KT-DOC-6; let и takeIf разрешены
+    active: true
+    methods:
+      - reason: 'KT-FMT-7: with запрещён — обращайтесь к получателю по имени.'
+        value: 'kotlin.with'
+      - reason: 'KT-FMT-7: also запрещён — отдельная строка с именованной переменной.'
+        value: 'kotlin.also'
+      - reason: 'KT-FMT-7: run запрещён — блок кода обычной функцией или локальной переменной.'
+        value: 'kotlin.run'
+      - reason: 'KT-FMT-7: apply запрещён — настройка через параметры конструктора или именованную переменную.'
+        value: 'kotlin.apply'
+      - reason: 'KT-DOC-6: заглушка TODO() запрещена — допишите код или заведите задачу.'
+        value: 'kotlin.TODO'
+  MagicNumber:
+    excludes: ['**/*.kts']
+  ReturnCount: # KT-FUN-8: ранний выход не считается
+    excludeGuardClauses: true
+
+ktlint:
+  ClassSignature: # KT-FMT-1: каждый параметр конструктора с новой строки, даже один; спеки — `class … : BehaviorSpec({` одной строкой
+    forceMultilineWhenParameterCountGreaterOrEqualThan: '1'
+    excludes: ['**/test/**']
+  CommentWrapping: # KT-FUN-4: комментарий /* имя = */ перед литералом у аргумента Java-метода
+    active: false
+  FunctionExpressionBody: # KT-FMT-6: тело-выражение разрешено, но не обязательно
+    active: false
+
+# Свои правила стандарта: модуль gradle-plugin/detekt-rules.
+standards:
+  active: true
+  NamedLiteralArgument: # KT-FUN-4
+    active: true
+  NoImplicitIt: # KT-FUN-6
+    active: true
+  OneClassPerFile: # KT-NAME-3
+    active: true
+  BehaviorSpecOnly: # KT-KIT-1, только тесты
+    active: true
+    includes: ['**/test/**']
+  SpecDataContent: # KT-TEST-2, KT-TEST-3, KT-TEST-5, только тесты
+    active: true
+    includes: ['**/test/**']

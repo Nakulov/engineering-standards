@@ -32,4 +32,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "gradle-plugin"
-include("detekt-rules")
+include("detekt-rules", "conventions")

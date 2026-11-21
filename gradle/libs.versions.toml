@@ -7,6 +7,8 @@ kotestkit = "2.2.0"
 [libraries]
 detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detekt" }
 detekt-test = { module = "dev.detekt:detekt-test", version.ref = "detekt" }
+detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotestkit = { module = "io.github.nakulov:kotestkit", version.ref = "kotestkit" }
 
 [plugins]
