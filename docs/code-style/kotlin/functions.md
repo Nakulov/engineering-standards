@@ -152,3 +152,57 @@ names.map { name -> name.uppercase() }
 // Запрещено
 names.map { it.uppercase() }
 ```
+
+### KT-FUN-7. Функция — не больше 40 строк и не больше двух уровней вложенных блоков
+Почему: осознанное ограничение ради чистоты и читаемости — функция читается целиком, без прокрутки; третий уровень вложенности держат в голове, его выносят в функцию с именем.
+Проверка: detekt `LongMethod`, `NestedBlockDepth`
+
+```kotlin
+// Запрещено — третий уровень вложенности
+fun paid(orders: List<Order>): List<Order> {
+    val result = mutableListOf<Order>()
+    for (order in orders) {
+        if (order.isPaid) {
+            if (order.total > 0) {
+                result.add(order)
+            }
+        }
+    }
+    return result
+}
+
+// Разрешено
+fun paid(orders: List<Order>): List<Order> {
+    return orders.filter { order -> order.isPaid && order.total > 0 }
+}
+```
+
+### KT-FUN-8. Не больше двух `return`, ранний выход не считается
+Почему: осознанное ограничение ради чистоты и читаемости — выход из функции виден в двух местах: в начале (ранний выход) и в конце; return посреди логики прячет ветки.
+Проверка: detekt `ReturnCount`
+
+```kotlin
+// Разрешено — ранний выход в начале не считается
+fun discount(order: Order?): Int {
+    if (order == null) {
+        return 0
+    }
+    if (order.isVip) {
+        return VIP_DISCOUNT
+    }
+    return BASE_DISCOUNT
+}
+
+// Запрещено — три return посреди логики
+fun discount(order: Order): Int {
+    val total = order.total
+    if (total > LARGE) {
+        return LARGE_DISCOUNT
+    }
+    val vip = order.isVip
+    if (vip) {
+        return VIP_DISCOUNT
+    }
+    return BASE_DISCOUNT
+}
+```
