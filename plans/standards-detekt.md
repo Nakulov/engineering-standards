@@ -137,7 +137,7 @@
   - [x] Приёмка
 - PR 4: Плагин `standards.kotlin` подключает detekt стандарта
   - [x] Задача 7: Плагин с detekt, конфигом и своими правилами
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 5: Плагин требует настроек проекта
   - [ ] Задача 8: Ошибки конфигурации `findMissingSetup`
   - [ ] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
@@ -1434,9 +1434,9 @@
 - [x] 5. Коммит — тест, плагин, конфиг и образец вместе
 
 ### Приёмка
-- [ ] Плагин подключает detekt стандарта: нарушение `NoImplicitIt` роняет `check` с KT-FUN-6
-- [ ] Крайние случаи: пустой `override` и реализация по умолчанию в интерфейсе не находка (опыт шага 4); без бейзлайна detekt работает; `ClassSignature` — опыт без коммита: в образец `violation` временно `internal class Holder(val name: String)` в `src/main/kotlin/sample/Holder.kt` → находка `ClassSignature`; удалить файл. Нет находки или находки на коде по стандарту — ⚠️ и вопрос пользователю
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
+- [x] Плагин подключает detekt стандарта: нарушение `NoImplicitIt` роняет `check` с KT-FUN-6
+- [x] Крайние случаи: пустой `override` и реализация по умолчанию в интерфейсе не находка (опыт шага 4); без бейзлайна detekt работает; `ClassSignature` — опыт без коммита: в образец `violation` временно `internal class Holder(val name: String)` в `src/main/kotlin/sample/Holder.kt` → находка `ClassSignature`; удалить файл. Нет находки или находки на коде по стандарту — ⚠️ и вопрос пользователю
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check`
 
 ## PR 5: Плагин требует настроек проекта
 **Объём:** `FindMissingSetup.kt` с парой спека + данные, `StandardsExtension.kt`, плагин, `StandardsKotlinPluginSpec.kt` и данные, `fixtures/violation/build.gradle.kts`, образец `no-bound` (2 файла); ≈ 10 файлов
