@@ -22,3 +22,13 @@ trim_trailing_whitespace = false
 ij_kotlin_name_count_to_use_star_import = 2147483647
 ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
 ij_kotlin_packages_to_use_import_on_demand = unset
+# Стиль ktlint — как в detekt стандарта: ktlint_official расходится с KT-FMT-1 и KT-FMT-2.
+ktlint_code_style = intellij_idea
+# Тело класса начинается с пустой строки (KT-FMT-3): правило ktlint из стиля ktlint_official требует обратного.
+ktlint_standard_no-empty-first-line-in-class-body = disabled
+# Каждый параметр конструктора — с новой строки, даже один (KT-FMT-1).
+ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 1
+
+# Спека — `class … : BehaviorSpec({` одной строкой: class-signature переносит супертип при многострочном аргументе.
+[**/test/**.{kt,kts}]
+ktlint_standard_class-signature = disabled
