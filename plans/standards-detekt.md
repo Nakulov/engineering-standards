@@ -117,7 +117,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: Сборка правил detekt с правилом KT-FUN-4
   - [x] Задача 1: Сборка `gradle-plugin/` и набор `standards`
-  - [ ] Задача 2: `NamedLiteralArgument`
+  - [x] Задача 2: `NamedLiteralArgument`
   - [ ] Приёмка
 - PR 2: Базовые правила KT-FUN-6 и KT-NAME-3
   - [ ] Задача 3: `NoImplicitIt`
@@ -281,7 +281,7 @@
 - Создать: `…/detekt/NamedLiteralArgumentSpec.kt`, `NamedLiteralArgumentSpecData.kt` — случаи
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt` — правило в наборе
 
-- [ ] 1. Падающий тест: литерал без имени (Kotlin и Java), с именем, исключения (`vararg`, инфикс, аннотация); в `makeStandardsRuleNames()` — `RuleName(value = "NamedLiteralArgument"),`.
+- [x] 1. Падающий тест: литерал без имени (Kotlin и Java), с именем, исключения (`vararg`, инфикс, аннотация); в `makeStandardsRuleNames()` — `RuleName(value = "NamedLiteralArgument"),`.
   ```kotlin
   // RuleLint.kt
   package io.github.nakulov.standards.detekt
@@ -408,8 +408,8 @@
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NamedLiteralArgumentSpec*'` — падает: `Unresolved reference 'NamedLiteralArgument'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*NamedLiteralArgumentSpec*'` — падает: `Unresolved reference 'NamedLiteralArgument'`
+- [x] 3. Минимальный код:
   ```kotlin
   // NamedLiteralArgument.kt
   package io.github.nakulov.standards.detekt
@@ -516,8 +516,8 @@
   }
   ```
   В `StandardsProvider.instance()` — `{ config -> NamedLiteralArgument(config = config) },` в `listOf(`.
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный (`NamedLiteralArgumentSpec`, `StandardsProviderSpec`); столбец или строка находки разошлись — сверить отступ образца (код с 2-й строки), не менять правило
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный (`NamedLiteralArgumentSpec`, `StandardsProviderSpec`); столбец или строка находки разошлись — сверить отступ образца (код с 2-й строки), не менять правило
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Набор `standards` с `NamedLiteralArgument` собирается, `./gradlew -p gradle-plugin :detekt-rules:test` → `BUILD SUCCESSFUL`

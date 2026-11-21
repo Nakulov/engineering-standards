@@ -11,5 +11,6 @@ fun makeStandardsRuleSetId(): RuleSetId {
 /** Правила набора — по имени класса, как они включаются в `detekt.yml`. */
 fun makeStandardsRuleNames(): Set<RuleName> {
     return setOf(
+        RuleName(value = "NamedLiteralArgument"),
     )
 }

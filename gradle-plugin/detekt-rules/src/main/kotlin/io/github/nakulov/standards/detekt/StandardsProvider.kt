@@ -13,6 +13,7 @@ class StandardsProvider : RuleSetProvider {
         return RuleSet(
             ruleSetId,
             listOf(
+                { config -> NamedLiteralArgument(config = config) },
             ),
         )
     }
