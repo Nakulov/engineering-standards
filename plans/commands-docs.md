@@ -142,7 +142,7 @@
   - [x] Задача 10: `worktree` и `groom`
   - [x] Задача 11: `execute`
   - [x] Задача 12: `decompose`
-  - [ ] Приёмка
+  - [x] Приёмка
 - `task final 34` — итоговый PR `long/34-commands-docs` → `dev`.
 
 **После завершения** (внешнее, без чекбоксов):
@@ -499,12 +499,12 @@
 - [x] 5. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `grep -c 'docs/commands/' skills/*/SKILL.md` → worktree 2, groom 2, execute 5, decompose 3
-- [ ] Пересказа нет: `grep -n "перематывает\|кладут\|другой статус не трогает\|Команда удаляет\|команда удаляет\|убирает сама команда\|Команда создаёт\|закрыта, эпик" skills/groom/SKILL.md skills/execute/SKILL.md skills/decompose/SKILL.md skills/worktree/SKILL.md` → пусто (до PR 2 — 8 строк: worktree:22, execute:20, :36, :38, :91, :112, groom:35, decompose:190)
-- [ ] Блоки меток не тронуты: `./gradlew :scripts:test --tests '*MarkersSpec*'` → `BUILD SUCCESSFUL`
-- [ ] `agents/plan-reviewer.md` и `scripts/` не тронуты: `git diff --stat origin/dev -- scripts/ agents/` → пусто
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам
+- [x] Что даёт этот PR — проверено: `grep -c 'docs/commands/' skills/*/SKILL.md` → worktree 2, groom 2, execute 5, decompose 3
+- [x] Пересказа нет: `grep -n "перематывает\|кладут\|другой статус не трогает\|Команда удаляет\|команда удаляет\|убирает сама команда\|Команда создаёт\|закрыта, эпик" skills/groom/SKILL.md skills/execute/SKILL.md skills/decompose/SKILL.md skills/worktree/SKILL.md` → пусто (до PR 2 — 8 строк: worktree:22, execute:20, :36, :38, :91, :112, groom:35, decompose:190)
+- [x] Блоки меток не тронуты: `./gradlew :scripts:test --tests '*MarkersSpec*'` → `BUILD SUCCESSFUL`
+- [x] `agents/plan-reviewer.md` и `scripts/` не тронуты: `git diff --stat origin/dev -- scripts/ agents/` → пусто
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам
 
 ## Открыто
 - нет
