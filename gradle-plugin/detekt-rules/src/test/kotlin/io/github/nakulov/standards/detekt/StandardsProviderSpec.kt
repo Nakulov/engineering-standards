@@ -6,5 +6,9 @@ import io.kotest.core.spec.style.BehaviorSpec
 class StandardsProviderSpec : BehaviorSpec({
     shouldReturnTest(makeStandardsRuleSetId()) { StandardsProvider().ruleSetId }
 
-    shouldReturnTest(makeStandardsRuleNames()) { StandardsProvider().instance().rules.keys }
+    shouldReturnTest(makeStandardsRuleNames()) {
+        StandardsProvider().instance()
+            .rules
+            .keys
+    }
 })

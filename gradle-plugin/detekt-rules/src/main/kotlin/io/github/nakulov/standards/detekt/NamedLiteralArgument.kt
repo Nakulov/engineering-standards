@@ -43,17 +43,20 @@ internal class NamedLiteralArgument(
     }
 
     private fun reportUnnamedLiterals(call: KtCallElement) {
-        val literals = call.valueArguments.filterIsInstance<KtValueArgument>()
+        val literals = call.valueArguments
+            .filterIsInstance<KtValueArgument>()
             .filter { argument -> isUnnamedLiteral(argument) }
         if (literals.isEmpty()) return
         analyze(call) {
             val functionCall = call.resolveToCall()
                 ?.singleFunctionCallOrNull() ?: return@analyze
             // У метода Java имена параметров не стабильны: вместо имени — комментарий /* имя = */.
-            val hasStableNames = functionCall.symbol.hasStableParameterNames
+            val hasStableNames = functionCall.symbol
+                .hasStableParameterNames
             val nonVarargLiterals = literals.filter { argument ->
                 val parameter = functionCall.valueArgumentMapping[argument.getArgumentExpression()]
-                parameter?.symbol?.isVararg == false
+                parameter?.symbol
+                    ?.isVararg == false
             }
             nonVarargLiterals.forEach { argument -> reportArgument(argument, hasStableNames) }
         }

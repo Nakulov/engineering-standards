@@ -5,12 +5,15 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-    plugins {
-        kotlin("jvm") version "2.4.21"
-    }
 }
 
 dependencyResolutionManagement {
+    // Версии — в общем каталоге репозитория: gradle-plugin/ — отдельная сборка, сама его не видит.
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -19,8 +22,10 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/Nakulov/KotestKit")
             credentials {
-                username = providers.gradleProperty("gpr.user").orNull
-                password = providers.gradleProperty("gpr.key").orNull
+                username = providers.gradleProperty("gpr.user")
+                    .orNull
+                password = providers.gradleProperty("gpr.key")
+                    .orNull
             }
         }
     }
