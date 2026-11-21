@@ -136,8 +136,8 @@
   - [x] Задача 6: `stage.md` и `new.md`
   - [x] Задача 7: `commit.md`
   - [x] Задача 8: `groomed.md` и `plan.md`
-  - [ ] Задача 9: `setup.md`
-  - [ ] Приёмка
+  - [x] Задача 9: `setup.md`
+  - [x] Приёмка
 - PR 2: скиллы ссылаются на справочник вместо пересказа
   - [ ] Задача 10: `worktree` и `groom`
   - [ ] Задача 11: `execute`
@@ -404,9 +404,9 @@
 - Создать: `docs/commands/setup.md`
 - Источник: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/Setup.kt`, `SetupMain.kt`, `Environment.kt`; `setup --help`
 
-- [ ] 1. Проверка: `grep -o -F -e 'у токена gh нет прав' -e 'нет прав администратора' -e '--check' -e '--confirm' docs/commands/setup.md | sort -u | wc -l` → `4`
-- [ ] 2. Запустить проверку — падает: `No such file or directory`
-- [ ] 3. Написать файл по шаблону, заголовок `# setup`:
+- [x] 1. Проверка: `grep -o -F -e 'у токена gh нет прав' -e 'нет прав администратора' -e '--check' -e '--confirm' docs/commands/setup.md | sort -u | wc -l` → `4`
+- [x] 2. Запустить проверку — падает: `No such file or directory`
+- [x] 3. Написать файл по шаблону, заголовок `# setup`:
   - использование: три строки из `setup --help` (`setup`, `setup --confirm`, `setup --check`);
   - «Когда звать»: настроить репозиторий текущей папки по стандарту; без опций — применить недостающее, удаляющие шаги только печатаются; `--confirm` — и удаляющие; `--check` — только сверить;
   - раздел «Коды выхода»: `--check`: `0` — соответствует, `1` — отклонения; остальное — как в [README.md](README.md) (сверить по `Setup.kt`: отказ — `1`, сбой — `2`);
@@ -417,17 +417,17 @@
   |-------|---------|------------|
   | `у токена gh нет прав <права> — выполните: gh auth refresh -s <право> …` | у токена `gh` нет прав `repo` или `project` | — |
   | `нет прав администратора репозитория — настройки меняет его владелец` | у пользователя нет прав admin | попросить владельца запустить `setup` |
-- [ ] 4. Запустить проверку — `4`
-- [ ] 5. Коммит
+- [x] 4. Запустить проверку — `4`
+- [x] 5. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `ls docs/commands` → 11 файлов: `README.md commit.md done.md final.md groomed.md new.md plan.md pr.md setup.md stage.md start.md`
-- [ ] Покрытие отказов: каждая строка `grep -rn "TaskError.Refusal(" scripts/src/main/kotlin/io/github/nakulov/standards/task` (39) сверена с таблицей «Отказы по командам» — строка в файле команды есть
-- [ ] Каждая команда из `scripts/task --help` и `scripts/setup --help` — строка в таблице `docs/commands/README.md`
-- [ ] Ссылки между файлами: `grep -o '](\([a-z-]*\.md\))' docs/commands/*.md` — все цели существуют в `docs/commands/`
-- [ ] `docs/commands/` не ссылается на `docs/workflow.md`: `grep -rn "workflow" docs/commands` → пусто
-- [ ] Код не тронут: `git diff --stat origin/dev -- scripts/` → пусто
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
+- [x] Что даёт этот PR — проверено: `ls docs/commands` → 11 файлов: `README.md commit.md done.md final.md groomed.md new.md plan.md pr.md setup.md stage.md start.md`
+- [x] Покрытие отказов: каждая строка `grep -rn "TaskError.Refusal(" scripts/src/main/kotlin/io/github/nakulov/standards/task` (39) сверена с таблицей «Отказы по командам» — строка в файле команды есть
+- [x] Каждая команда из `scripts/task --help` и `scripts/setup --help` — строка в таблице `docs/commands/README.md`
+- [x] Ссылки между файлами: `grep -o '](\([a-z-]*\.md\))' docs/commands/*.md` — все цели существуют в `docs/commands/`
+- [x] `docs/commands/` не ссылается на `docs/workflow.md`: `grep -rn "workflow" docs/commands` → пусто
+- [x] Код не тронут: `git diff --stat origin/dev -- scripts/` → пусто
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` → `BUILD SUCCESSFUL`
 
 ## PR 2: скиллы ссылаются на справочник вместо пересказа
 **Объём:** `skills/worktree/SKILL.md`, `skills/groom/SKILL.md`, `skills/execute/SKILL.md`, `skills/decompose/SKILL.md` — ≈ 4 файла
