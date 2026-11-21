@@ -1,7 +1,6 @@
 package io.github.nakulov.standards.detekt
 
-fun makeUnnamedLiteralCode(): String {
-    return """
+const val UNNAMED_LITERAL_CODE = """
 open class Base(
     val name: String,
 )
@@ -17,7 +16,27 @@ fun main() {
     repeat(-1) { }
 }
 """
+
+const val JAVA_LITERAL_CODE = """
+fun main() {
+    System.err.println("x")
+    System.err.println(/* p0 = */ "y")
 }
+"""
+
+const val ALLOWED_LITERAL_CODE = """
+fun greet(name: String, times: Int) {
+    println(message = name)
+}
+
+@Suppress("UNUSED")
+fun main() {
+    greet(name = "Ann", times = -1)
+    val list = listOf("a", "b")
+    val pair = "a" to 1
+    println(message = list + pair.first)
+}
+"""
 
 fun makeUnnamedLiteralFindings(): List<String> {
     return listOf(
@@ -31,33 +50,8 @@ fun makeUnnamedLiteralFindings(): List<String> {
     )
 }
 
-fun makeJavaLiteralCode(): String {
-    return """
-fun main() {
-    System.err.println("x")
-    System.err.println(/* p0 = */ "y")
-}
-"""
-}
-
 fun makeJavaLiteralFindings(): List<String> {
     return listOf(
         "3:24 KT-FUN-4. Литерал \"x\" без имени: добавьте комментарий /* имя = */ (метод Java).",
     )
-}
-
-fun makeAllowedLiteralCode(): String {
-    return """
-fun greet(name: String, times: Int) {
-    println(message = name)
-}
-
-@Suppress("UNUSED")
-fun main() {
-    greet(name = "Ann", times = -1)
-    val list = listOf("a", "b")
-    val pair = "a" to 1
-    println(message = list + pair.first)
-}
-"""
 }
