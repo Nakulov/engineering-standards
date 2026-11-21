@@ -22,67 +22,53 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 
 private const val RULE_ID = "KT-FUN-4"
 
-private val NAME_COMMENT = Regex(pattern = """/\*\s*\w+\s*=\s*\*/""")
-
 internal class NamedLiteralArgument(
     config: Config,
 ) : Rule(
-    config = config,
+    config,
     description = "$RULE_ID. Литерал в аргументе вызова — с именем параметра.",
 ),
     RequiresAnalysisApi {
 
+    private val nameComment = Regex(pattern = """/\*\s*\w+\s*=\s*\*/""")
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        reportUnnamedLiterals(call = expression)
+        reportUnnamedLiterals(expression)
     }
 
     override fun visitSuperTypeCallEntry(call: KtSuperTypeCallEntry) {
         super.visitSuperTypeCallEntry(call)
-        reportUnnamedLiterals(call = call)
+        reportUnnamedLiterals(call)
     }
 
     private fun reportUnnamedLiterals(call: KtCallElement) {
         val literals = call.valueArguments.filterIsInstance<KtValueArgument>()
-            .filter { argument -> isUnnamedLiteral(argument = argument) }
-        if (literals.isEmpty()) {
-            return
-        }
+            .filter { argument -> isUnnamedLiteral(argument) }
+        if (literals.isEmpty()) return
         analyze(call) {
             val functionCall = call.resolveToCall()
                 ?.singleFunctionCallOrNull() ?: return@analyze
             // У метода Java имена параметров не стабильны: вместо имени — комментарий /* имя = */.
             val hasStableNames = functionCall.symbol.hasStableParameterNames
             val nonVarargLiterals = literals.filter { argument ->
-                functionCall.valueArgumentMapping[argument.getArgumentExpression()]?.symbol?.isVararg == false
+                val parameter = functionCall.valueArgumentMapping[argument.getArgumentExpression()]
+                parameter?.symbol?.isVararg == false
             }
-            nonVarargLiterals.forEach { argument ->
-                reportArgument(argument = argument, hasStableNames = hasStableNames)
-            }
+            nonVarargLiterals.forEach { argument -> reportArgument(argument, hasStableNames) }
         }
     }
 
     private fun reportArgument(argument: KtValueArgument, hasStableNames: Boolean) {
-        if (!hasStableNames && hasNameComment(argument = argument)) {
-            return
-        }
-        val hint = if (hasStableNames) {
-            "назовите параметр"
-        } else {
-            "добавьте комментарий /* имя = */ (метод Java)"
-        }
-        report(
-            Finding(
-                entity = Entity.from(argument),
-                message = "$RULE_ID. Литерал ${argument.text} без имени: $hint.",
-            ),
-        )
+        if (!hasStableNames && hasNameComment(argument)) return
+        val hint = if (hasStableNames) "назовите параметр" else "добавьте комментарий /* имя = */ (метод Java)"
+        report(Finding(Entity.from(argument), message = "$RULE_ID. Литерал ${argument.text} без имени: $hint."))
     }
 
     private fun isUnnamedLiteral(argument: KtValueArgument): Boolean {
         return !argument.isNamed() &&
             argument !is KtLambdaArgument &&
-            isLiteral(expression = argument.getArgumentExpression())
+            isLiteral(argument.getArgumentExpression())
     }
 
     private fun isLiteral(expression: KtExpression?): Boolean {
@@ -96,6 +82,6 @@ internal class NamedLiteralArgument(
     private fun hasNameComment(argument: KtValueArgument): Boolean {
         val comment = argument.firstChild as? PsiComment
             ?: PsiTreeUtil.skipWhitespacesBackward(argument) as? PsiComment
-        return comment != null && NAME_COMMENT.matches(input = comment.text)
+        return comment != null && nameComment.matches(comment.text)
     }
 }

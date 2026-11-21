@@ -46,22 +46,15 @@ fun makeJavaLiteralFindings(): List<String> {
     )
 }
 
-fun makeNamedLiteralCode(): String {
+fun makeAllowedLiteralCode(): String {
     return """
 fun greet(name: String, times: Int) {
     println(message = name)
 }
 
-fun main() {
-    greet(name = "Ann", times = -1)
-}
-"""
-}
-
-fun makeLiteralExceptionsCode(): String {
-    return """
 @Suppress("UNUSED")
 fun main() {
+    greet(name = "Ann", times = -1)
     val list = listOf("a", "b")
     val pair = "a" to 1
     println(message = list + pair.first)
