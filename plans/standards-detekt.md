@@ -140,7 +140,7 @@
   - [x] Приёмка
 - PR 5: Плагин требует настроек проекта
   - [x] Задача 8: Ошибки конфигурации `findMissingSetup`
-  - [ ] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
+  - [x] Задача 9: Расширение `standards { coverageMinBound }` и проверка настроек
   - [ ] Приёмка
 - PR 6: Плагин проверяет покрытие по порогу проекта
   - [ ] Задача 10: Kover с порогом `coverageMinBound`
@@ -1503,7 +1503,7 @@
 - Создать: `gradle-plugin/conventions/src/test/fixtures/no-bound/settings.gradle.kts`, `build.gradle.kts`
 - Изменить: `…/gradle/StandardsKotlinPluginSpec.kt`, `StandardsKotlinPluginSpecData.kt` — случай `no-bound`
 
-- [ ] 1. Падающий тест: образец без порога — ошибка конфигурации с текстом `findMissingSetup`; образец `violation` задаёт порог и падает по-прежнему только на находке detekt.
+- [x] 1. Падающий тест: образец без порога — ошибка конфигурации с текстом `findMissingSetup`; образец `violation` задаёт порог и падает по-прежнему только на находке detekt.
   ```kotlin
   // fixtures/violation/build.gradle.kts
   plugins {
@@ -1545,8 +1545,8 @@
   ```kotlin
               case(arg1 = makeNoBoundOutput(), arg2 = "no-bound", arg3 = "standards.kotlin:"),
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*StandardsKotlinPluginSpec*'` — падает: у `violation` в выводе `Unresolved reference: standards`, находки `NoImplicitIt` нет; у `no-bound` сборка не падает (`buildAndFail` — `UnexpectedBuildSuccess`)
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :conventions:test --tests '*StandardsKotlinPluginSpec*'` — падает: у `violation` в выводе `Unresolved reference: standards`, находки `NoImplicitIt` нет; у `no-bound` сборка не падает (`buildAndFail` — `UnexpectedBuildSuccess`)
+- [x] 3. Минимальный код:
   ```kotlin
   // StandardsExtension.kt
   package io.github.nakulov.standards.gradle
@@ -1584,8 +1584,8 @@
       }
   ```
   KDoc класса — дописать: «без `kotlin("jvm")` или без порога `standards { coverageMinBound }` — ошибка конфигурации».
-- [ ] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — оба образца, `FindMissingSetupSpec`, правила). Строка ошибки `no-bound` разошлась только префиксом вывода Gradle (`>`, отступ) — поправить ожидание в `makeNoBoundOutput()` по выводу, текст `findMissingSetup` не менять.
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin check` — зелёный (`StandardsKotlinPluginSpec` — оба образца, `FindMissingSetupSpec`, правила). Строка ошибки `no-bound` разошлась только префиксом вывода Gradle (`>`, отступ) — поправить ожидание в `makeNoBoundOutput()` по выводу, текст `findMissingSetup` не менять.
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Плагин требует настроек: без порога — ошибка конфигурации с текстом (образец `no-bound`), без `kotlin("jvm")` — текст из `FindMissingSetupSpec`
