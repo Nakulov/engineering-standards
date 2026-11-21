@@ -193,16 +193,12 @@ fun discount(order: Order?): Int {
     return BASE_DISCOUNT
 }
 
-// Запрещено — три return посреди логики
+// Запрещено — три return в ветках when
 fun discount(order: Order): Int {
-    val total = order.total
-    if (total > LARGE) {
-        return LARGE_DISCOUNT
+    when {
+        order.total > LARGE -> return LARGE_DISCOUNT
+        order.isVip -> return VIP_DISCOUNT
+        else -> return BASE_DISCOUNT
     }
-    val vip = order.isVip
-    if (vip) {
-        return VIP_DISCOUNT
-    }
-    return BASE_DISCOUNT
 }
 ```
