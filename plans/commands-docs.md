@@ -141,7 +141,7 @@
 - PR 2: скиллы ссылаются на справочник вместо пересказа
   - [x] Задача 10: `worktree` и `groom`
   - [x] Задача 11: `execute`
-  - [ ] Задача 12: `decompose`
+  - [x] Задача 12: `decompose`
   - [ ] Приёмка
 - `task final 34` — итоговый PR `long/34-commands-docs` → `dev`.
 
@@ -483,9 +483,9 @@
 ### Задача 12: `decompose` — ссылки на `plan.md`, `pr.md`
 - Изменить: `skills/decompose/SKILL.md:95`, `:190`, `:214`
 
-- [ ] 1. Проверка: `grep -c 'docs/commands/' skills/decompose/SKILL.md` → `3`
-- [ ] 2. Запустить — `0`
-- [ ] 3. Правки:
+- [x] 1. Проверка: `grep -c 'docs/commands/' skills/decompose/SKILL.md` → `3`
+- [x] 2. Запустить — `0`
+- [x] 3. Правки:
   - `:95` — фрагмент
     было: ``Заменить — тот же slug: `task plan` с ним делает «Обновить план», другой slug дал бы вторую ветку плана.``
     стало: ``Заменить — тот же slug: другой slug дал бы вторую ветку плана; повтор `task plan` — `${CLAUDE_PLUGIN_ROOT}/docs/commands/plan.md`.``
@@ -495,8 +495,8 @@
   - `:214` — фрагмент
     было: ``PR — `task pr`: он сам перенесёт план в `plans/done/` и уберёт его из ветки.``
     стало: ``PR — `task pr`; план он переносит сам — `${CLAUDE_PLUGIN_ROOT}/docs/commands/pr.md`.``
-- [ ] 4. Запустить проверку — `3`
-- [ ] 5. Коммит
+- [x] 4. Запустить проверку — `3`
+- [x] 5. Коммит
 
 ### Приёмка
 - [ ] Что даёт этот PR — проверено: `grep -c 'docs/commands/' skills/*/SKILL.md` → worktree 2, groom 2, execute 5, decompose 3
