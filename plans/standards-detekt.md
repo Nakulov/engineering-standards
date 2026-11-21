@@ -133,7 +133,7 @@
   - [x] Приёмка
 - PR 3: Правила тестов KT-KIT-1 и KT-TEST-2/3/5
   - [x] Задача 5: `BehaviorSpecOnly`
-  - [ ] Задача 6: `SpecDataContent`
+  - [x] Задача 6: `SpecDataContent`
   - [ ] Приёмка
 - PR 4: Плагин `standards.kotlin` подключает detekt стандарта
   - [ ] Задача 7: Плагин с detekt, конфигом и своими правилами
@@ -915,7 +915,7 @@
 - Создать: `…/detekt/SpecDataContentSpec.kt`, `SpecDataContentSpecData.kt`
 - Изменить: `…/detekt/StandardsProvider.kt`, `StandardsProviderSpecData.kt`
 
-- [ ] 1. Падающий тест: в `*SpecData.kt` — `val` без `const`, функция без `make`, `makeup` (не `make` + заглавная), класс-спека; правильный файл данных (константа, `typealias`, data-класс, приватный `make…`) и обычный файл — без находок.
+- [x] 1. Падающий тест: в `*SpecData.kt` — `val` без `const`, функция без `make`, `makeup` (не `make` + заглавная), класс-спека; правильный файл данных (константа, `typealias`, data-класс, приватный `make…`) и обычный файл — без находок.
   ```kotlin
   // SpecDataContentSpecData.kt
   package io.github.nakulov.standards.detekt
@@ -1000,8 +1000,8 @@
   })
   ```
   В `makeStandardsRuleNames()` — добавить `RuleName(value = "SpecDataContent"),`.
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*SpecDataContentSpec*'` — падает: `Unresolved reference 'SpecDataContent'`
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*SpecDataContentSpec*'` — падает: `Unresolved reference 'SpecDataContent'`
+- [x] 3. Минимальный код:
   ```kotlin
   // SpecDataContent.kt
   package io.github.nakulov.standards.detekt
@@ -1077,8 +1077,8 @@
   }
   ```
   В `StandardsProvider.instance()` — добавить `{ config -> SpecDataContent(config) },`.
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
-- [ ] 5. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test` — зелёный
+- [x] 5. Коммит — тест и код вместе
 
 ### Приёмка
 - [ ] Набор `standards` — 5 правил, `StandardsProviderSpec` зелёный

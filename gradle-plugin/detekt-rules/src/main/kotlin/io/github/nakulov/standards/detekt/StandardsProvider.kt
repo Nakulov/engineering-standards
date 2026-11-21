@@ -17,6 +17,7 @@ class StandardsProvider : RuleSetProvider {
                 { config -> NamedLiteralArgument(config) },
                 { config -> NoImplicitIt(config) },
                 { config -> OneClassPerFile(config) },
+                { config -> SpecDataContent(config) },
             ),
         )
     }
