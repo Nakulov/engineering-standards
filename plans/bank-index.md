@@ -106,8 +106,8 @@ PR 2:
   - [x] Приёмка
 - PR 2: сабагенты получают вход в банк
   - [x] Задача 4: Копии правила банка в агентах под проверкой маркеров
-  - [ ] Задача 5: Корень плагина — вход агентов от `execute`
-  - [ ] Приёмка
+  - [x] Задача 5: Корень плагина — вход агентов от `execute`
+  - [x] Приёмка
 
 **После завершения** (внешнее, без чекбоксов):
 - Ручная проверка на живой сессии — сценарии в «После завершения».
@@ -365,9 +365,9 @@ PR 2:
 - Изменить: `skills/execute/SKILL.md:62` — аргумент `plan-executor`.
 - Изменить: `skills/execute/review.md:12` — аргумент `standards-reviewer`.
 
-- [ ] 1. Тест: не применим — текст агентов и скилла; проверка — `grep` в шаге 4 (критерий цели 1) и `MarkersSpec` (копии не задеты).
-- [ ] 2. Запустить `grep -rnE 'code-style/kotlin|testing/kotlin|\*\.kts?' skills agents rules` — находит `agents/standards-reviewer.md:46`.
-- [ ] 3. Правки:
+- [x] 1. Тест: не применим — текст агентов и скилла; проверка — `grep` в шаге 4 (критерий цели 1) и `MarkersSpec` (копии не задеты).
+- [x] 2. Запустить `grep -rnE 'code-style/kotlin|testing/kotlin|\*\.kts?' skills agents rules` — находит `agents/standards-reviewer.md:46`.
+- [x] 3. Правки:
   `agents/plan-executor.md`, «Вход» — после строки `- **Рабочая папка** — …`:
   ```markdown
   - **Корень плагина** — абсолютный путь к корню плагина: оглавление банка знаний — `<корень плагина>/docs/README.md` (правило «Банк знаний» выше).
@@ -400,14 +400,14 @@ PR 2:
   ```markdown
   Каждому: путь к плану, рабочая папка, база — `git -C <рабочая папка> merge-base origin/dev HEAD` (начало ветки плана; одинаково для одного блока и нескольких); `implementation-reviewer` и `test-reviewer` — ещё журнал; `standards-reviewer` — ещё корень плагина, тот же, что `plan-executor` (шаг 4.4 скилла).
   ```
-- [ ] 4. Запустить `grep -rnE 'code-style/kotlin|testing/kotlin|\*\.kts?' skills agents rules` — пусто; `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит.
+- [x] 4. Запустить `grep -rnE 'code-style/kotlin|testing/kotlin|\*\.kts?' skills agents rules` — пусто; `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит.
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: в `plan-executor` и `standards-reviewer` есть копия `rules:bank` и вход «Корень плагина»; `execute` передаёт корень обоим.
-- [ ] Крайние случаи обработаны: корень не передан — правило велит «Банк знаний не найден — проверено только по образцам существующего кода» (`rules/bank.md`); текст совпадает с шаблоном `agents/standards-reviewer.md:86`.
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`.
-- [ ] Критерии цели из «Обзора» — по пунктам: 1 — `grep` из задачи 5 пуст; 2 — `BankIndexSpec` зелёный; 3 — правило в `rules/`, копии в двух агентах, корень от хука и `execute`; 4 — правило ≈ 3 строки, оглавление велит читать только свои строки.
+- [x] Что даёт этот PR — проверено: в `plan-executor` и `standards-reviewer` есть копия `rules:bank` и вход «Корень плагина»; `execute` передаёт корень обоим.
+- [x] Крайние случаи обработаны: корень не передан — правило велит «Банк знаний не найден — проверено только по образцам существующего кода» (`rules/bank.md`); текст совпадает с шаблоном `agents/standards-reviewer.md:86`.
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`.
+- [x] Критерии цели из «Обзора» — по пунктам: 1 — `grep` из задачи 5 пуст; 2 — `BankIndexSpec` зелёный; 3 — правило в `rules/`, копии в двух агентах, корень от хука и `execute`; 4 — правило ≈ 3 строки, оглавление велит читать только свои строки.
 
 ## Открыто
 - Нет.
