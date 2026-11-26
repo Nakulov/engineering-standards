@@ -225,7 +225,7 @@ withGivens(
     case(arg1 = makeAdminArgs(), arg2 = "true"),
     case(arg1 = makeGuestArgs(), arg2 = "false"),
 ) { args, expected ->
-    every { gitHub.read(args = args) } returns expected
+    every { gitHub.read(args) } returns expected
     // …
 }
 
