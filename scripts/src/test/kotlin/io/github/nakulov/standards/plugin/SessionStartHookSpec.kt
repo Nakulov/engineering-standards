@@ -1,7 +1,6 @@
 package io.github.nakulov.standards.plugin
 
 import io.github.nakulov.kotestkit.shouldReturnTest
-import io.github.nakulov.standards.task.cli.LauncherRun
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 
@@ -15,32 +14,32 @@ class SessionStartHookSpec : BehaviorSpec({
     val project = makeGitProject()
     val envFile = makeEnvFile()
     val cache = makeTempDir(prefix = "cache")
+    val blocked = makeBlockedCache()
 
     shouldReturnTest(makePathLine(plugin)) {
-        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
-        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
+        runHook(plugin, project, envFile, cache)
+        runHook(plugin, project, envFile, cache)
         envFile.readText()
     }
 
     shouldReturnTest(makeRulesRun(plugin)) {
-        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
+        runHook(plugin, project, envFile, cache)
     }
 
     shouldReturnTest(makeNoEnvFileRun(bare)) {
-        runHook(plugin = bare, project = project, envFile = null, cache = cache)
+        runHook(bare, project, envFile = null, cache)
     }
 
-    shouldReturnTest(plugin.path + "\n") {
-        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
-        readRootRecord(cache = cache, project = project)
+    shouldReturnTest(makeRootRecord(plugin)) {
+        runHook(plugin, project, envFile, cache)
+        readRootRecord(cache, project)
     }
 
-    val blocked = makeBlockedCache()
-    shouldReturnTest(makeNoCacheRun(cache = blocked, plugin = plugin)) {
-        runHook(plugin = plugin, project = project, envFile = envFile, cache = blocked)
+    shouldReturnTest(makeNoCacheRun(cache = blocked, plugin)) {
+        runHook(plugin, project, envFile, cache = blocked)
     }
 
-    shouldReturnTest(LauncherRun(code = 0, out = makeRootLine(bare), err = "")) {
-        runHook(plugin = bare, project = project, envFile = envFile, cache = cache)
+    shouldReturnTest(makeRootOnlyRun(bare)) {
+        runHook(bare, project, envFile, cache)
     }
 })

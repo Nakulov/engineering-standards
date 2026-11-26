@@ -65,9 +65,16 @@ fun makePathLine(plugin: File): String {
     return "export PATH=\"${plugin.path}/scripts:\$PATH\"\n"
 }
 
-/** Строка корня плагина — хук печатает её всегда: по ней сессия находит банк знаний. */
 fun makeRootLine(plugin: File): String {
     return "Корень плагина: `${plugin.path}`\n"
+}
+
+fun makeRootRecord(plugin: File): String {
+    return plugin.path + "\n"
+}
+
+fun makeRootOnlyRun(plugin: File): LauncherRun {
+    return LauncherRun(code = 0, out = makeRootLine(plugin), err = "")
 }
 
 fun makeRulesRun(plugin: File): LauncherRun {
