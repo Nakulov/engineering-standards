@@ -105,7 +105,7 @@ PR 2:
   - [x] Задача 3: Шаблон плана без «файла проекта и карты»
   - [x] Приёмка
 - PR 2: сабагенты получают вход в банк
-  - [ ] Задача 4: Копии правила банка в агентах под проверкой маркеров
+  - [x] Задача 4: Копии правила банка в агентах под проверкой маркеров
   - [ ] Задача 5: Корень плагина — вход агентов от `execute`
   - [ ] Приёмка
 
@@ -302,7 +302,7 @@ PR 2:
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/MarkersSpec.kt:7-35` — шапка и список источников.
 - Изменить: `agents/plan-executor.md`, `agents/standards-reviewer.md` — копия `rules:bank` после блока `rules:bash-commands`.
 
-- [ ] 1. Падающий тест: `rules:bank` есть среди источников и скопирован в `plan-executor` и `standards-reviewer`.
+- [x] 1. Падающий тест: `rules:bank` есть среди источников и скопирован в `plan-executor` и `standards-reviewer`.
   `MarkersSpecData.kt` — заменить `Copies` и `COPIES` (строки 5–15):
   ```kotlin
   /** Источник и копия, у которых блоки [prefix] — копии 1 в 1: [prefix] — имя блока или его часть до `:`. */
@@ -346,8 +346,8 @@ PR 2:
                   "rules:bash-commands",
               ),
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает первый тест: `expected:<[]> but was:<[rules:bank, rules:bank]>` (в агентах копий нет); второй — зелёный.
-- [ ] 3. Минимальный код: в `agents/plan-executor.md` и `agents/standards-reviewer.md` сразу после строки `<!-- <<< rules:bash-commands -->` — пустая строка и блок, слово в слово как `rules/bank.md`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает первый тест: `expected:<[]> but was:<[rules:bank, rules:bank]>` (в агентах копий нет); второй — зелёный.
+- [x] 3. Минимальный код: в `agents/plan-executor.md` и `agents/standards-reviewer.md` сразу после строки `<!-- <<< rules:bash-commands -->` — пустая строка и блок, слово в слово как `rules/bank.md`:
   ```markdown
 
   <!-- >>> rules:bank -->
@@ -356,8 +356,8 @@ PR 2:
   Причина: что и когда читать, знает банк, а не скилл или агент — новый раздел меняет только банк.
   <!-- <<< rules:bank -->
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и копии вместе.
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и копии вместе.
 
 ### Задача 5: Корень плагина — вход агентов от `execute`
 - Изменить: `agents/plan-executor.md` — раздел «Вход».
