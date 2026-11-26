@@ -11,7 +11,7 @@ class BankIndexSpec : BehaviorSpec({
         findBankIndexErrors()
     }
 
-    shouldReturnTest(true, options = TestOptions(name = "разделы банка найдены")) {
+    shouldReturnTest(expected = true, options = TestOptions(name = "разделы банка найдены")) {
         findBankSections().isNotEmpty()
     }
 })

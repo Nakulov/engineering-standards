@@ -6,7 +6,7 @@ import java.nio.file.Files
 
 /** Пустая папка в кеше тестов модуля. */
 fun makeTempDir(prefix: String): File {
-    val base = File(System.getProperty("task.cache"), "plugin")
+    val base = File(System.getProperty(/* key = */ "task.cache"), /* child = */ "plugin")
     base.mkdirs()
     return Files.createTempDirectory(/* dir = */ base.toPath(), /* prefix = */ prefix).toFile()
 }
@@ -31,14 +31,14 @@ fun makeGitProject(): File {
 /** Ключ записи корня: основная папка репозитория, `/` → `-` — как в хуке и обёртке. */
 fun makeRootKey(project: File): String {
     val common = runGit(directory = project, "rev-parse", "--path-format=absolute", "--git-common-dir").trim()
-    return File(common).parent.replace(oldChar = '/', newChar = '-')
+    return File(/* pathname = */ common).parent.replace(oldChar = '/', newChar = '-')
 }
 
 /** Копия `hooks/session-start` в новой папке плагина и [rules] — имя файла → текст; пусто — без папки `rules/`. */
 fun makeHookPlugin(rules: Map<String, String>): File {
     val plugin = makeTempDir(prefix = "plugin")
-    val hook = File(plugin, "hooks/session-start")
-    File(System.getProperty("task.repoRoot"), "hooks/session-start").copyTo(target = hook)
+    val hook = File(plugin, /* child = */ "hooks/session-start")
+    File(System.getProperty(/* key = */ "task.repoRoot"), /* child = */ "hooks/session-start").copyTo(target = hook)
     hook.setExecutable(true)
     rules.forEach { (name, text) ->
         val rule = File(plugin, "rules/$name")
@@ -49,15 +49,15 @@ fun makeHookPlugin(rules: Map<String, String>): File {
 }
 
 fun makeEnvFile(): File {
-    val file = File(makeTempDir(prefix = "env"), "env")
-    file.writeText("")
+    val file = File(makeTempDir(prefix = "env"), /* child = */ "env")
+    file.writeText(text = "")
     return file
 }
 
 /** Кеш — обычный файл: папку записей в нём не создать. */
 fun makeBlockedCache(): File {
-    val file = File(makeTempDir(prefix = "blocked"), "cache")
-    file.writeText("")
+    val file = File(makeTempDir(prefix = "blocked"), /* child = */ "cache")
+    file.writeText(text = "")
     return file
 }
 
@@ -101,9 +101,9 @@ fun runHook(
     envFile: File?,
     cache: File,
 ): LauncherRun {
-    val builder = ProcessBuilder(File(plugin, "hooks/session-start").path).directory(project)
+    val builder = ProcessBuilder(File(plugin, /* child = */ "hooks/session-start").path).directory(project)
     val environment = builder.environment()
-    environment.remove("CLAUDE_ENV_FILE")
+    environment.remove(key = "CLAUDE_ENV_FILE")
     environment["CLAUDE_PROJECT_DIR"] = project.path
     environment["XDG_CACHE_HOME"] = cache.path
     if (envFile != null) {
