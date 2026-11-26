@@ -71,11 +71,11 @@ fun makeRootLine(plugin: File): String {
 }
 
 fun makeRulesRun(plugin: File): LauncherRun {
-    return LauncherRun(code = 0, out = makeRootLine(plugin = plugin) + "Правило А\n\nПравило Б\n\n", err = "")
+    return LauncherRun(code = 0, out = makeRootLine(plugin) + "Правило А\n\nПравило Б\n\n", err = "")
 }
 
 fun makeNoEnvFileRun(plugin: File): LauncherRun {
-    val out = "`task` не в PATH — вызывай ${plugin.path}/scripts/task\n" + makeRootLine(plugin = plugin)
+    val out = "`task` не в PATH — вызывай ${plugin.path}/scripts/task\n" + makeRootLine(plugin)
     return LauncherRun(code = 0, out = out, err = "")
 }
 
@@ -84,14 +84,14 @@ fun makeNoCacheRun(
     plugin: File,
 ): LauncherRun {
     val err = "engineering-standards: корень плагина не записан в ${cache.path}/engineering-standards/roots\n"
-    return LauncherRun(code = 0, out = makeRulesRun(plugin = plugin).out, err = err)
+    return LauncherRun(code = 0, out = makeRulesRun(plugin).out, err = err)
 }
 
 fun readRootRecord(
     cache: File,
     project: File,
 ): String {
-    return File(cache, "engineering-standards/roots/${makeRootKey(project = project)}").readText()
+    return File(cache, "engineering-standards/roots/${makeRootKey(project)}").readText()
 }
 
 /** Запуск хука: [envFile] `null` — без `CLAUDE_ENV_FILE`. */
