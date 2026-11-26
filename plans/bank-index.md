@@ -101,7 +101,7 @@ PR 2:
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: оглавление банка и вход в него в основной сессии
   - [x] Задача 1: Оглавление банка под тестом ссылок и разделов
-  - [ ] Задача 2: Правило-вход и строка «Корень плагина» из хука
+  - [x] Задача 2: Правило-вход и строка «Корень плагина» из хука
   - [ ] Задача 3: Шаблон плана без «файла проекта и карты»
   - [ ] Приёмка
 - PR 2: сабагенты получают вход в банк
@@ -212,7 +212,7 @@ PR 2:
 - Изменить: `hooks/session-start:2`, `:28` — строка корня всегда.
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/SessionStartHookSpec.kt`, `SessionStartHookSpecData.kt` — ожидаемый вывод.
 
-- [ ] 1. Падающий тест: вывод хука содержит строку «Корень плагина» во всех запусках, даже без правил и с `task` в PATH.
+- [x] 1. Падающий тест: вывод хука содержит строку «Корень плагина» во всех запусках, даже без правил и с `task` в PATH.
   `SessionStartHookSpecData.kt` — заменить `makeRulesRun`, `makeNoEnvFileRun`, `makeNoCacheRun` и добавить `makeRootLine`:
   ```kotlin
   /** Строка корня плагина — хук печатает её всегда: по ней сессия находит банк знаний. */
@@ -247,8 +247,8 @@ PR 2:
   ```kotlin
           shouldReturnTest(LauncherRun(code = 0, out = makeRootLine(plugin = bare), err = "")) {
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — падают 4 теста: `expected:<…Корень плагина: `…` …> but was:<…>` (в выводе хука строки корня нет).
-- [ ] 3. Минимальный код: строка в хуке и правило.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — падают 4 теста: `expected:<…Корень плагина: `…` …> but was:<…>` (в выводе хука строки корня нет).
+- [x] 3. Минимальный код: строка в хуке и правило.
   `hooks/session-start`, строки 2–3 (шапка):
   ```bash
   # Хук SessionStart плагина engineering-standards (#43, решение 9): PATH к scripts/ плагина, корень плагина для обёртки
@@ -269,8 +269,8 @@ PR 2:
   Причина: что и когда читать, знает банк, а не скилл или агент — новый раздел меняет только банк.
   <!-- <<< rules:bank -->
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе.
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе.
 
 ### Задача 3: Шаблон плана без «файла проекта и карты»
 - Изменить: `skills/decompose/SKILL.md:316` — пункт «Документация» в «Приёмке» шаблона.

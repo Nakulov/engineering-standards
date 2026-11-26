@@ -65,17 +65,26 @@ fun makePathLine(plugin: File): String {
     return "export PATH=\"${plugin.path}/scripts:\$PATH\"\n"
 }
 
-fun makeRulesRun(): LauncherRun {
-    return LauncherRun(code = 0, out = "Правило А\n\nПравило Б\n\n", err = "")
+/** Строка корня плагина — хук печатает её всегда: по ней сессия находит банк знаний. */
+fun makeRootLine(plugin: File): String {
+    return "Корень плагина: `${plugin.path}`\n"
+}
+
+fun makeRulesRun(plugin: File): LauncherRun {
+    return LauncherRun(code = 0, out = makeRootLine(plugin = plugin) + "Правило А\n\nПравило Б\n\n", err = "")
 }
 
 fun makeNoEnvFileRun(plugin: File): LauncherRun {
-    return LauncherRun(code = 0, out = "`task` не в PATH — вызывай ${plugin.path}/scripts/task\n", err = "")
+    val out = "`task` не в PATH — вызывай ${plugin.path}/scripts/task\n" + makeRootLine(plugin = plugin)
+    return LauncherRun(code = 0, out = out, err = "")
 }
 
-fun makeNoCacheRun(cache: File): LauncherRun {
+fun makeNoCacheRun(
+    cache: File,
+    plugin: File,
+): LauncherRun {
     val err = "engineering-standards: корень плагина не записан в ${cache.path}/engineering-standards/roots\n"
-    return LauncherRun(code = 0, out = makeRulesRun().out, err = err)
+    return LauncherRun(code = 0, out = makeRulesRun(plugin = plugin).out, err = err)
 }
 
 fun readRootRecord(

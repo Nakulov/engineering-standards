@@ -23,7 +23,7 @@ class SessionStartHookSpec :
             envFile.readText()
         }
 
-        shouldReturnTest(makeRulesRun()) {
+        shouldReturnTest(makeRulesRun(plugin = plugin)) {
             runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
         }
 
@@ -37,11 +37,11 @@ class SessionStartHookSpec :
         }
 
         val blocked = makeBlockedCache()
-        shouldReturnTest(makeNoCacheRun(cache = blocked)) {
+        shouldReturnTest(makeNoCacheRun(cache = blocked, plugin = plugin)) {
             runHook(plugin = plugin, project = project, envFile = envFile, cache = blocked)
         }
 
-        shouldReturnTest(LauncherRun(code = 0, out = "", err = "")) {
+        shouldReturnTest(LauncherRun(code = 0, out = makeRootLine(plugin = bare), err = "")) {
             runHook(plugin = bare, project = project, envFile = envFile, cache = cache)
         }
     })
