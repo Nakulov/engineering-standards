@@ -100,10 +100,10 @@ PR 2:
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: оглавление банка и вход в него в основной сессии
-  - [ ] Задача 1: Оглавление банка под тестом ссылок и разделов
-  - [ ] Задача 2: Правило-вход и строка «Корень плагина» из хука
-  - [ ] Задача 3: Шаблон плана без «файла проекта и карты»
-  - [ ] Приёмка
+  - [x] Задача 1: Оглавление банка под тестом ссылок и разделов
+  - [x] Задача 2: Правило-вход и строка «Корень плагина» из хука
+  - [x] Задача 3: Шаблон плана без «файла проекта и карты»
+  - [x] Приёмка
 - PR 2: сабагенты получают вход в банк
   - [ ] Задача 4: Копии правила банка в агентах под проверкой маркеров
   - [ ] Задача 5: Корень плагина — вход агентов от `execute`
@@ -120,7 +120,7 @@ PR 2:
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/BankIndexSpec.kt` — ссылки и разделы.
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/BankIndexSpecData.kt` — разбор оглавления и поиск разделов.
 
-- [ ] 1. Падающий тест: ссылки оглавления ведут на файлы, каждый раздел есть в оглавлении, разделы найдены.
+- [x] 1. Падающий тест: ссылки оглавления ведут на файлы, каждый раздел есть в оглавлении, разделы найдены.
   ```kotlin
   package io.github.nakulov.standards.plugin
 
@@ -145,8 +145,8 @@ PR 2:
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `Unresolved reference: findBrokenIndexLinks`.
-- [ ] 3. Минимальный код: разбор оглавления и само оглавление.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `Unresolved reference: findBrokenIndexLinks`.
+- [x] 3. Минимальный код: разбор оглавления и само оглавление.
   `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/BankIndexSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.plugin
@@ -204,15 +204,15 @@ PR 2:
 
   Раздел банка — папка `docs/<область>/<язык>/` со своим `README.md`. Добавил раздел — добавь строку в «Что читать»: без неё раздел никто не прочитает. Раздел без строки ловит тест `BankIndexSpec`.
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе.
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе.
 
 ### Задача 2: Правило-вход и строка «Корень плагина» из хука
 - Создать: `rules/bank.md` — вход в банк.
 - Изменить: `hooks/session-start:2`, `:28` — строка корня всегда.
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/SessionStartHookSpec.kt`, `SessionStartHookSpecData.kt` — ожидаемый вывод.
 
-- [ ] 1. Падающий тест: вывод хука содержит строку «Корень плагина» во всех запусках, даже без правил и с `task` в PATH.
+- [x] 1. Падающий тест: вывод хука содержит строку «Корень плагина» во всех запусках, даже без правил и с `task` в PATH.
   `SessionStartHookSpecData.kt` — заменить `makeRulesRun`, `makeNoEnvFileRun`, `makeNoCacheRun` и добавить `makeRootLine`:
   ```kotlin
   /** Строка корня плагина — хук печатает её всегда: по ней сессия находит банк знаний. */
@@ -247,8 +247,8 @@ PR 2:
   ```kotlin
           shouldReturnTest(LauncherRun(code = 0, out = makeRootLine(plugin = bare), err = "")) {
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — падают 4 теста: `expected:<…Корень плагина: `…` …> but was:<…>` (в выводе хука строки корня нет).
-- [ ] 3. Минимальный код: строка в хуке и правило.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — падают 4 теста: `expected:<…Корень плагина: `…` …> but was:<…>` (в выводе хука строки корня нет).
+- [x] 3. Минимальный код: строка в хуке и правило.
   `hooks/session-start`, строки 2–3 (шапка):
   ```bash
   # Хук SessionStart плагина engineering-standards (#43, решение 9): PATH к scripts/ плагина, корень плагина для обёртки
@@ -269,15 +269,15 @@ PR 2:
   Причина: что и когда читать, знает банк, а не скилл или агент — новый раздел меняет только банк.
   <!-- <<< rules:bank -->
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе.
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*SessionStartHookSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе.
 
 ### Задача 3: Шаблон плана без «файла проекта и карты»
 - Изменить: `skills/decompose/SKILL.md:316` — пункт «Документация» в «Приёмке» шаблона.
 
-- [ ] 1. Тест: не применим — текст скилла вне маркеров `plan:*`; проверка — `grep` в шаге 4.
-- [ ] 2. Запустить `grep -n "файл проекта и карта" skills/decompose/SKILL.md` — находит `316:`.
-- [ ] 3. Заменить строку 316:
+- [x] 1. Тест: не применим — текст скилла вне маркеров `plan:*`; проверка — `grep` в шаге 4.
+- [x] 2. Запустить `grep -n "файл проекта и карта" skills/decompose/SKILL.md` — находит `316:`.
+- [x] 3. Заменить строку 316:
   было:
   ```markdown
   - [ ] Документация: <что обновить — README, `docs/`, файл проекта и карта> — пункт только если есть что обновлять
@@ -286,13 +286,13 @@ PR 2:
   ```markdown
   - [ ] Документация: <что обновить — README, `docs/`> — пункт только если есть что обновлять
   ```
-- [ ] 4. Запустить `grep -n "файл проекта и карта" skills/decompose/SKILL.md` — пусто; `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL` (блоки `plan:*` не задеты).
-- [ ] 5. Коммит.
+- [x] 4. Запустить `grep -n "файл проекта и карта" skills/decompose/SKILL.md` — пусто; `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL` (блоки `plan:*` не задеты).
+- [x] 5. Коммит.
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: `hooks/session-start` из корня репозитория печатает «Корень плагина» и текст `rules/bank.md`; ссылки в `docs/README.md` открываются.
-- [ ] Крайние случаи обработаны: хук без правил и с `task` в PATH печатает строку корня (тест), раздел без строки в оглавлении ловит `BankIndexSpec`.
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`.
+- [x] Что даёт этот PR — проверено: `hooks/session-start` из корня репозитория печатает «Корень плагина» и текст `rules/bank.md`; ссылки в `docs/README.md` открываются.
+- [x] Крайние случаи обработаны: хук без правил и с `task` в PATH печатает строку корня (тест), раздел без строки в оглавлении ловит `BankIndexSpec`.
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`.
 
 ## PR 2: сабагенты получают вход в банк
 **Объём:** `MarkersSpec.kt`, `MarkersSpecData.kt`, `agents/plan-executor.md`, `agents/standards-reviewer.md`, `skills/execute/SKILL.md`, `skills/execute/review.md` — ≈ 6 файлов.
