@@ -100,7 +100,7 @@ PR 2:
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: оглавление банка и вход в него в основной сессии
-  - [ ] Задача 1: Оглавление банка под тестом ссылок и разделов
+  - [x] Задача 1: Оглавление банка под тестом ссылок и разделов
   - [ ] Задача 2: Правило-вход и строка «Корень плагина» из хука
   - [ ] Задача 3: Шаблон плана без «файла проекта и карты»
   - [ ] Приёмка
@@ -120,7 +120,7 @@ PR 2:
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/BankIndexSpec.kt` — ссылки и разделы.
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/BankIndexSpecData.kt` — разбор оглавления и поиск разделов.
 
-- [ ] 1. Падающий тест: ссылки оглавления ведут на файлы, каждый раздел есть в оглавлении, разделы найдены.
+- [x] 1. Падающий тест: ссылки оглавления ведут на файлы, каждый раздел есть в оглавлении, разделы найдены.
   ```kotlin
   package io.github.nakulov.standards.plugin
 
@@ -145,8 +145,8 @@ PR 2:
           }
       })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `Unresolved reference: findBrokenIndexLinks`.
-- [ ] 3. Минимальный код: разбор оглавления и само оглавление.
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `Unresolved reference: findBrokenIndexLinks`.
+- [x] 3. Минимальный код: разбор оглавления и само оглавление.
   `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/BankIndexSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.plugin
@@ -204,8 +204,8 @@ PR 2:
 
   Раздел банка — папка `docs/<область>/<язык>/` со своим `README.md`. Добавил раздел — добавь строку в «Что читать»: без неё раздел никто не прочитает. Раздел без строки ловит тест `BankIndexSpec`.
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`.
-- [ ] 5. Коммит — тест и код вместе.
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`.
+- [x] 5. Коммит — тест и код вместе.
 
 ### Задача 2: Правило-вход и строка «Корень плагина» из хука
 - Создать: `rules/bank.md` — вход в банк.
