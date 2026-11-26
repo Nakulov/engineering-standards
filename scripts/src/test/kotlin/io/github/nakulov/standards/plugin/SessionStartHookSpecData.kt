@@ -31,7 +31,8 @@ fun makeGitProject(): File {
 /** Ключ записи корня: основная папка репозитория, `/` → `-` — как в хуке и обёртке. */
 fun makeRootKey(project: File): String {
     val common = runGit(directory = project, "rev-parse", "--path-format=absolute", "--git-common-dir").trim()
-    return File(/* pathname = */ common).parent.replace(oldChar = '/', newChar = '-')
+    return File(/* pathname = */ common).parent
+        .replace(oldChar = '/', newChar = '-')
 }
 
 /** Копия `hooks/session-start` в новой папке плагина и [rules] — имя файла → текст; пусто — без папки `rules/`. */
@@ -108,7 +109,8 @@ fun runHook(
     envFile: File?,
     cache: File,
 ): LauncherRun {
-    val builder = ProcessBuilder(File(plugin, /* child = */ "hooks/session-start").path).directory(project)
+    val builder = ProcessBuilder(File(plugin, /* child = */ "hooks/session-start").path)
+        .directory(project)
     val environment = builder.environment()
     environment.remove(key = "CLAUDE_ENV_FILE")
     environment["CLAUDE_PROJECT_DIR"] = project.path

@@ -17,29 +17,29 @@ class SessionStartHookSpec : BehaviorSpec({
     val blocked = makeBlockedCache()
 
     shouldReturnTest(makePathLine(plugin)) {
-        runHook(plugin, project, envFile, cache)
-        runHook(plugin, project, envFile, cache)
+        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
+        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
         envFile.readText()
     }
 
     shouldReturnTest(makeRulesRun(plugin)) {
-        runHook(plugin, project, envFile, cache)
+        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
     }
 
     shouldReturnTest(makeNoEnvFileRun(bare)) {
-        runHook(bare, project, envFile = null, cache)
+        runHook(plugin = bare, project = project, envFile = null, cache = cache)
     }
 
     shouldReturnTest(makeRootRecord(plugin)) {
-        runHook(plugin, project, envFile, cache)
+        runHook(plugin = plugin, project = project, envFile = envFile, cache = cache)
         readRootRecord(cache, project)
     }
 
     shouldReturnTest(makeNoCacheRun(cache = blocked, plugin)) {
-        runHook(plugin, project, envFile, cache = blocked)
+        runHook(plugin = plugin, project = project, envFile = envFile, cache = blocked)
     }
 
     shouldReturnTest(makeRootOnlyRun(bare)) {
-        runHook(bare, project, envFile, cache)
+        runHook(plugin = bare, project = project, envFile = envFile, cache = cache)
     }
 })
