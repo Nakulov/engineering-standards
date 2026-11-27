@@ -1,0 +1,12 @@
+# Конфиг покрытия проекта: setup создаёт его один раз, дальше его ведёт проект.
+# fail_under — замер при подключении с округлением вниз; поднимается, не снижается (PY-TEST-2).
+[run]
+source = .
+omit = tests/*
+
+[report]
+fail_under = 0
+# Скрипты в папках без __init__.py (PY-LINT-3): без этой строки непокрытый скрипт не попадает в отчёт.
+include_namespace_packages = True
+exclude_also =
+    if __name__ == .__main__.:

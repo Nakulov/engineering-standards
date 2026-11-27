@@ -128,7 +128,7 @@
   - [x] Приёмка
 - PR 3: `setup` ставит конфиги Python в проект с `*.py`
   - [x] Задача 6: `Git.trackedPaths`
-  - [ ] Задача 7: шаг `PythonConfig`
+  - [x] Задача 7: шаг `PythonConfig`
   - [ ] Задача 8: шаг в `setup` и `.coverage` в `.gitignore`
   - [ ] Приёмка
 
@@ -876,7 +876,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpecData.kt` — шаблоны плагина и находки
 - Создать: `templates/project/ruff.toml`, `templates/project/coveragerc` — заготовки
 
-- [ ] 1. Падающий тест. Создать `StandardCopiesSpecData.kt`:
+- [x] 1. Падающий тест. Создать `StandardCopiesSpecData.kt`:
 
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1065,7 +1065,7 @@
   }
 
   fun makePythonPaths(): List<String> {
-      return listOf("tools/check.py")
+      return listOf(element = "tools/check.py")
   }
 
   fun makeNoPythonFinding(): Finding {
@@ -1256,8 +1256,8 @@
   })
   ```
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*'` — падает: `Unresolved reference 'StandardCopies'` и `Unresolved reference 'PythonConfig'`
-- [ ] 3. Минимальный код. Создать `StandardCopies.kt`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*'` — падает: `Unresolved reference 'StandardCopies'` и `Unresolved reference 'PythonConfig'`
+- [x] 3. Минимальный код. Создать `StandardCopies.kt`:
 
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1440,9 +1440,9 @@
       if __name__ == .__main__.:
   ```
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*' --tests '*StandardFilesSpec*'` — `BUILD SUCCESSFUL`, 24 теста (8 + 13 + 3)
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; падение порога покрытия — найти непокрытую ветку в `build/reports/kover/html` и добавить случай, порог не снижать
-- [ ] 6. Коммит — `StandardCopies` с `StandardFiles`, шаг, обе спеки, данные и заготовки вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*' --tests '*StandardFilesSpec*'` — `BUILD SUCCESSFUL`, 24 теста (8 + 13 + 3)
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; падение порога покрытия — найти непокрытую ветку в `build/reports/kover/html` и добавить случай, порог не снижать
+- [x] 6. Коммит — `StandardCopies` с `StandardFiles`, шаг, обе спеки, данные и заготовки вместе
 
 ### Задача 8: шаг в `setup` и `.coverage` в `.gitignore`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/SetupMain.kt:27` — шаг в списке
