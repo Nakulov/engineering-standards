@@ -43,7 +43,8 @@ config.json         ← config.schema.json, проверка JSON сверяет
     "retries": {
       "type": "integer"
     }
-  }
+  },
+  "additionalProperties": false
 }
 
 // Разрешено
@@ -60,7 +61,8 @@ config.json         ← config.schema.json, проверка JSON сверяет
       "type": "integer",
       "description": "Сколько раз повторить загрузку при сетевой ошибке; 0 — не повторять."
     }
-  }
+  },
+  "additionalProperties": false
 }
 ```
 
