@@ -1,6 +1,10 @@
 package io.github.nakulov.standards.task.cli
 
+import io.github.nakulov.standards.plugin.makeTempDir
 import java.io.File
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 const val UNKNOWN_COMMAND = "nope"
 
@@ -58,16 +62,35 @@ fun makeOldKotlinPath(): String {
     return "${bin.absolutePath}:${makeBarePath()}"
 }
 
+/** Корень репозитория, из которого запущены тесты: `-C` в него — свой корень, без перенаправления. */
+fun makeRepoRoot(): String {
+    return System.getProperty(/* key = */ "task.repoRoot")
+}
+
+/**
+ * Запуск `scripts/task` с таймаутом: вывод — в файлы, иначе сломанное перенаправление `-C` (копия запускает себя
+ * бесконечно) повесит чтение вывода, и тест зависнет, а не упадёт.
+ */
 fun runLauncher(
     path: String,
     args: List<String>,
     launcher: String = System.getProperty("task.launcher"),
+    directory: File? = null,
+    timeout: Duration = 3.minutes,
 ): LauncherRun {
-    val builder = ProcessBuilder(listOf(launcher) + args)
+    val logs = makeTempDir(prefix = "launcher")
+    val out = File(/* parent = */ logs, /* child = */ "out")
+    val err = File(/* parent = */ logs, /* child = */ "err")
+    val builder = ProcessBuilder(listOf(launcher) + args).directory(directory)
+        .redirectOutput(out)
+        .redirectError(err)
     builder.environment()["PATH"] = path
     builder.environment()["XDG_CACHE_HOME"] = System.getProperty("task.cache")
     val process = builder.start()
-    val out = process.inputStream.bufferedReader().readText()
-    val err = process.errorStream.bufferedReader().readText()
-    return LauncherRun(code = process.waitFor(), out = out, err = err)
+    val isFinished = process.waitFor(timeout.inWholeSeconds, TimeUnit.SECONDS)
+    if (!isFinished) {
+        process.destroyForcibly()
+    }
+    check(isFinished) { "task ${args.joinToString(separator = " ")} не завершился за $timeout" }
+    return LauncherRun(code = process.exitValue(), out = out.readText(), err = err.readText())
 }
