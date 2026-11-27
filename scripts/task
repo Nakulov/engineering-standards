@@ -7,7 +7,18 @@ set -eu
 min_major=2
 min_minor=2 # совпадает с languageVersion в build.gradle.kts
 
-dir=$(cd "$(dirname "$0")" && pwd)
+dir=$(cd "$(dirname "$0")" && pwd -P)
+
+# Копия стандарта по `-C` (разбор — как в WorkingDirectory.kt): в сессии Claude `task` — scripts/task основной папки
+# из PATH хука, мимо обёртки ~/.local/bin/task. Корень папки `-C` — другая копия стандарта → её task; совпал со своим —
+# без перенаправления, иначе копия запускала бы себя бесконечно. Пути физические, как у git (`pwd -P`).
+if [ "${1:-}" = "-C" ] && [ -d "${2:-}" ]; then
+  top=$(git -C "$2" rev-parse --show-toplevel 2>/dev/null || true)
+  if [ -n "$top" ] && [ "$(cd "$top/scripts" 2>/dev/null && pwd -P)" != "$dir" ] &&
+    grep -qs '"name": "engineering-standards"' "$top/.claude-plugin/plugin.json"; then
+    exec "$top/scripts/task" "$@"
+  fi
+fi
 
 if ! command -v kotlinc >/dev/null 2>&1; then
   echo "Нет Kotlin — установите: brew install kotlin" >&2
