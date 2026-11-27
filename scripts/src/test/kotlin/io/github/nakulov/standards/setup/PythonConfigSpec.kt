@@ -13,10 +13,11 @@ import io.mockk.mockk
 class PythonConfigSpec : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerRoot
 
-    val git = mockk<Git>()
     val root = makeProjectRoot()
-    every { git.root() } returns root.path
-    every { git.trackedPaths(PYTHON_PATTERN) } returns makePythonPaths()
+    val git = mockk<Git> {
+        every { root() } returns root.path
+        every { trackedPaths(PYTHON_PATTERN) } returns makePythonPaths()
+    }
     val step = PythonConfig(git, makePythonPluginRoot())
 
     withGivens(
