@@ -133,7 +133,7 @@ class WrapperInstaller(
 given(name = "установка обёртки") {
     justRun { files.copy(source = any(), target = any()) }
     `when` {
-        installer.install(target = makeTargetPath())
+        installer.install(makeTargetPath())
         then {
             verifySequence { files.copy(source = makeWrapperSource(), target = makeTargetPath()) }
         }
