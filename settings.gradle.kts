@@ -7,6 +7,7 @@ pluginManagement {
     }
 }
 plugins {
+    // Версия строкой, а не из gradle/libs.versions.toml: в plugins {} файла settings каталог ещё недоступен.
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 

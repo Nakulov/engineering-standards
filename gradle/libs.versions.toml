@@ -1,9 +1,11 @@
-# Каталог версий репозитория. Сборка gradle-plugin/ читает его через versionCatalogs (gradle-plugin/settings.gradle.kts).
+# Каталог версий репозитория. Корневая сборка (scripts/) подключает его сама: это место каталога по умолчанию;
+# сборка gradle-plugin/ — через versionCatalogs (gradle-plugin/settings.gradle.kts).
 [versions]
 kotlin = "2.4.21"
 detekt = "2.0.0-alpha.6"
 kotestkit = "2.2.0"
 kover = "0.9.11"
+mockk = "1.14.9"
 
 [libraries]
 detekt-api = { module = "dev.detekt:detekt-api", version.ref = "detekt" }
@@ -12,6 +14,7 @@ detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref
 kover-gradle-plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotestkit = { module = "io.github.nakulov:kotestkit", version.ref = "kotestkit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
