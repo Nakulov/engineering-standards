@@ -24,4 +24,10 @@ class FindWorkflowErrorsSpec : BehaviorSpec({
     shouldReturnTest(emptyList<String>(), options = TestOptions(name = "команда task — не скилл")) {
         findWorkflowErrors(workflow = WORKFLOW_WITH_TASK_COMMAND, skills = makeSkills())
     }
+
+    // Вне стандарта: тест проверяет не функцию, а файлы репозитория — памятку `docs/workflow.md` и папку `skills/`:
+    // переименованный или новый скилл без строки в памятке иначе молча расходится с ней.
+    shouldReturnTest(emptyList<String>(), options = TestOptions(name = "памятка репозитория без ошибок")) {
+        findRepoWorkflowErrors()
+    }
 })

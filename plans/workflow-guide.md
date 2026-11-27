@@ -75,7 +75,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: памятка процесса, сверенная со скиллами
   - [x] Задача 1: сверка памятки со скиллами
-  - [ ] Задача 2: памятка `docs/workflow.md` и проверка репозитория
+  - [x] Задача 2: памятка `docs/workflow.md` и проверка репозитория
   - [ ] Задача 3: ссылки на памятку из README
   - [ ] Приёмка
 
@@ -178,7 +178,7 @@
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/FindWorkflowErrorsSpec.kt` — тест памятки репозитория
 - Создать: `docs/workflow.md` — памятка процесса
 
-- [ ] 1. Падающий тест: в конец `FindWorkflowErrorsSpec` (перед `})`) добавить
+- [x] 1. Падающий тест: в конец `FindWorkflowErrorsSpec` (перед `})`) добавить
   ```kotlin
 
       // Вне стандарта: тест проверяет не функцию, а файлы репозитория — памятку `docs/workflow.md` и папку `skills/`:
@@ -187,8 +187,8 @@
           findRepoWorkflowErrors()
       }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — падает: `Unresolved reference 'findRepoWorkflowErrors'`
-- [ ] 3. Минимальный код: `FindRepoWorkflowErrors.kt`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — падает: `Unresolved reference 'findRepoWorkflowErrors'`
+- [x] 3. Минимальный код: `FindRepoWorkflowErrors.kt`
   ```kotlin
   package io.github.nakulov.standards.plugin
 
@@ -208,8 +208,8 @@
       return findWorkflowErrors(workflow, skills)
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — падает: `FileNotFoundException: …/docs/workflow.md` (памятки ещё нет)
-- [ ] 5. Памятка `docs/workflow.md`:
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — падает: `FileNotFoundException: …/docs/workflow.md` (памятки ещё нет)
+- [x] 5. Памятка `docs/workflow.md`:
   ```markdown
   # Как мы работаем
 
@@ -233,8 +233,8 @@
   - Команды `task` — [docs/commands/README.md](commands/README.md).
   - Как проверить результат — README проекта.
   ```
-- [ ] 6. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — `BUILD SUCCESSFUL`, 6 тестов
-- [ ] 7. Коммит — тест, код и памятка вместе: «Памятка процесса для человека»
+- [x] 6. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — `BUILD SUCCESSFUL`, 6 тестов
+- [x] 7. Коммит — тест, код и памятка вместе: «Памятка процесса для человека»
 
 ### Задача 3: ссылки на памятку из README — человек находит памятку
 - Изменить: `docs/README.md:3` — вступление; после `:15` — строка про памятку
