@@ -216,8 +216,11 @@ class OrderServiceSpec : BehaviorSpec({
 ```
 
 ### KT-KIT-7. Параметризованные тесты — только `withGivens`
-Почему: своя надстройка KotestKit — один стиль параметризованных тестов во всех проектах.
+Почему: своя надстройка KotestKit — один стиль параметризованных тестов во всех проектах; новый случай набора — строка `case`, а не копия теста.
 Проверка: ревью
+Два и больше однотипных случая одной функции — один `withGivens`. Однотипные — различаются только входом и ожидаемым значением, тело теста одно. Случаи с разной проверкой — например, один возвращает значение, другой бросает исключение — отдельные тесты. Общая подготовка — не повод писать однотипные случаи отдельно: `withGivens` — только в корне спеки, подготовка — в его теле.
+Имя случая: `nameFn` показывает вход. `TestOptions(name = …)` — только когда имя теста по умолчанию (`300 -> 270`) нечитаемо; тогда в нём смысл случая.
+
 ```kotlin
 // Разрешено
 withGivens(
@@ -240,6 +243,25 @@ listOf(makeAdminArgs(), makeGuestArgs()).forEach { args ->
         // …
     }
 }
+
+// Разрешено — вход нечитаем в имени по умолчанию: смысл случая в TestOptions
+withGivens(
+    nameFn = { case -> "заказ: ${case.arg2.id}" },
+    case(arg1 = "пустая корзина", arg2 = makeEmptyOrder(), arg3 = 0),
+    case(arg1 = "скидка на всё", arg2 = makeDiscountedOrder(), arg3 = 90),
+) { name, order, expected ->
+    shouldReturnTest(expected, options = TestOptions(name)) {
+        checkout.total(order)
+    }
+}
+
+// Запрещено — однотипные случаи отдельными тестами
+shouldReturnTest(expected = 270, options = TestOptions(name = "цена: 300")) {
+    discount.priceFor(price = 300)
+}
+shouldReturnTest(expected = 360, options = TestOptions(name = "цена: 400")) {
+    discount.priceFor(price = 400)
+}
 ```
 
 ### KT-KIT-8. Функция с результатом без побочного эффекта — `shouldReturnTest` в корне спеки
@@ -250,13 +272,13 @@ listOf(makeAdminArgs(), makeGuestArgs()).forEach { args ->
 ```kotlin
 // Разрешено — значение, с заглушкой мока
 shouldReturnTest(expected = 20, options = TestOptions(name = "налог по ставке страны")) {
-    every { rates.rateFor(country = "RU") } returns 20
+    every { rates.rateFor(country = "RU") } returns RU_TAX_RATE
     calculator.tax(price = 100, country = "RU")
 }
 
 // Разрешено — значение со входом: вход передаётся в блок и попадает в имя теста, здесь 100 -> 90
 shouldReturnTest(expected = 90, input = 100) { price ->
-    discount.priceFor(price = price)
+    discount.priceFor(price)
 }
 
 // Разрешено — настройки теста: TestOptions задаёт имя и TestConfig из Kotest
@@ -274,18 +296,18 @@ withGivens(
     case(arg1 = 360, arg2 = 400),
 ) { expected, price ->
     shouldReturnTest(expected) {
-        discount.priceFor(price = price)
+        discount.priceFor(price)
     }
 }
 
-// Разрешено — общая подготовка
+// Разрешено — общая подготовка, разные функции
 given(name = "скидка 50%") {
     val half = Discount(percent = 50)
     shouldReturnTest(expected = 50) {
         half.priceFor(price = 100)
     }
-    shouldReturnTest(expected = 0) {
-        half.priceFor(price = 0)
+    shouldReturnTest(expected = "−50%") {
+        half.label()
     }
 }
 
@@ -294,8 +316,8 @@ withGivens(
     nameFn = { case -> "цена: ${case.arg2}, вес: ${case.arg3}" },
     case(arg1 = 2.5, arg2 = 5.0, arg3 = 2.0),
 ) { expected, price, kilos ->
-    shouldReturnTest(expected plusOrMinus 1e-12) {
-        getPricePerKilo(price = price, kilos = kilos)
+    shouldReturnTest(expected plusOrMinus PRICE_TOLERANCE) {
+        getPricePerKilo(price, kilos)
     }
 }
 
