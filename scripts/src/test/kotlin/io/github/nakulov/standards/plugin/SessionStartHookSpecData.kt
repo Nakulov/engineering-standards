@@ -87,10 +87,7 @@ fun makeNoEnvFileRun(plugin: File): LauncherRun {
     return LauncherRun(code = 0, out = out, err = "")
 }
 
-fun makeNoCacheRun(
-    cache: File,
-    plugin: File,
-): LauncherRun {
+fun makeNoCacheRun(cache: File, plugin: File): LauncherRun {
     val err = "engineering-standards: корень плагина не записан в ${cache.path}/engineering-standards/roots\n"
     return LauncherRun(code = 0, out = makeRulesRun(plugin).out, err = err)
 }
@@ -99,7 +96,7 @@ fun readRootRecord(
     cache: File,
     project: File,
 ): String {
-    return File(cache, "engineering-standards/roots/${makeRootKey(project)}").readText()
+    return File(cache, /* child = */ "engineering-standards/roots/${makeRootKey(project)}").readText()
 }
 
 /** Запуск хука: [envFile] `null` — без `CLAUDE_ENV_FILE`. */

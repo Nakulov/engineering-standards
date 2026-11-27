@@ -12,13 +12,13 @@ import kotlin.time.Duration.Companion.minutes
 class TaskLauncherSpec :
     BehaviorSpec({
         shouldReturnTest(
-            makeHelpRun(),
+            makeUnknownCommandRun(),
             options = TestOptions(
-                name = "task --help: компиляция в кеш и запуск",
+                name = "task: компиляция в кеш и запуск",
                 config = TestConfig(timeout = 3.minutes),
             ),
         ) {
-            runLauncher(path = makeSystemPath(), args = listOf("--help"))
+            runLauncher(path = makeSystemPath(), args = listOf(UNKNOWN_COMMAND))
         }
 
         shouldReturnTest(

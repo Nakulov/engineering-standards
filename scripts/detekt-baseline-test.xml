@@ -145,7 +145,6 @@
     <ID>MagicNumber:PluginSettingsSpecData.kt:3</ID>
     <ID>MagicNumber:StartCommandSpecData.kt:3</ID>
     <ID>MagicNumber:StartCommandSpecData.kt:8</ID>
-    <ID>MatchingDeclarationName:TaskLauncherSpecData.kt:LauncherRun</ID>
     <ID>MaxLineLength:GitSpec.kt:GitSpec$val paths = Git(shell = ProcessShell(directory = worktree)).worktrees().map { path -&gt; File(path).canonicalPath }</ID>
     <ID>MaxLineLength:PluginSettingsSpec.kt:PluginSettingsSpec$shouldThrowWithMessageTest</ID>
     <ID>MaxLineLength:PluginSettingsSpecData.kt:return makeStandardKeys(enabled = "true", source = listOf("\"source\": \"directory\"", "\"path\": \"/tmp/standards\""))</ID>
@@ -411,17 +410,8 @@
     <ID>NamedLiteralArgument:RulesetsSpec.kt:RulesetsSpec$"применение: прогон check есть, ruleset'ов нет, классическая защита есть"</ID>
     <ID>NamedLiteralArgument:RulesetsSpecData.kt:"rulesets"</ID>
     <ID>NamedLiteralArgument:RulesetsSpecData.kt:"task.cache"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:""</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"CLAUDE_ENV_FILE"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"cache"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"engineering-standards/roots/${makeRootKey(project = project)}"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"env"</ID>
     <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"git"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"hooks/session-start"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"plugin"</ID>
     <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"rules/$name"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"task.cache"</ID>
-    <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:"task.repoRoot"</ID>
     <ID>NamedLiteralArgument:SessionStartHookSpecData.kt:true</ID>
     <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"--check"</ID>
     <ID>NamedLiteralArgument:SetupSpec.kt:SetupSpec$"--confirm"</ID>
@@ -533,11 +523,12 @@
     <ID>SpecDataContent:GitSpecData.kt:private fun git</ID>
     <ID>SpecDataContent:GitignoreBlockSpecData.kt:fun readGitignore: String</ID>
     <ID>SpecDataContent:GitignoreBlockSpecData.kt:fun writeGitignore</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:/** Правило плагина → агенты с его копией: правила плагина грузятся только основной сессии. */ private val RULE_COPIES = mapOf( "bash-commands" to listOf("plan-executor", "implementation-reviewer", "test-reviewer", "standards-reviewer"), "bank" to listOf("plan-executor", "standards-reviewer"), )</ID>
     <ID>SpecDataContent:MarkersSpecData.kt:// Блок: `&lt;!-- &gt;&gt;&gt; &lt;префикс&gt;:&lt;имя&gt; --&gt;` + перевод строки + текст + `&lt;!-- &lt;&lt;&lt; &lt;префикс&gt;:&lt;имя&gt; --&gt;`; `\1` — то же имя. private val BLOCK = Regex( pattern = "&lt;!-- &gt;&gt;&gt; ([a-z]+:[a-z-]+) --&gt;\\n(.*?)&lt;!-- &lt;&lt;&lt; \\1 --&gt;", option = RegexOption.DOT_MATCHES_ALL, )</ID>
     <ID>SpecDataContent:MarkersSpecData.kt:fun findMarkerMismatches: List&lt;String&gt;</ID>
     <ID>SpecDataContent:MarkersSpecData.kt:fun findSourceMarkers: List&lt;String&gt;</ID>
     <ID>SpecDataContent:MarkersSpecData.kt:private fun blocks: Map&lt;String, String&gt;</ID>
-    <ID>SpecDataContent:MarkersSpecData.kt:private val COPIES = listOf( Copies(source = "skills/decompose/SKILL.md", copy = "agents/plan-reviewer.md", prefix = "plan"), Copies(source = "skills/execute/SKILL.md", copy = "agents/plan-executor.md", prefix = "execute"), ) + listOf("plan-executor", "implementation-reviewer", "test-reviewer", "standards-reviewer").map { agent -&gt; Copies(source = "rules/bash-commands.md", copy = "agents/$agent.md", prefix = "rules") } + listOf("implementation-reviewer", "test-reviewer", "standards-reviewer").map { reviewer -&gt; Copies(source = "agents/plan-executor.md", copy = "agents/$reviewer.md", prefix = "agents") }</ID>
+    <ID>SpecDataContent:MarkersSpecData.kt:private val COPIES = listOf( Copies(source = "skills/decompose/SKILL.md", copy = "agents/plan-reviewer.md", prefix = "plan"), Copies(source = "skills/execute/SKILL.md", copy = "agents/plan-executor.md", prefix = "execute"), ) + RULE_COPIES.flatMap { (rule, agents) -&gt; agents.map { agent -&gt; Copies(source = "rules/$rule.md", copy = "agents/$agent.md", prefix = "rules:$rule") } } + listOf("implementation-reviewer", "test-reviewer", "standards-reviewer").map { reviewer -&gt; Copies(source = "agents/plan-executor.md", copy = "agents/$reviewer.md", prefix = "agents") }</ID>
     <ID>SpecDataContent:PluginSettingsSpecData.kt:fun readSettings: String</ID>
     <ID>SpecDataContent:PluginSettingsSpecData.kt:fun writeSettings</ID>
     <ID>SpecDataContent:PrBodySpecData.kt:fun readTemplateChecks: List&lt;String&gt;</ID>

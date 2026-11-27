@@ -2,6 +2,8 @@ package io.github.nakulov.standards.task.cli
 
 import java.io.File
 
+const val UNKNOWN_COMMAND = "nope"
+
 /** Результат запуска `scripts/task`: код выхода, stdout, stderr. */
 data class LauncherRun(
     val code: Int,
@@ -9,26 +11,9 @@ data class LauncherRun(
     val err: String,
 )
 
-fun makeHelpRun(): LauncherRun {
-    return LauncherRun(
-        code = 0,
-        out = "task — механика процесса: ветки, PR, доска. Команды:\n\n" +
-            "  task start <N> <slug> [--long | --from long/<M>-…] [--worktree] — ветка task/<N>-<slug> от " +
-            "origin/dev, статус In progress; --worktree — в копии .worktrees/<slug>\n" +
-            "  task pr --title «…» --body-file <файл> [--check «команда»]… [--part] | --ready — " +
-            "черновик PR по шаблону; --ready — к ревью\n" +
-            "  task done — после слияния PR: свежий dev, ветка удалена, статус Done\n" +
-            "  task final <N> --title «…» --body-file <файл> [--check «команда»]… — итоговый PR " +
-            "task/<N>-final → dev из long/<N>-…\n" +
-            "  task stage create --title «…» --body-file <файл> [--due ГГГГ-ММ-ДД] — веха этапа по шаблону\n" +
-            "  task new <тип> --title «…» --body-file <файл> [--parent N] [--blocked-by N,N] — " +
-            "задача по шаблону типа в Backlog\n" +
-            "  task commit --message-file <файл> — коммит по шаблону задачи плана: файлы — из раздела «Файлы:»\n" +
-            "  task groomed <N> — задача из Backlog в Groomed: груминг закончен\n" +
-            "  task plan <N> <slug> [--long] --issue-parts <файл> — " +
-            "план plans/<slug>.md в ветку задачи; задача из Backlog — в Groomed\n",
-        err = "",
-    )
+/** Ответ `Task` на неизвестную команду: не зависит от списка команд и их опций. */
+fun makeUnknownCommandRun(): LauncherRun {
+    return LauncherRun(code = 2, out = "", err = "неизвестная команда nope — см. task --help\n")
 }
 
 fun makeSetupHelpRun(): LauncherRun {
