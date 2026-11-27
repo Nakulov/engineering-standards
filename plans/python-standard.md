@@ -954,10 +954,7 @@
       return project
   }
 
-  private fun makeCopyFinding(
-      status: Finding.Status,
-      text: String,
-  ): Finding {
+  private fun makeCopyFinding(status: Finding.Status, text: String): Finding {
       return Finding(status = status, area = COPIES_AREA, text = text)
   }
   ```
@@ -1272,11 +1269,7 @@
       private val area: String,
   ) {
 
-      fun run(
-          root: File,
-          copies: List<Pair<String, String>>,
-          mode: Setup.Mode,
-      ): List<Finding> {
+      fun run(root: File, copies: List<Pair<String, String>>, mode: Setup.Mode): List<Finding> {
           val differing = copies.filter { (source, target) ->
               val file = File(root, target)
               !file.isFile || file.readText() != File(pluginRoot, source).readText()
@@ -1372,10 +1365,7 @@
           }
       }
 
-      private fun createMissingSeeds(
-          root: File,
-          mode: Setup.Mode,
-      ): List<Finding> {
+      private fun createMissingSeeds(root: File, mode: Setup.Mode): List<Finding> {
           val missing = seeds.filter { (_, target) -> !File(root, target).isFile }
           return missing.map { (source, target) ->
               if (mode.apply) {
