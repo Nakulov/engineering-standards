@@ -43,4 +43,12 @@ tasks.test {
     systemProperty("task.repoRoot", rootProject.projectDir.absolutePath)
     systemProperty("task.prTemplate", rootProject.file("templates/github/pull_request_template.md").absolutePath)
     systemProperty("task.cache", layout.buildDirectory.dir("test-cache").get().asFile.absolutePath)
+    // Спеки читают эти файлы через task.repoRoot: без входов правка только в них оставляет тест UP-TO-DATE.
+    inputs.files(
+        rootProject.files(
+            "skills", "agents", "rules", "docs", "templates", ".github",
+            "hooks/session-start", "scripts/task-wrapper",
+        ),
+    )
+        .withPropertyName(/* propertyName = */ "repoFiles")
 }
