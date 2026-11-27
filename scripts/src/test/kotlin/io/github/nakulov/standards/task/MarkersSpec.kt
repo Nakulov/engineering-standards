@@ -7,7 +7,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 // Вне стандарта: спека проверяет не класс, а пары файлов — блоки между маркерами в них копии 1 в 1:
 // `plan:*` — `skills/decompose/SKILL.md` и `agents/plan-reviewer.md` (#46),
 // `execute:*` — `skills/execute/SKILL.md` и `agents/plan-executor.md` (#48): правило в скилле и в агенте не расходится,
-// `rules:*` — `rules/bash-commands.md` и 4 агента с Bash (#98): правила плагина грузятся только основной сессии,
+// `rules:<правило>` — `rules/<правило>.md` и агенты, которым оно нужно (#98, #49): правила плагина грузятся только
+// основной сессии,
 // `agents:*` — `agents/plan-executor.md` и 3 ревьюера (#96): файлы — абсолютным путём рабочей папки.
 // Разбор — в MarkersSpecData.
 class MarkersSpec :
@@ -28,6 +29,7 @@ class MarkersSpec :
                 "plan:granularity",
                 "plan:no-stubs",
                 "plan:types",
+                "rules:bank",
                 "rules:bash-commands",
             ),
             options = TestOptions(name = "в источниках все блоки plan:*, execute:*, rules:* и agents:*"),
