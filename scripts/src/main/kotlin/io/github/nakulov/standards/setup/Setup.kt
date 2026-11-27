@@ -33,6 +33,7 @@ class Setup(
             report(message = error.message.orEmpty(), error = error)
             error.exitCode
         } catch (@Suppress("TooGenericExceptionCaught") error: RuntimeException) {
+            // Граница CLI: любой сбой — в код 2 и одну строку, стектрейс только при TASK_DEBUG=1.
             report(message = "сбой скрипта: $error — подробности: TASK_DEBUG=1", error = error)
             2
         }
