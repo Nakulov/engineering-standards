@@ -5,10 +5,7 @@ private const val COMMAND_PATTERN = "`/([a-z][a-z-]*)"
 
 // Ошибки памятки `docs/workflow.md` против имён скиллов: команда без скилла и скилл, не упомянутый командой.
 // Порядок: команды — по первому появлению в тексте, скиллы — по списку.
-fun findWorkflowErrors(
-    workflow: String,
-    skills: List<String>,
-): List<String> {
+fun findWorkflowErrors(workflow: String, skills: List<String>): List<String> {
     val commands = Regex(pattern = COMMAND_PATTERN).findAll(input = workflow)
         .map { match -> match.groupValues[1] }
         .distinct()

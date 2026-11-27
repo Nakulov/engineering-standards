@@ -273,7 +273,7 @@ withGivens(
     case(arg1 = 270, arg2 = 300),
     case(arg1 = 360, arg2 = 400),
 ) { expected, price ->
-    shouldReturnTest(expected = expected) {
+    shouldReturnTest(expected) {
         discount.priceFor(price = price)
     }
 }
@@ -294,7 +294,7 @@ withGivens(
     nameFn = { case -> "цена: ${case.arg2}, вес: ${case.arg3}" },
     case(arg1 = 2.5, arg2 = 5.0, arg3 = 2.0),
 ) { expected, price, kilos ->
-    shouldReturnTest(expected = expected plusOrMinus 1e-12) {
+    shouldReturnTest(expected plusOrMinus 1e-12) {
         getPricePerKilo(price = price, kilos = kilos)
     }
 }
