@@ -74,6 +74,8 @@ ktlint:
     active: false
   FunctionExpressionBody: # KT-FMT-6: тело-выражение разрешено, но не обязательно
     active: false
+  FunctionSignature: # KT-FMT-10: параметры функции с новой строки от трёх; один-два — одной строкой, пока сигнатура влезает в 120
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 3
 
 # Свои правила стандарта: модуль gradle-plugin/detekt-rules.
 standards:

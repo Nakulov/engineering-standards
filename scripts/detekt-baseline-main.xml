@@ -25,33 +25,25 @@
     <ID>DestructuringDeclarationWithTooManyEntries:Board.kt:Board$val (id, projectId, fieldId, status, options) = rows.first().split("\t")</ID>
     <ID>DestructuringDeclarationWithTooManyEntries:BoardSetup.kt:BoardSetup$val (_, url, fieldId, optionsText, workflowsText) = board</ID>
     <ID>DestructuringDeclarationWithTooManyEntries:BoardSetup.kt:BoardSetup$val (id, name, color, description) = "$line\t\t\t".split("\t")</ID>
-    <ID>FunctionSignature:Board.kt:Board$fun add: BoardItem</ID>
     <ID>FunctionSignature:Board.kt:Board$fun item: BoardItem</ID>
     <ID>FunctionSignature:Board.kt:Board$fun move</ID>
     <ID>FunctionSignature:Board.kt:Board$private fun isVisible: Boolean</ID>
     <ID>FunctionSignature:BoardSetup.kt:BoardSetup$private fun addStatuses</ID>
-    <ID>FunctionSignature:BoardSetup.kt:BoardSetup$private fun check: List&lt;Finding&gt;</ID>
     <ID>FunctionSignature:BoardSetup.kt:BoardSetup.Companion$fun parse: Template</ID>
-    <ID>FunctionSignature:BranchName.kt:BranchName.Companion$fun of: BranchName</ID>
     <ID>FunctionSignature:Command.kt:Command$fun run</ID>
     <ID>FunctionSignature:CommitCommand.kt:CommitCommand$override fun run</ID>
     <ID>FunctionSignature:CommitMessage.kt:CommitMessage.Companion$fun parse: CommitMessage</ID>
     <ID>FunctionSignature:DoneCommand.kt:DoneCommand$override fun run</ID>
     <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun finishIssue</ID>
     <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun leaveBranch: Boolean</ID>
-    <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun removeLong</ID>
     <ID>FunctionSignature:DoneCommand.kt:DoneCommand$private fun removeOwnCopy</ID>
     <ID>FunctionSignature:FinalCommand.kt:FinalCommand$override fun run</ID>
-    <ID>FunctionSignature:FinalCommand.kt:FinalCommand$private fun longBranch: String</ID>
-    <ID>FunctionSignature:FinalCommand.kt:FinalCommand$private fun prepare</ID>
-    <ID>FunctionSignature:Git.kt:Git$fun addBranchWorktree</ID>
     <ID>FunctionSignature:Git.kt:Git$fun addWorktree</ID>
     <ID>FunctionSignature:Git.kt:Git$fun addWorktreeOn</ID>
     <ID>FunctionSignature:Git.kt:Git$fun commitAll</ID>
     <ID>FunctionSignature:Git.kt:Git$fun commitPaths</ID>
     <ID>FunctionSignature:Git.kt:Git$fun createBranch</ID>
     <ID>FunctionSignature:Git.kt:Git$fun fastForwardIn</ID>
-    <ID>FunctionSignature:Git.kt:Git$fun firstCommit</ID>
     <ID>FunctionSignature:Git.kt:Git$fun includedPaths: List&lt;String&gt;</ID>
     <ID>FunctionSignature:Git.kt:Git$fun isAncestor: Boolean</ID>
     <ID>FunctionSignature:Git.kt:Git$fun moveBranch</ID>
@@ -60,54 +52,37 @@
     <ID>FunctionSignature:Git.kt:Git$fun setBase</ID>
     <ID>FunctionSignature:Git.kt:Git$fun switchIn</ID>
     <ID>FunctionSignature:Git.kt:Git$private fun readIn: String</ID>
-    <ID>FunctionSignature:GitHub.kt:GitHub$fun listGraphql: List&lt;String&gt;</ID>
     <ID>FunctionSignature:GitHub.kt:GitHub$fun listRest: List&lt;String&gt;</ID>
-    <ID>FunctionSignature:GitHub.kt:GitHub$private fun output: String</ID>
     <ID>FunctionSignature:GroomedCommand.kt:GroomedCommand$override fun run</ID>
-    <ID>FunctionSignature:IssueParts.kt:IssueParts$fun merge: String</ID>
-    <ID>FunctionSignature:IssueParts.kt:IssueParts$private fun place: List&lt;String&gt;</ID>
     <ID>FunctionSignature:IssueTemplate.kt:IssueTemplate$fun typeLabel: String</ID>
-    <ID>FunctionSignature:Issues.kt:Issues$fun create: Int</ID>
     <ID>FunctionSignature:Issues.kt:Issues$fun editBody</ID>
     <ID>FunctionSignature:JsonValue.kt:private fun render: String</ID>
     <ID>FunctionSignature:Labels.kt:Labels$private fun removeDefault: Finding</ID>
-    <ID>FunctionSignature:Labels.kt:Labels$private fun syncType: Finding?</ID>
     <ID>FunctionSignature:Labels.kt:Labels.Companion$fun parse: List&lt;Label&gt;</ID>
-    <ID>FunctionSignature:Labels.kt:Labels.Companion$private fun value: String</ID>
     <ID>FunctionSignature:NewCommand.kt:NewCommand$override fun run</ID>
-    <ID>FunctionSignature:Options.kt:Options$fun parse: Map&lt;String, String&gt;</ID>
     <ID>FunctionSignature:Options.kt:Options$fun readFile: String</ID>
     <ID>FunctionSignature:PlanCommand.kt:PlanCommand$override fun run</ID>
-    <ID>FunctionSignature:PlanCommand.kt:PlanCommand$private fun save: String?</ID>
     <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun enabled: Finding</ID>
     <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun finding: Finding</ID>
     <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun marketplace: Finding</ID>
     <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun objectAt: JsonObject</ID>
     <ID>FunctionSignature:PluginSettings.kt:PluginSettings$private fun permissions: List&lt;Finding&gt;</ID>
-    <ID>FunctionSignature:PrBody.kt:PrBody$fun compose: String</ID>
     <ID>FunctionSignature:PrBody.kt:PrBody$private fun commentEnd: Int</ID>
     <ID>FunctionSignature:PrBody.kt:PrBody$private fun withLink: List&lt;String&gt;</ID>
     <ID>FunctionSignature:PrCommand.kt:PrCommand$override fun run</ID>
-    <ID>FunctionSignature:PrCommand.kt:PrCommand$private fun ready</ID>
     <ID>FunctionSignature:Publisher.kt:Publisher$fun publish</ID>
-    <ID>FunctionSignature:PullRequests.kt:PullRequests$fun create: String</ID>
-    <ID>FunctionSignature:PullRequests.kt:PullRequests$fun edit: String</ID>
     <ID>FunctionSignature:Rulesets.kt:Rulesets$private fun countOrZero: Int</ID>
-    <ID>FunctionSignature:Rulesets.kt:Rulesets$private fun send</ID>
-    <ID>FunctionSignature:Rulesets.kt:Rulesets$private fun sync: Finding</ID>
     <ID>FunctionSignature:Setup.kt:Setup$private fun report</ID>
     <ID>FunctionSignature:StageBody.kt:StageBody$fun emptySections: List&lt;String&gt;</ID>
     <ID>FunctionSignature:StageCommand.kt:StageCommand$override fun run</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$override fun run</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun checkReady</ID>
-    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun createBranch</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun isSamePath: Boolean</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun openCopy: String</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun openedRefusal: TaskError.Refusal</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun research</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun switchOwnCopy</ID>
     <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun switchToBranch</ID>
-    <ID>FunctionSignature:StartCommand.kt:StartCommand$private fun switchToExisting</ID>
     <ID>FunctionSignature:Task.kt:Task$private fun report</ID>
     <ID>FunctionSignature:TaskWrapper.kt:TaskWrapper$private fun finding: Finding</ID>
     <ID>FunctionSignature:TaskWrapper.kt:TaskWrapper$private fun install</ID>
