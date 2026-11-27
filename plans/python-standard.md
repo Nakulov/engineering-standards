@@ -903,54 +903,32 @@
 
   fun makeMissingPythonFindings(): List<Finding> {
       return listOf(
-          Finding(status = Finding.Status.DEVIATION, area = AREA, text = "ruff-standard.toml: нет"),
-          Finding(status = Finding.Status.DEVIATION, area = AREA, text = "pytest.ini: нет"),
-          Finding(status = Finding.Status.DEVIATION, area = AREA, text = "ruff.toml: нет"),
-          Finding(status = Finding.Status.DEVIATION, area = AREA, text = ".coveragerc: нет"),
+          makePythonDeviation(text = "ruff-standard.toml: нет"),
+          makePythonDeviation(text = "pytest.ini: нет"),
+          makePythonDeviation(text = "ruff.toml: нет"),
+          makePythonDeviation(text = ".coveragerc: нет"),
       )
   }
 
   fun makeWrittenPythonFindings(): List<Finding> {
       return listOf(
-          Finding(
-              status = Finding.Status.FIXED,
-              area = AREA,
-              text = "ruff-standard.toml записан (нет) — закоммитьте через задачу",
-          ),
-          Finding(
-              status = Finding.Status.FIXED,
-              area = AREA,
-              text = "pytest.ini записан (нет) — закоммитьте через задачу",
-          ),
-          Finding(
-              status = Finding.Status.FIXED,
-              area = AREA,
+          makeFixedPythonFinding(text = "ruff-standard.toml записан (нет) — закоммитьте через задачу"),
+          makeFixedPythonFinding(text = "pytest.ini записан (нет) — закоммитьте через задачу"),
+          makeFixedPythonFinding(
               text = "ruff.toml создан по заготовке — дальше его ведёт проект; закоммитьте через задачу",
           ),
-          Finding(
-              status = Finding.Status.FIXED,
-              area = AREA,
+          makeFixedPythonFinding(
               text = ".coveragerc создан по заготовке — дальше его ведёт проект; закоммитьте через задачу",
           ),
       )
   }
 
   fun makePythonFiles(): Map<String, String> {
-      return mapOf(
-          "ruff-standard.toml" to STANDARD_RUFF,
-          "pytest.ini" to STANDARD_PYTEST,
-          "ruff.toml" to RUFF_SEED,
-          ".coveragerc" to COVERAGE_SEED,
-      )
+      return makePythonFilesWithRuff(ruff = RUFF_SEED)
   }
 
   fun makePythonFilesWithProjectRuff(): Map<String, String> {
-      return mapOf(
-          "ruff-standard.toml" to STANDARD_RUFF,
-          "pytest.ini" to STANDARD_PYTEST,
-          "ruff.toml" to PROJECT_RUFF,
-          ".coveragerc" to COVERAGE_SEED,
-      )
+      return makePythonFilesWithRuff(ruff = PROJECT_RUFF)
   }
 
   fun makePythonDeviation(text: String): Finding {
@@ -959,6 +937,19 @@
 
   fun makePythonOk(): Finding {
       return Finding(status = Finding.Status.OK, area = AREA, text = "конфиги Python по стандарту")
+  }
+
+  private fun makeFixedPythonFinding(text: String): Finding {
+      return Finding(status = Finding.Status.FIXED, area = AREA, text = text)
+  }
+
+  private fun makePythonFilesWithRuff(ruff: String): Map<String, String> {
+      return mapOf(
+          "ruff-standard.toml" to STANDARD_RUFF,
+          "pytest.ini" to STANDARD_PYTEST,
+          "ruff.toml" to ruff,
+          ".coveragerc" to COVERAGE_SEED,
+      )
   }
   ```
 
@@ -984,30 +975,53 @@
       val root = makeProjectRoot()
       every { git.root() } returns root.path
       every { git.trackedPaths(PYTHON_PATTERN) } returns makePythonPaths()
-      val step = PythonConfig(git = git, pluginRoot = makePythonPluginRoot())
+      val step = PythonConfig(git, makePythonPluginRoot())
 
-      shouldReturnTest(listOf(makeNoPythonFinding()), options = TestOptions(name = "нет файлов Python — находка")) {
-          every { git.trackedPaths(PYTHON_PATTERN) } returns emptyList()
-          step.run(makeCheckMode())
+      withGivens(
+          nameFn = { case -> case.arg1 },
+          case(
+              arg1 = "нет файлов Python — находка",
+              arg2 = emptyList<String>(),
+              arg3 = makeCheckMode(),
+              arg4 = listOf(makeNoPythonFinding()),
+          ),
+          case(
+              arg1 = "проект без конфигов Python",
+              arg2 = makePythonPaths(),
+              arg3 = makeCheckMode(),
+              arg4 = makeMissingPythonFindings(),
+          ),
+          case(
+              arg1 = "setup пишет копии и заготовки",
+              arg2 = makePythonPaths(),
+              arg3 = makeApplyMode(),
+              arg4 = makeWrittenPythonFindings(),
+          ),
+      ) { _, paths, mode, expected ->
+          shouldReturnTest(expected) {
+              every { git.trackedPaths(PYTHON_PATTERN) } returns paths
+              step.run(mode)
+          }
       }
 
-      shouldReturnTest(emptyMap<String, String>(), options = TestOptions(name = "нет файлов Python — файлы не пишутся")) {
-          every { git.trackedPaths(PYTHON_PATTERN) } returns emptyList()
-          step.run(makeApplyMode())
-          readProjectFiles(root)
-      }
-
-      shouldReturnTest(makeMissingPythonFindings(), options = TestOptions(name = "проект без конфигов Python")) {
-          step.run(makeCheckMode())
-      }
-
-      shouldReturnTest(makeWrittenPythonFindings(), options = TestOptions(name = "setup пишет копии и заготовки")) {
-          step.run(makeApplyMode())
-      }
-
-      shouldReturnTest(makePythonFiles(), options = TestOptions(name = "содержимое копий и заготовок")) {
-          step.run(makeApplyMode())
-          readProjectFiles(root)
+      withGivens(
+          nameFn = { case -> case.arg1 },
+          case(
+              arg1 = "нет файлов Python — файлы не пишутся",
+              arg2 = emptyList<String>(),
+              arg3 = emptyMap<String, String>(),
+          ),
+          case(
+              arg1 = "содержимое копий и заготовок",
+              arg2 = makePythonPaths(),
+              arg3 = makePythonFiles(),
+          ),
+      ) { _, paths, expected ->
+          shouldReturnTest(expected) {
+              every { git.trackedPaths(PYTHON_PATTERN) } returns paths
+              step.run(makeApplyMode())
+              readProjectFiles(root)
+          }
       }
 
       shouldReturnTest(makePythonFilesWithProjectRuff(), options = TestOptions(name = "ruff.toml проекта не трогается")) {
@@ -1022,40 +1036,46 @@
       }
 
       withGivens(
-          nameFn = { given -> given.arg3 },
+          nameFn = { case -> "${case.arg1}: ${case.arg4}" },
           case(
               arg1 = "ruff-standard.toml",
               arg2 = "старый стандарт\n",
               arg3 = "ruff-standard.toml: отличается от стандарта",
+              arg4 = "старый стандарт",
           ),
           case(
               arg1 = "ruff.toml",
               arg2 = "line-length = 100\n",
               arg3 = "ruff.toml: нет строки extend = \"ruff-standard.toml\" — стандарт не действует",
+              arg4 = "без extend",
           ),
           case(
               arg1 = ".ruff.toml",
               arg2 = "line-length = 100\n",
               arg3 = ".ruff.toml: ruff читает его вместо ruff.toml — перенесите настройки в ruff.toml",
+              arg4 = "рядом с ruff.toml",
           ),
           case(
               arg1 = "pyproject.toml",
               arg2 = "[tool.ruff]\nline-length = 100\n",
               arg3 = "pyproject.toml: [tool.ruff] не действует рядом с ruff.toml — перенесите настройки в ruff.toml",
+              arg4 = "раздел [tool.ruff]",
           ),
           case(
               arg1 = "pyproject.toml",
               arg2 = "[tool.pytest.ini_options]\naddopts = \"-x\"\n",
               arg3 = "pyproject.toml: [tool.pytest] не действует рядом с pytest.ini — " +
                   "настройки pytest задаёт стандарт, уберите раздел",
+              arg4 = "раздел [tool.pytest]",
           ),
           case(
               arg1 = "pyproject.toml",
               arg2 = "[tool.coverage.report]\nfail_under = 90\n",
               arg3 = "pyproject.toml: [tool.coverage] не действует рядом с .coveragerc — " +
                   "перенесите настройки в .coveragerc",
+              arg4 = "раздел [tool.coverage]",
           ),
-      ) { path, text, expected ->
+      ) { path, text, expected, _ ->
           shouldReturnTest(listOf(makePythonDeviation(expected))) {
               step.run(makeApplyMode())
               writeProjectFile(root, path, text)
