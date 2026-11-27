@@ -600,6 +600,43 @@
       "\n" +
       "import os\n"
 
+  /** Строка в 112 символов: длиннее 88 (умолчание ruff), но в пределах 120 (PY-FMT-1). */
+  fun makeLongLineProject(): Map<String, String> {
+      return mapOf(TOOL_PATH to makeMessagePy(length = 100))
+  }
+
+  /** Строка в 131 символ: длиннее 120 — нарушение вне набора ruff по умолчанию. */
+  fun makeTooLongLineProject(): Map<String, String> {
+      return mapOf(TOOL_PATH to makeMessagePy(length = 119))
+  }
+
+  private fun makeMessagePy(length: Int): String {
+      return "\"\"\"Скрипт-образец с длинной строкой.\"\"\"\n\nMESSAGE = \"${"а".repeat(length)}\"\n"
+  }
+
+  /** Докстринг без точки: нарушение D415 по Google (PY-FMT-3); `D` вне набора ruff по умолчанию. */
+  const val NON_GOOGLE_DOC_PY = "\"\"\"Скрипт-образец с докстрингом не по Google.\"\"\"\n" +
+      "\n" +
+      "\n" +
+      "def greet() -> None:\n" +
+      "    \"\"\"Печатает приветствие\"\"\"\n"
+
+  /** Функция без аннотаций: нарушение `ANN` вне набора ruff по умолчанию. */
+  const val NO_ANNOTATION_PY = "\"\"\"Скрипт-образец без аннотаций.\"\"\"\n" +
+      "\n" +
+      "\n" +
+      "def greet(name):\n" +
+      "    \"\"\"Возвращает приветствие.\"\"\"\n" +
+      "    return name\n"
+
+  fun makeNonGoogleDocProject(): Map<String, String> {
+      return mapOf(TOOL_PATH to NON_GOOGLE_DOC_PY)
+  }
+
+  fun makeNoAnnotationProject(): Map<String, String> {
+      return mapOf(TOOL_PATH to NO_ANNOTATION_PY)
+  }
+
   fun makeCleanProject(): Map<String, String> {
       return mapOf(TOOL_PATH to TOOL_PY, TEST_TOOL_PATH to TEST_TOOL_PY)
   }
@@ -622,6 +659,32 @@
           "tools/tool.py:3:8: F401 [*] `os` imported but unused",
           "Found 1 error.",
           "[*] 1 fixable with `--fix`.",
+      )
+  }
+
+  fun makeLongLineFormatOutput(): List<String> {
+      return listOf("0", "1 file already formatted")
+  }
+
+  fun makeTooLongLineOutput(): List<String> {
+      return listOf("1", "tools/tool.py:3:121: E501 Line too long (131 > 120)", "Found 1 error.")
+  }
+
+  fun makeNonGoogleDocOutput(): List<String> {
+      return listOf(
+          "1",
+          "tools/tool.py:5:5: D415 First line should end with a period, question mark, or exclamation point",
+          "Found 1 error.",
+          "1 unsafe fix available with `--fix --unsafe-fixes`.",
+      )
+  }
+
+  fun makeNoAnnotationOutput(): List<String> {
+      return listOf(
+          "1",
+          "tools/tool.py:4:5: ANN201 Missing return type annotation for public function `greet`",
+          "tools/tool.py:4:11: ANN001 Missing type annotation for function argument `name`",
+          "Found 2 errors.",
       )
   }
   ```
@@ -694,6 +757,36 @@
               arg3 = listOf("check", "--output-format", "concise"),
               arg4 = makeUnusedImportOutput(),
           ),
+          case(
+              arg1 = "ruff check: строка 112 символов — в пределах 120",
+              arg2 = makeLongLineProject(),
+              arg3 = listOf("check", "--output-format", "concise"),
+              arg4 = makeCleanCheckOutput(),
+          ),
+          case(
+              arg1 = "ruff format: строка 112 символов не переносится",
+              arg2 = makeLongLineProject(),
+              arg3 = listOf("format", "--check"),
+              arg4 = makeLongLineFormatOutput(),
+          ),
+          case(
+              arg1 = "ruff check: строка длиннее 120 символов",
+              arg2 = makeTooLongLineProject(),
+              arg3 = listOf("check", "--output-format", "concise"),
+              arg4 = makeTooLongLineOutput(),
+          ),
+          case(
+              arg1 = "ruff check: докстринг не по Google",
+              arg2 = makeNonGoogleDocProject(),
+              arg3 = listOf("check", "--output-format", "concise"),
+              arg4 = makeNonGoogleDocOutput(),
+          ),
+          case(
+              arg1 = "ruff check: функция без аннотаций",
+              arg2 = makeNoAnnotationProject(),
+              arg3 = listOf("check", "--output-format", "concise"),
+              arg4 = makeNoAnnotationOutput(),
+          ),
       ) { name, files, args, expected ->
           shouldReturnTest(expected, options = TestOptions(name)) {
               findRuffOutput(files, args)
@@ -734,31 +827,22 @@
   "tests/**" = ["S101", "PLR2004", "D1"]  # PY-TEST-3
   ```
 
-- [x] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 3 теста
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 8 тестов
 - [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
 - [x] 6. Коммит — шаблон и спека вместе
 
 ### Задача 5: `pytest.ini` и порог покрытия на образце
 - Создать: `templates/project/pytest.ini` — конфиг pytest стандарта
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/FindPytestFailure.kt` — запуск pytest в образце
+- Создать: `templates/project/coveragerc` — заготовка `.coveragerc` проекта: спека берёт настоящий шаблон, а не копию
 - Изменить: `PythonTemplatesSpec.kt`, `PythonTemplatesSpecData.kt` — случай порога
 
 - [x] 1. Падающий тест: порог из `.coveragerc` роняет pytest. В `PythonTemplatesSpecData.kt` добавить:
 
   ```kotlin
   /** Порог 100% при покрытии 57%; блок `__main__` и `tests/` — вне подсчёта, `tools/` без `__init__.py` — в нём. */
-  const val STRICT_COVERAGERC = "[run]\n" +
-      "source = .\n" +
-      "omit = tests/*\n" +
-      "\n" +
-      "[report]\n" +
-      "fail_under = 100\n" +
-      "include_namespace_packages = True\n" +
-      "exclude_also =\n" +
-      "    if __name__ == .__main__.:\n"
-
   fun makeLowCoverageProject(): Map<String, String> {
-      return mapOf(TOOL_PATH to TOOL_PY, TEST_TOOL_PATH to TEST_TOOL_PY, ".coveragerc" to STRICT_COVERAGERC)
+      return mapOf(TOOL_PATH to TOOL_PY, TEST_TOOL_PATH to TEST_TOOL_PY)
   }
 
   fun makeCoverageFailure(): List<String> {
@@ -788,15 +872,23 @@
   private const val CONFIG = "pytest.ini"
   private const val PYTEST = "pytest==9.2.0"
   private const val PYTEST_COV = "pytest-cov==7.1.0"
+  private const val COVERAGE_TEMPLATE = "templates/project/coveragerc"
+  private const val COVERAGE_CONFIG = ".coveragerc"
+  private const val SEED_THRESHOLD = "fail_under = 0"
+  private const val STRICT_THRESHOLD = "fail_under = 100"
   private const val FAILURE = "FAIL "
 
   // Исключение KT-TEST-6: pytest запускается процессом в образце [files] с копией шаблона в корне, как её кладёт setup:
   // pythonpath шаблона считается от папки pytest.ini. Версии — нижние границы шаблона (minversion, required_plugins),
   // закреплённые: тест не зависит от новых выпусков; поднял границу в pytest.ini — подними и PYTEST, PYTEST_COV.
+  // Конфиг покрытия — настоящий templates/project/coveragerc с порогом 100 вместо нулевого порога заготовки.
   // Из вывода остаются код выхода и строка FAIL pytest-cov — остальное (платформа, время) зависит от машины.
   fun findPytestFailure(files: Map<String, String>): List<String> {
       val project = makeProjectRoot()
       File(System.getProperty(/* key = */ "task.repoRoot"), TEMPLATE).copyTo(target = File(project, CONFIG))
+      val coverage = File(System.getProperty(/* key = */ "task.repoRoot"), COVERAGE_TEMPLATE).readText()
+      require(SEED_THRESHOLD in coverage) { "в $COVERAGE_TEMPLATE нет $SEED_THRESHOLD" }
+      File(project, COVERAGE_CONFIG).writeText(coverage.replace(SEED_THRESHOLD, STRICT_THRESHOLD))
       files.forEach { (path, text) -> writeProjectFile(project, path, text) }
       val command = listOf("uv", "tool", "run", "--from", PYTEST, "--with", PYTEST_COV) +
           listOf("pytest", "-p", "no:cacheprovider")
@@ -808,7 +900,7 @@
   }
   ```
 
-- [x] 2. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — падает: `NoSuchFileException` … `templates/project/pytest.ini` (бросает `copyTo`)
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — падает: `NoSuchFileException` … `templates/project/pytest.ini` (бросает `copyTo`; `coveragerc` читается после него)
 - [x] 3. Минимальный код: создать `templates/project/pytest.ini`:
 
   ```ini
@@ -823,7 +915,24 @@
   addopts = --cov --cov-report=term-missing
   ```
 
-- [x] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 4 теста
+  Создать `templates/project/coveragerc` (порог 0 — заготовка проекта; спека подставляет `fail_under = 100`):
+
+  ```ini
+  # Конфиг покрытия проекта: setup создаёт его один раз, дальше его ведёт проект.
+  # fail_under — замер при подключении с округлением вниз; поднимается, не снижается (PY-TEST-2).
+  [run]
+  source = .
+  omit = tests/*
+
+  [report]
+  fail_under = 0
+  # Скрипты в папках без __init__.py (PY-LINT-3): без этой строки непокрытый скрипт не попадает в отчёт.
+  include_namespace_packages = True
+  exclude_also =
+      if __name__ == .__main__.:
+  ```
+
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 9 тестов
 - [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
 - [x] 6. Коммит — шаблон и случай спеки вместе
 
@@ -874,7 +983,9 @@
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/PythonConfig.kt` — шаг
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpec.kt` — случаи
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpecData.kt` — шаблоны плагина и находки
-- Создать: `templates/project/ruff.toml`, `templates/project/coveragerc` — заготовки
+- Создать: `templates/project/ruff.toml` — заготовка; `templates/project/coveragerc` создан в задаче 5
+- Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/HasRuffSeedExtend.kt` — проверка строки `extend` в настоящей заготовке
+- Изменить: `PythonTemplatesSpec.kt` — случай `ruff.toml` шаблона; `setup/PythonConfig.kt` — `EXTEND_LINE` без `private` (читает спека)
 
 - [x] 1. Падающий тест. Создать `StandardCopiesSpecData.kt`:
 
@@ -1322,7 +1433,7 @@
   private const val PYTEST_CONFIG = "pytest.ini"
   private const val COVERAGE_CONFIG = ".coveragerc"
   private const val PYPROJECT = "pyproject.toml"
-  private const val EXTEND_LINE = "extend = \"$RUFF_STANDARD\""
+  internal const val EXTEND_LINE = "extend = \"$RUFF_STANDARD\""
   private const val TOOL_RUFF = "[tool.ruff"
   private const val TOOL_PYTEST = "[tool.pytest"
   private const val TOOL_COVERAGE = "[tool.coverage"
@@ -1423,24 +1534,36 @@
   extend = "ruff-standard.toml"
   ```
 
-  Создать `templates/project/coveragerc`:
+  Спека шаблонов проверяет настоящую заготовку `ruff.toml`: строка `extend`, на которую смотрит `PythonConfig` (`EXTEND_LINE`), в ней есть. Создать `HasRuffSeedExtend.kt`:
 
-  ```ini
-  # Конфиг покрытия проекта: setup создаёт его один раз, дальше его ведёт проект.
-  # fail_under — замер при подключении с округлением вниз; поднимается, не снижается (PY-TEST-2).
-  [run]
-  source = .
-  omit = tests/*
+  ```kotlin
+  package io.github.nakulov.standards.plugin
 
-  [report]
-  fail_under = 0
-  # Скрипты в папках без __init__.py (PY-LINT-3): без этой строки непокрытый скрипт не попадает в отчёт.
-  include_namespace_packages = True
-  exclude_also =
-      if __name__ == .__main__.:
+  import io.github.nakulov.standards.setup.EXTEND_LINE
+  import java.io.File
+
+  private const val TEMPLATE = "templates/project/ruff.toml"
+
+  // Исключение KT-TEST-6: читает настоящий шаблон — PythonConfigSpec работает с фальшивым корнем плагина и не видит,
+  // что строка extend, по которой PythonConfig проверяет ruff.toml проекта, есть в заготовке.
+  fun hasRuffSeedExtend(): Boolean {
+      val lines = File(System.getProperty(/* key = */ "task.repoRoot"), TEMPLATE).readLines()
+          .map { line -> line.trim() }
+      return EXTEND_LINE in lines
+  }
   ```
 
-- [x] 4. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*' --tests '*StandardFilesSpec*'` — `BUILD SUCCESSFUL`, 24 теста (8 + 13 + 3)
+  В `PythonTemplatesSpec.kt` после случая pytest:
+
+  ```kotlin
+      shouldReturnTest(expected = true, options = TestOptions(name = "ruff.toml шаблона: строка extend")) {
+          hasRuffSeedExtend()
+      }
+  ```
+
+  `templates/project/coveragerc` уже создан в задаче 5.
+
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*' --tests '*StandardFilesSpec*' --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 34 теста (8 + 13 + 3 + 10)
 - [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; падение порога покрытия — найти непокрытую ветку в `build/reports/kover/html` и добавить случай, порог не снижать
 - [x] 6. Коммит — `StandardCopies` с `StandardFiles`, шаг, обе спеки, данные и заготовки вместе
 

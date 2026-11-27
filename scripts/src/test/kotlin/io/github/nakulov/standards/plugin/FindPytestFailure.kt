@@ -9,15 +9,23 @@ private const val TEMPLATE = "templates/project/pytest.ini"
 private const val CONFIG = "pytest.ini"
 private const val PYTEST = "pytest==9.2.0"
 private const val PYTEST_COV = "pytest-cov==7.1.0"
+private const val COVERAGE_TEMPLATE = "templates/project/coveragerc"
+private const val COVERAGE_CONFIG = ".coveragerc"
+private const val SEED_THRESHOLD = "fail_under = 0"
+private const val STRICT_THRESHOLD = "fail_under = 100"
 private const val FAILURE = "FAIL "
 
 // Исключение KT-TEST-6: pytest запускается процессом в образце [files] с копией шаблона в корне, как её кладёт setup:
 // pythonpath шаблона считается от папки pytest.ini. Версии — нижние границы шаблона (minversion, required_plugins),
 // закреплённые: тест не зависит от новых выпусков; поднял границу в pytest.ini — подними и PYTEST, PYTEST_COV.
+// Конфиг покрытия — настоящий templates/project/coveragerc с порогом 100 вместо нулевого порога заготовки.
 // Из вывода остаются код выхода и строка FAIL pytest-cov — остальное (платформа, время) зависит от машины.
 fun findPytestFailure(files: Map<String, String>): List<String> {
     val project = makeProjectRoot()
     File(System.getProperty(/* key = */ "task.repoRoot"), TEMPLATE).copyTo(target = File(project, CONFIG))
+    val coverage = File(System.getProperty(/* key = */ "task.repoRoot"), COVERAGE_TEMPLATE).readText()
+    require(SEED_THRESHOLD in coverage) { "в $COVERAGE_TEMPLATE нет $SEED_THRESHOLD" }
+    File(project, COVERAGE_CONFIG).writeText(coverage.replace(SEED_THRESHOLD, STRICT_THRESHOLD))
     files.forEach { (path, text) -> writeProjectFile(project, path, text) }
     val command = listOf("uv", "tool", "run", "--from", PYTEST, "--with", PYTEST_COV) +
         listOf("pytest", "-p", "no:cacheprovider")
