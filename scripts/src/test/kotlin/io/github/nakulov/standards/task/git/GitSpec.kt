@@ -183,6 +183,10 @@ class GitSpec :
             Git(shell = ProcessShell(directory = makeCloneWithPlanBranch())).addedPaths(base = "origin/dev")
         }
 
+        shouldReturnTest(listOf("a.txt", "b.txt"), options = TestOptions(name = "отслеживаемые файлы по шаблону")) {
+            Git(shell = ProcessShell(directory = makeCloneWithChanges())).trackedPaths(pattern = "*.txt")
+        }
+
         shouldReturnTest(listOf("Убрать план: П"), options = TestOptions(name = "удаление и коммит")) {
             val clone = makeCloneWithPlanBranch()
             Git(shell = ProcessShell(directory = clone))

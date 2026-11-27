@@ -127,7 +127,7 @@
   - [x] Задача 5: `pytest.ini` и порог покрытия на образце
   - [x] Приёмка
 - PR 3: `setup` ставит конфиги Python в проект с `*.py`
-  - [ ] Задача 6: `Git.trackedPaths`
+  - [x] Задача 6: `Git.trackedPaths`
   - [ ] Задача 7: шаг `PythonConfig`
   - [ ] Задача 8: шаг в `setup` и `.coverage` в `.gitignore`
   - [ ] Приёмка
@@ -839,7 +839,7 @@
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/git/Git.kt:196` — после `addedPaths`
 - Изменить: `scripts/src/test/kotlin/io/github/nakulov/standards/task/git/GitSpec.kt:184` — после случая «добавленные в ветке пути»
 
-- [ ] 1. Падающий тест: в `GitSpec.kt` после строки 184:
+- [x] 1. Падающий тест: в `GitSpec.kt` после строки 184:
 
   ```kotlin
 
@@ -849,8 +849,8 @@
   ```
 
   `makeCloneWithChanges` (`GitSpecData.kt:137`): `a.txt` и `b.txt` в индексе (`b.txt` удалён только в рабочей папке), `c.txt` не отслеживается.
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'trackedPaths'`
-- [ ] 3. Минимальный код: в `Git.kt` после `addedPaths`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — падает: `Unresolved reference 'trackedPaths'`
+- [x] 3. Минимальный код: в `Git.kt` после `addedPaths`:
 
   ```kotlin
 
@@ -862,9 +862,9 @@
       }
   ```
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 6. Коммит — метод и случай вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*GitSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 6. Коммит — метод и случай вместе
 
 ### Задача 7: шаг `PythonConfig`
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/StandardCopies.kt` — сверка и запись копий
