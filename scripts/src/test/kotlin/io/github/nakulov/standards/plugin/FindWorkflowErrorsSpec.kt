@@ -64,8 +64,8 @@ class FindWorkflowErrorsSpec : BehaviorSpec({
             arg4 = makeAllCommandsUnknownErrors(),
         ),
     ) { name, workflow, skills, expected ->
-        shouldReturnTest(expected, options = TestOptions(name = name)) {
-            findWorkflowErrors(workflow = workflow, skills = skills)
+        shouldReturnTest(expected, options = TestOptions(name)) {
+            findWorkflowErrors(workflow, skills)
         }
     }
 
