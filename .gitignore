@@ -10,6 +10,7 @@ local.properties
 *.hprof
 hs_err_pid*
 __pycache__/
+.coverage
 .venv/
 node_modules/
 .claude/worktrees/

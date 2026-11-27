@@ -29,6 +29,36 @@ class PythonTemplatesSpec : BehaviorSpec({
             arg3 = listOf("check", "--output-format", "concise"),
             arg4 = makeUnusedImportOutput(),
         ),
+        case(
+            arg1 = "ruff check: строка 112 символов — в пределах 120",
+            arg2 = makeLongLineProject(),
+            arg3 = listOf("check", "--output-format", "concise"),
+            arg4 = makeCleanCheckOutput(),
+        ),
+        case(
+            arg1 = "ruff format: строка 112 символов не переносится",
+            arg2 = makeLongLineProject(),
+            arg3 = listOf("format", "--check"),
+            arg4 = makeLongLineFormatOutput(),
+        ),
+        case(
+            arg1 = "ruff check: строка длиннее 120 символов",
+            arg2 = makeTooLongLineProject(),
+            arg3 = listOf("check", "--output-format", "concise"),
+            arg4 = makeTooLongLineOutput(),
+        ),
+        case(
+            arg1 = "ruff check: докстринг не по Google",
+            arg2 = makeNonGoogleDocProject(),
+            arg3 = listOf("check", "--output-format", "concise"),
+            arg4 = makeNonGoogleDocOutput(),
+        ),
+        case(
+            arg1 = "ruff check: функция без аннотаций",
+            arg2 = makeNoAnnotationProject(),
+            arg3 = listOf("check", "--output-format", "concise"),
+            arg4 = makeNoAnnotationOutput(),
+        ),
     ) { name, files, args, expected ->
         shouldReturnTest(expected, options = TestOptions(name)) {
             findRuffOutput(files, args)
@@ -37,5 +67,9 @@ class PythonTemplatesSpec : BehaviorSpec({
 
     shouldReturnTest(makeCoverageFailure(), options = TestOptions(name = "pytest: покрытие ниже порога")) {
         findPytestFailure(files = makeLowCoverageProject())
+    }
+
+    shouldReturnTest(expected = true, options = TestOptions(name = "ruff.toml шаблона: строка extend")) {
+        hasRuffSeedExtend()
     }
 })

@@ -25,6 +25,7 @@ fun main(args: Array<String>) {
         environment = Environment(gitHub = gitHub),
         steps = listOf(
             StandardFiles(git = git, pluginRoot = pluginRoot),
+            PythonConfig(git = git, pluginRoot = pluginRoot),
             GitignoreBlock(git = git, block = File(pluginRoot, GITIGNORE).readText()),
             PluginSettings(git = git, pluginRoot = pluginRoot),
             InitialBranch(

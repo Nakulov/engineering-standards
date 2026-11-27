@@ -193,6 +193,13 @@ class Git(
             .filter { line -> line.isNotBlank() }
     }
 
+    /** Отслеживаемые файлы по шаблону [pattern] (`*` проходит и через папки) — по ним `setup` узнаёт язык проекта. */
+    fun trackedPaths(pattern: String): List<String> {
+        return read(args = listOf("ls-files", "--", pattern))
+            .lines()
+            .filter { line -> line.isNotBlank() }
+    }
+
     /** Удалить [paths] из ветки и закоммитить с [message]. */
     fun removeAndCommit(
         paths: List<String>,
