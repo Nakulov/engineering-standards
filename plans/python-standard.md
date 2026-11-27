@@ -129,8 +129,8 @@
 - PR 3: `setup` ставит конфиги Python в проект с `*.py`
   - [x] Задача 6: `Git.trackedPaths`
   - [x] Задача 7: шаг `PythonConfig`
-  - [ ] Задача 8: шаг в `setup` и `.coverage` в `.gitignore`
-  - [ ] Приёмка
+  - [x] Задача 8: шаг в `setup` и `.coverage` в `.gitignore`
+  - [x] Приёмка
 
 **После завершения** (внешнее, без чекбоксов):
 - `setup --check` в проекте с `*.py`: отклонения по четырём файлам; `setup` — файлы созданы; повторный `setup --check` — «конфиги Python по стандарту».
@@ -1450,9 +1450,9 @@
 
 Тест: не применим — точка входа `SetupMainKt` исключена из покрытия (`scripts/build.gradle.kts`, KT-TEST-7), строка `.gitignore` — текст шаблона; проверка — «После завершения».
 
-- [ ] 1. Тест: не применим — см. выше
-- [ ] 2. Запуск: не применим
-- [ ] 3. Код. В `SetupMain.kt` после строки 27:
+- [x] 1. Тест: не применим — см. выше
+- [x] 2. Запуск: не применим
+- [x] 3. Код. В `SetupMain.kt` после строки 27:
 
   ```kotlin
               PythonConfig(git = git, pluginRoot = pluginRoot),
@@ -1463,17 +1463,17 @@
   ```gitignore
   .coverage
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 6. Коммит — шаг и строка `.gitignore` вместе
+- [x] 4. Запустить `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 6. Коммит — шаг и строка `.gitignore` вместе
 
 ### Приёмка
-- [ ] `setup` ставит конфиги Python в проект с `*.py` — проверено спеками `PythonConfigSpec` и `StandardCopiesSpec`
-- [ ] Сверка копий вынесена без изменения поведения: `StandardFilesSpec` зелёная без правок
-- [ ] Крайние случаи обработаны: нет `*.py` — ничего не пишется; `ruff.toml` проекта не перезаписывается; без `extend`, `.ruff.toml`, `[tool.ruff]`, `[tool.pytest]`, `[tool.coverage]` — отклонения с советом
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам: правила `PY-…` и BANK-6/7 (PR 1), `setup` ставит четыре файла только в проект с `*.py` (PR 3), спеки шаблонов на образцах зелёные (PR 2)
-- [ ] Документация: `docs/code-style/python/README.md`, раздел «Подключение» — совпадает с тем, что делает `PythonConfig`
+- [x] `setup` ставит конфиги Python в проект с `*.py` — проверено спеками `PythonConfigSpec` и `StandardCopiesSpec`
+- [x] Сверка копий вынесена без изменения поведения: `StandardFilesSpec` зелёная без правок
+- [x] Крайние случаи обработаны: нет `*.py` — ничего не пишется; `ruff.toml` проекта не перезаписывается; без `extend`, `.ruff.toml`, `[tool.ruff]`, `[tool.pytest]`, `[tool.coverage]` — отклонения с советом
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам: правила `PY-…` и BANK-6/7 (PR 1), `setup` ставит четыре файла только в проект с `*.py` (PR 3), спеки шаблонов на образцах зелёные (PR 2)
+- [x] Документация: `docs/code-style/python/README.md`, раздел «Подключение» — совпадает с тем, что делает `PythonConfig`
 
 ## Открыто
 - нет
