@@ -116,7 +116,7 @@
 - PR 1: правила Python и команды проверки языка в банке
   - [x] Задача 1: кодстайл Python в банке — BANK-6
   - [x] Задача 2: тесты Python в банке — BANK-7
-  - [ ] Задача 3: команды проверки — в «Проверке» банка, не в скилле
+  - [x] Задача 3: команды проверки — в «Проверке» банка, не в скилле
   - [ ] Приёмка
 - PR 2: конфиги ruff и pytest стандарта, проверенные на образцах
   - [ ] Задача 4: `ruff-standard.toml` на образцах
@@ -499,7 +499,7 @@
 
 Тест: `MarkersSpec` — копия блока `plan:granularity` совпадает с источником; сам текст — «тест: не применим — текст скилла».
 
-- [ ] 1. Падающий тест: правка источника блока без копии. В `skills/decompose/SKILL.md` заменить строку 123:
+- [x] 1. Падающий тест: правка источника блока без копии. В `skills/decompose/SKILL.md` заменить строку 123:
 
   было:
   ```markdown
@@ -511,8 +511,8 @@
   ```
 
   и в строке 129 `проверки модуля — тоже не применимы` → `проверки языка — тоже не применимы`.
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает на блоке `plan:granularity`: копия в `agents/plan-reviewer.md` расходится с источником
-- [ ] 3. Копия, остальные строки скилла и «Проверка» Kotlin:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает на блоке `plan:granularity`: копия в `agents/plan-reviewer.md` расходится с источником
+- [x] 3. Копия, остальные строки скилла и «Проверка» Kotlin:
   - `agents/plan-reviewer.md:87` и строка «Без логики …» блока — те же замены, что в шаге 1.
   - `skills/decompose/SKILL.md:229`:
 
@@ -538,9 +538,9 @@
     | `./gradlew :<модуль>:test --tests '*<Имя>Spec*'` — одна спека | `BUILD SUCCESSFUL` | `Unresolved reference: <имя>` или упавший случай спеки |
     | `./gradlew :<модуль>:check` — тесты, detekt, порог покрытия | `BUILD SUCCESSFUL` | имя правила detekt, например `FunctionSignature`, или порог покрытия (KT-TEST-7) |
     ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; `grep -rn "gradlew" skills/decompose/SKILL.md agents/plan-reviewer.md` — пусто
-- [ ] 5. Проверки языка: не применимы — Markdown; полный `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (спеки читают `skills/` и `agents/`)
-- [ ] 6. Коммит — скилл, агент и «Проверка» Kotlin вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; `grep -rn "gradlew" skills/decompose/SKILL.md agents/plan-reviewer.md` — пусто
+- [x] 5. Проверки языка: не применимы — Markdown; полный `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (спеки читают `skills/` и `agents/`)
+- [x] 6. Коммит — скилл, агент и «Проверка» Kotlin вместе
 
 ### Приёмка
 - [ ] Правила Python и команды проверки языка в банке — проверено: BANK-6/7 ведут на разделы, в скилле и агенте нет `gradlew`
