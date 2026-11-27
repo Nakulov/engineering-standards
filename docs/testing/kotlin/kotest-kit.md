@@ -91,15 +91,15 @@ val gitHub = mockk<GitHub>()
 
 // Разрешено — заглушки при создании мока
 val gitHub = mockk<GitHub> {
-    every { read(args = makeAdminArgs()) } returns "true"
+    every { read(makeAdminArgs()) } returns "true"
 }
 
 // Разрешено — функции с Unit не требуют заглушек
 val gitHub = mockk<GitHub>(relaxUnitFun = true)
 
 // Разрешено — заглушка вызова
-every { gitHub.read(args = makeAdminArgs()) } returns "true"
-coEvery { gitHub.load(args = makeAdminArgs()) } returns "true"
+every { gitHub.read(makeAdminArgs()) } returns "true"
+coEvery { gitHub.load(makeAdminArgs()) } returns "true"
 
 // Разрешено — заглушка вызова с Unit
 justRun { pause.invoke(any()) }
@@ -353,7 +353,7 @@ shouldThrowWithMessageTest<IllegalArgumentException>(message = "Скидка д�
 
 // Разрешено — точный тип зависит от платформы
 shouldThrowTest<IOException> {
-    reader.read(path = makeMissingPath())
+    reader.read(makeMissingPath())
 }
 
 // Запрещено — try/catch
