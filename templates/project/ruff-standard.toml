@@ -1,0 +1,26 @@
+# Общий конфиг ruff стандарта: setup кладёт копию в корень проекта и сверяет её (setup --check).
+# Копию не правят: настройки проекта — в ruff.toml с extend = "ruff-standard.toml".
+# Основа — все правила ruff; у каждого отклонения — ID правила из docs/code-style/python/ и docs/testing/python/.
+# Версия закреплена: ALL с новой версией включает новые правила — версия меняется только вместе со стандартом.
+required-version = "==0.17.6"
+line-length = 120  # PY-FMT-1
+
+[lint]
+select = ["ALL"]
+ignore = [
+    "COM812",  # PY-FMT-2: конфликтует с ruff format
+    "RUF001",  # PY-LINT-1: кириллица в строках
+    "RUF002",  # PY-LINT-1: кириллица в докстрингах
+    "RUF003",  # PY-LINT-1: кириллица в комментариях
+    "T201",  # PY-LINT-2: print — вывод скрипта
+    "INP001",  # PY-LINT-3: папка скриптов — не пакет
+    "S603",  # PY-LINT-4: subprocess с командой-списком
+    "S607",  # PY-LINT-4: git и gh без полного пути
+    "CPY001",  # PY-LINT-5: без заголовка с копирайтом
+]
+
+[lint.pydocstyle]
+convention = "google"  # PY-FMT-3
+
+[lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004", "D1"]  # PY-TEST-3

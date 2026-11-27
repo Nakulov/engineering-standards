@@ -119,7 +119,7 @@
   - [x] Задача 3: команды проверки — в «Проверке» банка, не в скилле
   - [x] Приёмка
 - PR 2: конфиги ruff и pytest стандарта, проверенные на образцах
-  - [ ] Задача 4: `ruff-standard.toml` на образцах
+  - [x] Задача 4: `ruff-standard.toml` на образцах
   - [ ] Задача 5: `pytest.ini` и порог покрытия на образце
   - [ ] Приёмка
 - PR 3: `setup` ставит конфиги Python в проект с `*.py`
@@ -556,7 +556,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/PythonTemplatesSpec.kt` — случаи ruff
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/PythonTemplatesSpecData.kt` — образцы и ожидаемый вывод
 
-- [ ] 1. Падающий тест: образцы проходят и нарушают стандарт. Создать `PythonTemplatesSpecData.kt`:
+- [x] 1. Падающий тест: образцы проходят и нарушают стандарт. Создать `PythonTemplatesSpecData.kt`:
 
   ```kotlin
   package io.github.nakulov.standards.plugin
@@ -639,10 +639,7 @@
   // Исключение KT-TEST-6: ruff проверяет настоящие файлы — образец [files] собирается во временной папке рядом с копией
   // шаблона, как её кладёт setup, и ruff запускается процессом из этой папки: пути per-file-ignores считаются от неё.
   // Версия ruff — из required-version шаблона: тест проверяет ту версию, которую стандарт требует от проектов.
-  fun findRuffOutput(
-      files: Map<String, String>,
-      args: List<String>,
-  ): List<String> {
+  fun findRuffOutput(files: Map<String, String>, args: List<String>): List<String> {
       val template = File(System.getProperty(/* key = */ "task.repoRoot"), TEMPLATE)
       val match = Regex(pattern = VERSION_PATTERN).find(input = template.readText())
           ?: error(message = "в $TEMPLATE нет required-version")
@@ -655,7 +652,7 @@
       val lines = result.out
           .lines()
           .filter { line -> line.isNotBlank() }
-      return listOf("${result.code}") + lines
+      return listOf(result.code.toString()) + lines
   }
   ```
 
@@ -685,8 +682,8 @@
   })
   ```
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — падает: `FileNotFoundException` … `templates/project/ruff-standard.toml`
-- [ ] 3. Минимальный код: создать `templates/project/ruff-standard.toml`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — падает: `FileNotFoundException` … `templates/project/ruff-standard.toml`
+- [x] 3. Минимальный код: создать `templates/project/ruff-standard.toml`:
 
   ```toml
   # Общий конфиг ruff стандарта: setup кладёт копию в корень проекта и сверяет её (setup --check).
@@ -717,9 +714,9 @@
   "tests/**" = ["S101", "PLR2004", "D1"]  # PY-TEST-3
   ```
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 3 теста
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 6. Коммит — шаблон и спека вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 3 теста
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 6. Коммит — шаблон и спека вместе
 
 ### Задача 5: `pytest.ini` и порог покрытия на образце
 - Создать: `templates/project/pytest.ini` — конфиг pytest стандарта
@@ -786,7 +783,7 @@
       val failures = result.out
           .lines()
           .filter { line -> line.startsWith(prefix = FAILURE) }
-      return listOf("${result.code}") + failures
+      return listOf(result.code.toString()) + failures
   }
   ```
 
