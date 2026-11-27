@@ -139,10 +139,10 @@ fun refresh() {}
 // Разрешено — граница программы
 fun run(args: List<String>): Int {
     return try {
-        execute(args = args)
+        execute(args)
     } catch (@Suppress("TooGenericExceptionCaught") error: RuntimeException) {
         // Граница программы: любой сбой — в код выхода и сообщение, не в стектрейс.
-        report(error = error)
+        report(error)
     }
 }
 
