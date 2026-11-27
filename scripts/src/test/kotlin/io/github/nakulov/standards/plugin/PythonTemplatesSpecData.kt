@@ -59,3 +59,22 @@ fun makeUnusedImportOutput(): List<String> {
         "[*] 1 fixable with `--fix`.",
     )
 }
+
+/** Порог 100% при покрытии 57%; блок `__main__` и `tests/` — вне подсчёта, `tools/` без `__init__.py` — в нём. */
+const val STRICT_COVERAGERC = "[run]\n" +
+    "source = .\n" +
+    "omit = tests/*\n" +
+    "\n" +
+    "[report]\n" +
+    "fail_under = 100\n" +
+    "include_namespace_packages = True\n" +
+    "exclude_also =\n" +
+    "    if __name__ == .__main__.:\n"
+
+fun makeLowCoverageProject(): Map<String, String> {
+    return mapOf(TOOL_PATH to TOOL_PY, TEST_TOOL_PATH to TEST_TOOL_PY, ".coveragerc" to STRICT_COVERAGERC)
+}
+
+fun makeCoverageFailure(): List<String> {
+    return listOf("1", "FAIL Required test coverage of 100.0% not reached. Total coverage: 57.14%")
+}

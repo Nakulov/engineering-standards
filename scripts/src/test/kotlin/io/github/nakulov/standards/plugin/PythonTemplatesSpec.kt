@@ -18,4 +18,8 @@ class PythonTemplatesSpec : BehaviorSpec({
     shouldReturnTest(makeUnusedImportOutput(), options = TestOptions(name = "ruff check: неиспользуемый импорт")) {
         findRuffOutput(files = makeUnusedImportProject(), args = listOf("check", "--output-format", "concise"))
     }
+
+    shouldReturnTest(makeCoverageFailure(), options = TestOptions(name = "pytest: покрытие ниже порога")) {
+        findPytestFailure(files = makeLowCoverageProject())
+    }
 })

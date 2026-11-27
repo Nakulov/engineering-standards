@@ -120,7 +120,7 @@
   - [x] Приёмка
 - PR 2: конфиги ruff и pytest стандарта, проверенные на образцах
   - [x] Задача 4: `ruff-standard.toml` на образцах
-  - [ ] Задача 5: `pytest.ini` и порог покрытия на образце
+  - [x] Задача 5: `pytest.ini` и порог покрытия на образце
   - [ ] Приёмка
 - PR 3: `setup` ставит конфиги Python в проект с `*.py`
   - [ ] Задача 6: `Git.trackedPaths`
@@ -723,7 +723,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/FindPytestFailure.kt` — запуск pytest в образце
 - Изменить: `PythonTemplatesSpec.kt`, `PythonTemplatesSpecData.kt` — случай порога
 
-- [ ] 1. Падающий тест: порог из `.coveragerc` роняет pytest. В `PythonTemplatesSpecData.kt` добавить:
+- [x] 1. Падающий тест: порог из `.coveragerc` роняет pytest. В `PythonTemplatesSpecData.kt` добавить:
 
   ```kotlin
   /** Порог 100% при покрытии 57%; блок `__main__` и `tests/` — вне подсчёта, `tools/` без `__init__.py` — в нём. */
@@ -778,7 +778,8 @@
       val project = makeProjectRoot()
       File(System.getProperty(/* key = */ "task.repoRoot"), TEMPLATE).copyTo(target = File(project, CONFIG))
       files.forEach { (path, text) -> writeProjectFile(project, path, text) }
-      val command = listOf("uv", "tool", "run", "--from", PYTEST, "--with", PYTEST_COV, "pytest", "-p", "no:cacheprovider")
+      val command = listOf("uv", "tool", "run", "--from", PYTEST, "--with", PYTEST_COV) +
+          listOf("pytest", "-p", "no:cacheprovider")
       val result = ProcessShell(directory = project).run(command)
       val failures = result.out
           .lines()
@@ -787,8 +788,8 @@
   }
   ```
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — падает: `NoSuchFileException` … `templates/project/pytest.ini` (бросает `copyTo`)
-- [ ] 3. Минимальный код: создать `templates/project/pytest.ini`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — падает: `NoSuchFileException` … `templates/project/pytest.ini` (бросает `copyTo`)
+- [x] 3. Минимальный код: создать `templates/project/pytest.ini`:
 
   ```ini
   # Общий конфиг pytest стандарта: setup кладёт копию в корень проекта и сверяет её (setup --check).
@@ -802,9 +803,9 @@
   addopts = --cov --cov-report=term-missing
   ```
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 4 теста
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 6. Коммит — шаблон и случай спеки вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*PythonTemplatesSpec*'` — `BUILD SUCCESSFUL`, 4 теста
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 6. Коммит — шаблон и случай спеки вместе
 
 ### Приёмка
 - [ ] Конфиги стандарта проверены на образцах: чистый образец — `All checks passed!` и `2 files already formatted`, нарушение — `F401`, порог — `FAIL Required test coverage`
