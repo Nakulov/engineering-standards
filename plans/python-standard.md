@@ -65,6 +65,10 @@
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/PythonConfig.kt` — шаг `setup` для проекта с `*.py`; вход: `PythonConfig(git: Git, pluginRoot: File) : Setup.Step`
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpec.kt` — случаи шага
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpecData.kt` — шаблоны плагина и ожидаемые находки
+- Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/StandardCopies.kt` — сверка и запись копий стандарта, общая для `StandardFiles` и `PythonConfig`; вход: `StandardCopies(pluginRoot: File, area: String)`, `run(root: File, copies: List<Pair<String, String>>, mode: Setup.Mode): List<Finding>`
+- Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/StandardCopiesSpec.kt` — случаи сверки и записи
+- Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/StandardCopiesSpecData.kt` — шаблон плагина, проекты и ожидаемые находки
+- Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/StandardFiles.kt:15–35` — сверка копий через `StandardCopies`, поведение и тексты те же
 - Создать: `templates/project/ruff.toml` — заготовка `ruff.toml` проекта
 - Создать: `templates/project/coveragerc` — заготовка `.coveragerc` проекта
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/SetupMain.kt:27` — шаг `PythonConfig` после `StandardFiles`
@@ -85,7 +89,7 @@
   - `include_namespace_packages = True` в `[report]` `.coveragerc` — изменено при плане (ревью, В1): без неё coverage.py не видит скрипт без тестов в папке без `__init__.py` (опыт: `tools/helper.py` без теста — отчёт 100%, с настройкой — 50%); образец спеки лежит в `tools/`, чтобы это ловилось;
   - разделы `[tool.pytest` и `[tool.coverage` в `pyproject.toml` — отклонения с советом, как `[tool.ruff]` — изменено при плане (ревью, В2): pytest берёт `pytest.ini` первым, даже пустой ([Configuration file formats](https://docs.pytest.org/en/stable/reference/customize.html#configuration-file-formats)), coverage — `.coveragerc` (опыт: `fail_under = 99` в `pyproject.toml` рядом с `.coveragerc` не действует). Свой `pytest.ini` проекта виден и так: `setup` пишет «отличается от стандарта», дифф виден до коммита;
   - образцы проектов — константы `SpecData`, а не файлы `*.py` (см. «Ограничения»);
-  - шаг `PythonConfig` повторяет сверку копий из `StandardFiles` (≈ 15 строк) — дублирование выбрано пользователем: без связанности, PR 3 в лимите;
+  - сверка копий — один класс `StandardCopies` на `StandardFiles` и `PythonConfig` — изменено при плане (ревью, В): шаг почти построчно повторял бы сверку из `StandardFiles` (≈ 15 строк); цена — PR 3 вырос до ≈ 14 файлов, выше лимита 10 (см. «Открыто»);
   - `.coverage` в общий блок `.gitignore` — добавлено при плане: `pytest` с `--cov` пишет его в корень проекта, без строки файл попадёт в коммит;
   - разбивка — 3 PR вместо 2 из груминга — изменено при плане: доставка не влезала в лимит 10 файлов.
 - Как вписывается в систему: банк — BANK-6/7; конфиги — `templates/project/` рядом с `editorconfig`; доставка — шаг `setup` рядом с `StandardFiles`; процесс — шаг 5 задачи плана берёт команды из «Проверки» README языка.
@@ -829,7 +833,7 @@
 - [x] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
 
 ## PR 3: `setup` ставит конфиги Python в проект с `*.py`
-**Объём:** `Git.kt`, `GitSpec.kt`, `setup/PythonConfig.kt` со спекой и данными, `SetupMain.kt`, `templates/project/ruff.toml`, `templates/project/coveragerc`, `templates/project/gitignore`, `.gitignore`; ≈ 10 файлов
+**Объём:** `Git.kt`, `GitSpec.kt`, `setup/StandardCopies.kt` со спекой и данными, `setup/StandardFiles.kt`, `setup/PythonConfig.kt` со спекой и данными, `SetupMain.kt`, `templates/project/ruff.toml`, `templates/project/coveragerc`, `templates/project/gitignore`, `.gitignore`; ≈ 14 файлов
 
 ### Задача 6: `Git.trackedPaths`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/task/git/Git.kt:196` — после `addedPaths`
@@ -863,12 +867,182 @@
 - [ ] 6. Коммит — метод и случай вместе
 
 ### Задача 7: шаг `PythonConfig`
+- Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/StandardCopies.kt` — сверка и запись копий
+- Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/StandardCopiesSpec.kt` — случаи сверки и записи
+- Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/StandardCopiesSpecData.kt` — шаблон плагина, проекты и находки
+- Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/StandardFiles.kt:15–35` — сверка копий через `StandardCopies`
 - Создать: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/PythonConfig.kt` — шаг
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpec.kt` — случаи
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/setup/PythonConfigSpecData.kt` — шаблоны плагина и находки
 - Создать: `templates/project/ruff.toml`, `templates/project/coveragerc` — заготовки
 
-- [ ] 1. Падающий тест. Создать `PythonConfigSpecData.kt`:
+- [ ] 1. Падающий тест. Создать `StandardCopiesSpecData.kt`:
+
+  ```kotlin
+  package io.github.nakulov.standards.setup
+
+  import java.io.File
+
+  const val COPIES_AREA = "копии"
+  private const val COPY_SOURCE = "templates/a.txt"
+  private const val COPY_TARGET = "a.txt"
+  private const val NESTED_TARGET = "docs/nested/a.txt"
+  private const val STANDARD_TEXT = "стандарт\n"
+  private const val OLD_TEXT = "старый\n"
+
+  /** Корень плагина с одним шаблоном `templates/a.txt`. */
+  fun makeCopiesPluginRoot(): File {
+      val plugin = makeProjectRoot()
+      writeProjectFile(root = plugin, path = COPY_SOURCE, text = STANDARD_TEXT)
+      return plugin
+  }
+
+  fun makeEmptyProject(): File {
+      return makeProjectRoot()
+  }
+
+  fun makeProjectWithOldCopy(): File {
+      return makeProjectWithCopy(text = OLD_TEXT)
+  }
+
+  fun makeProjectWithStandardCopy(): File {
+      return makeProjectWithCopy(text = STANDARD_TEXT)
+  }
+
+  fun makeFlatCopies(): List<Pair<String, String>> {
+      return listOf(COPY_SOURCE to COPY_TARGET)
+  }
+
+  fun makeNestedCopies(): List<Pair<String, String>> {
+      return listOf(COPY_SOURCE to NESTED_TARGET)
+  }
+
+  fun makeMissingCopyFindings(): List<Finding> {
+      return listOf(makeCopyFinding(status = Finding.Status.DEVIATION, text = "a.txt: нет"))
+  }
+
+  fun makeDifferingCopyFindings(): List<Finding> {
+      return listOf(makeCopyFinding(status = Finding.Status.DEVIATION, text = "a.txt: отличается от стандарта"))
+  }
+
+  fun makeWrittenMissingCopyFindings(): List<Finding> {
+      return listOf(
+          makeCopyFinding(status = Finding.Status.FIXED, text = "a.txt записан (нет) — закоммитьте через задачу"),
+      )
+  }
+
+  fun makeWrittenDifferingCopyFindings(): List<Finding> {
+      return listOf(
+          makeCopyFinding(
+              status = Finding.Status.FIXED,
+              text = "a.txt записан (отличается от стандарта) — закоммитьте через задачу",
+          ),
+      )
+  }
+
+  fun makeFlatFiles(): Map<String, String> {
+      return mapOf(COPY_TARGET to STANDARD_TEXT)
+  }
+
+  fun makeNestedFiles(): Map<String, String> {
+      return mapOf(NESTED_TARGET to STANDARD_TEXT)
+  }
+
+  private fun makeProjectWithCopy(text: String): File {
+      val project = makeProjectRoot()
+      writeProjectFile(root = project, path = COPY_TARGET, text = text)
+      return project
+  }
+
+  private fun makeCopyFinding(
+      status: Finding.Status,
+      text: String,
+  ): Finding {
+      return Finding(status = status, area = COPIES_AREA, text = text)
+  }
+  ```
+
+  Создать `StandardCopiesSpec.kt`:
+
+  ```kotlin
+  package io.github.nakulov.standards.setup
+
+  import io.github.nakulov.kotestkit.case
+  import io.github.nakulov.kotestkit.shouldReturnTest
+  import io.github.nakulov.kotestkit.withGivens
+  import io.kotest.core.spec.style.BehaviorSpec
+
+  class StandardCopiesSpec : BehaviorSpec({
+      val step = StandardCopies(makeCopiesPluginRoot(), COPIES_AREA)
+
+      withGivens(
+          nameFn = { case -> case.arg1 },
+          case(
+              arg1 = "копии нет — проверка",
+              arg2 = makeEmptyProject(),
+              arg3 = makeCheckMode(),
+              arg4 = makeMissingCopyFindings(),
+          ),
+          case(
+              arg1 = "копия отличается — проверка",
+              arg2 = makeProjectWithOldCopy(),
+              arg3 = makeCheckMode(),
+              arg4 = makeDifferingCopyFindings(),
+          ),
+          case(
+              arg1 = "копия совпадает — находок нет",
+              arg2 = makeProjectWithStandardCopy(),
+              arg3 = makeCheckMode(),
+              arg4 = emptyList<Finding>(),
+          ),
+          case(
+              arg1 = "копии нет — запись",
+              arg2 = makeEmptyProject(),
+              arg3 = makeApplyMode(),
+              arg4 = makeWrittenMissingCopyFindings(),
+          ),
+          case(
+              arg1 = "копия отличается — запись",
+              arg2 = makeProjectWithOldCopy(),
+              arg3 = makeApplyMode(),
+              arg4 = makeWrittenDifferingCopyFindings(),
+          ),
+      ) { _, project, mode, expected ->
+          shouldReturnTest(expected) {
+              step.run(project, makeFlatCopies(), mode)
+          }
+      }
+
+      withGivens(
+          nameFn = { case -> case.arg1 },
+          case(
+              arg1 = "копии нет — файл записан",
+              arg2 = makeEmptyProject(),
+              arg3 = makeFlatCopies(),
+              arg4 = makeFlatFiles(),
+          ),
+          case(
+              arg1 = "копия отличается — файл перезаписан",
+              arg2 = makeProjectWithOldCopy(),
+              arg3 = makeFlatCopies(),
+              arg4 = makeFlatFiles(),
+          ),
+          case(
+              arg1 = "вложенная папка — создана",
+              arg2 = makeEmptyProject(),
+              arg3 = makeNestedCopies(),
+              arg4 = makeNestedFiles(),
+          ),
+      ) { _, project, copies, expected ->
+          shouldReturnTest(expected) {
+              step.run(project, copies, makeApplyMode())
+              readProjectFiles(project)
+          }
+      }
+  })
+  ```
+
+  Создать `PythonConfigSpecData.kt`:
 
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1085,8 +1259,64 @@
   })
   ```
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*PythonConfigSpec*'` — падает: `Unresolved reference 'PythonConfig'`
-- [ ] 3. Минимальный код. Создать `PythonConfig.kt`:
+- [ ] 2. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*'` — падает: `Unresolved reference 'StandardCopies'` и `Unresolved reference 'PythonConfig'`
+- [ ] 3. Минимальный код. Создать `StandardCopies.kt`:
+
+  ```kotlin
+  package io.github.nakulov.standards.setup
+
+  import java.io.File
+
+  /**
+   * Сверка и запись копий стандарта: пары «файл плагина → файл проекта». Находки — только по отличающимся копиям:
+   * проверка называет расхождение, запись (`mode.apply`) создаёт папки и перезаписывает копию.
+   */
+  internal class StandardCopies(
+      private val pluginRoot: File,
+      private val area: String,
+  ) {
+
+      fun run(
+          root: File,
+          copies: List<Pair<String, String>>,
+          mode: Setup.Mode,
+      ): List<Finding> {
+          val differing = copies.filter { (source, target) ->
+              val file = File(root, target)
+              !file.isFile || file.readText() != File(pluginRoot, source).readText()
+          }
+          return differing.map { (source, target) ->
+              val file = File(root, target)
+              val state = if (file.isFile) "отличается от стандарта" else "нет"
+              if (mode.apply) {
+                  file.parentFile.mkdirs()
+                  file.writeText(File(pluginRoot, source).readText())
+                  val text = "$target записан ($state) — закоммитьте через задачу"
+                  Finding(status = Finding.Status.FIXED, area = area, text = text)
+              } else {
+                  Finding(status = Finding.Status.DEVIATION, area = area, text = "$target: $state")
+              }
+          }
+      }
+  }
+  ```
+
+  В `StandardFiles.kt` — свойство после `) : Setup.Step {` и вместо строк 17–35 (`val pairs` … конец `val findings`):
+
+  ```kotlin
+
+      private val standardCopies = StandardCopies(pluginRoot, AREA)
+
+  ```
+
+  ```kotlin
+          val pairs = copies()
+          val findings = standardCopies.run(root, pairs, mode)
+  ```
+
+  Находка OK, шаблоны вне стандарта и `copies()` остаются в `StandardFiles` как есть; тексты находок те же — `StandardFilesSpec` не правится.
+
+  Создать `PythonConfig.kt`:
 
   ```kotlin
   package io.github.nakulov.standards.setup
@@ -1096,37 +1326,41 @@
 
   private const val AREA = "python"
   private const val PYTHON_FILES = "*.py"
+  private const val TEMPLATES = "templates/project"
+  private const val RUFF_STANDARD = "ruff-standard.toml"
   private const val RUFF_CONFIG = "ruff.toml"
   private const val RUFF_DOTFILE = ".ruff.toml"
   private const val PYTEST_CONFIG = "pytest.ini"
   private const val COVERAGE_CONFIG = ".coveragerc"
   private const val PYPROJECT = "pyproject.toml"
-  private const val EXTEND_LINE = "extend = \"ruff-standard.toml\""
+  private const val EXTEND_LINE = "extend = \"$RUFF_STANDARD\""
   private const val TOOL_RUFF = "[tool.ruff"
   private const val TOOL_PYTEST = "[tool.pytest"
   private const val TOOL_COVERAGE = "[tool.coverage"
 
   // Копии стандарта: проект их не правит, поэтому setup перезаписывает их при расхождении.
-  private val COPIES = listOf(
-      "templates/project/ruff-standard.toml" to "ruff-standard.toml",
-      "templates/project/pytest.ini" to PYTEST_CONFIG,
+  private val copies = listOf(
+      "$TEMPLATES/$RUFF_STANDARD" to RUFF_STANDARD,
+      "$TEMPLATES/$PYTEST_CONFIG" to PYTEST_CONFIG,
   )
 
   // Заготовки проекта: в них настройки и порог покрытия проекта, поэтому setup создаёт их один раз и не трогает.
-  private val SEEDS = listOf(
-      "templates/project/ruff.toml" to RUFF_CONFIG,
-      "templates/project/coveragerc" to COVERAGE_CONFIG,
+  private val seeds = listOf(
+      "$TEMPLATES/$RUFF_CONFIG" to RUFF_CONFIG,
+      "$TEMPLATES/coveragerc" to COVERAGE_CONFIG,
   )
 
   /**
-   * Конфиги проверок Python — только в проекте, где git отслеживает файлы `*.py`. Копии стандарта сверяются, как в
-   * [StandardFiles]; заготовки создаются, если их нет. Настройки ruff мимо `ruff.toml` — отклонение с советом: ruff
+   * Конфиги проверок Python — только в проекте, где git отслеживает файлы `*.py`. Копии стандарта сверяет
+   * [StandardCopies]; заготовки создаются, если их нет. Настройки ruff мимо `ruff.toml` — отклонение с советом: ruff
    * их не читает или читает вместо стандарта.
    */
   class PythonConfig(
       private val git: Git,
       private val pluginRoot: File,
   ) : Setup.Step {
+
+      private val standardCopies = StandardCopies(pluginRoot, AREA)
 
       override fun run(mode: Setup.Mode): List<Finding> {
           val pythonFiles = git.trackedPaths(PYTHON_FILES)
@@ -1135,38 +1369,18 @@
               return listOf(Finding(status = Finding.Status.OK, area = AREA, text = text))
           }
           val root = File(git.root())
-          val findings = produceCopyFindings(root, mode) + produceSeedFindings(root, mode) + findConfigDeviations(root)
+          val copyFindings = standardCopies.run(root, copies, mode)
+          val findings = copyFindings + createMissingSeeds(root, mode) + findConfigDeviations(root)
           return findings.ifEmpty {
               listOf(Finding(status = Finding.Status.OK, area = AREA, text = "конфиги Python по стандарту"))
           }
       }
 
-      private fun produceCopyFindings(
+      private fun createMissingSeeds(
           root: File,
           mode: Setup.Mode,
       ): List<Finding> {
-          val differing = COPIES.filter { (source, target) ->
-              val file = File(root, target)
-              !file.isFile || file.readText() != File(pluginRoot, source).readText()
-          }
-          return differing.map { (source, target) ->
-              val file = File(root, target)
-              val state = if (file.isFile) "отличается от стандарта" else "нет"
-              if (mode.apply) {
-                  file.writeText(File(pluginRoot, source).readText())
-                  val text = "$target записан ($state) — закоммитьте через задачу"
-                  Finding(status = Finding.Status.FIXED, area = AREA, text = text)
-              } else {
-                  Finding(status = Finding.Status.DEVIATION, area = AREA, text = "$target: $state")
-              }
-          }
-      }
-
-      private fun produceSeedFindings(
-          root: File,
-          mode: Setup.Mode,
-      ): List<Finding> {
-          val missing = SEEDS.filter { (_, target) -> !File(root, target).isFile }
+          val missing = seeds.filter { (_, target) -> !File(root, target).isFile }
           return missing.map { (source, target) ->
               if (mode.apply) {
                   File(root, target).writeText(File(pluginRoot, source).readText())
@@ -1240,9 +1454,9 @@
       if __name__ == .__main__.:
   ```
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*PythonConfigSpec*'` — `BUILD SUCCESSFUL`, 13 тестов
+- [ ] 4. Запустить `./gradlew :scripts:test --tests '*StandardCopiesSpec*' --tests '*PythonConfigSpec*' --tests '*StandardFilesSpec*'` — `BUILD SUCCESSFUL`, 24 теста (8 + 13 + 3)
 - [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; падение порога покрытия — найти непокрытую ветку в `build/reports/kover/html` и добавить случай, порог не снижать
-- [ ] 6. Коммит — шаг, спека, данные и заготовки вместе
+- [ ] 6. Коммит — `StandardCopies` с `StandardFiles`, шаг, обе спеки, данные и заготовки вместе
 
 ### Задача 8: шаг в `setup` и `.coverage` в `.gitignore`
 - Изменить: `scripts/src/main/kotlin/io/github/nakulov/standards/setup/SetupMain.kt:27` — шаг в списке
@@ -1268,14 +1482,15 @@
 - [ ] 6. Коммит — шаг и строка `.gitignore` вместе
 
 ### Приёмка
-- [ ] `setup` ставит конфиги Python в проект с `*.py` — проверено спекой `PythonConfigSpec`
+- [ ] `setup` ставит конфиги Python в проект с `*.py` — проверено спеками `PythonConfigSpec` и `StandardCopiesSpec`
+- [ ] Сверка копий вынесена без изменения поведения: `StandardFilesSpec` зелёная без правок
 - [ ] Крайние случаи обработаны: нет `*.py` — ничего не пишется; `ruff.toml` проекта не перезаписывается; без `extend`, `.ruff.toml`, `[tool.ruff]`, `[tool.pytest]`, `[tool.coverage]` — отклонения с советом
 - [ ] Полный набор тестов зелёный: `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
 - [ ] Последний блок: критерии цели из «Обзора» — по пунктам: правила `PY-…` и BANK-6/7 (PR 1), `setup` ставит четыре файла только в проект с `*.py` (PR 3), спеки шаблонов на образцах зелёные (PR 2)
 - [ ] Документация: `docs/code-style/python/README.md`, раздел «Подключение» — совпадает с тем, что делает `PythonConfig`
 
 ## Открыто
-- нет
+- PR 3 вырос до ≈ 14 файлов при лимите 10 (`StandardCopies` со спекой и данными, правка `StandardFiles`): принять превышение или вынести `StandardCopies` в отдельный блок — решает пользователь
 
 ## После завершения
 - Ручная проверка: в проекте с `*.py` (например, пустой репозиторий с одним `tools/check.py` в индексе) — `setup --check` → четыре отклонения в области `python`; `setup` → «записан» и «создан по заготовке»; повторный `setup --check` → «[ok] python: конфиги Python по стандарту»; `ruff check` и `pytest` из корня проекта запускаются с конфигами стандарта.
