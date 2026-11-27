@@ -121,7 +121,7 @@
 - PR 2: конфиги ruff и pytest стандарта, проверенные на образцах
   - [x] Задача 4: `ruff-standard.toml` на образцах
   - [x] Задача 5: `pytest.ini` и порог покрытия на образце
-  - [ ] Приёмка
+  - [x] Приёмка
 - PR 3: `setup` ставит конфиги Python в проект с `*.py`
   - [ ] Задача 6: `Git.trackedPaths`
   - [ ] Задача 7: шаг `PythonConfig`
@@ -808,9 +808,9 @@
 - [x] 6. Коммит — шаблон и случай спеки вместе
 
 ### Приёмка
-- [ ] Конфиги стандарта проверены на образцах: чистый образец — `All checks passed!` и `2 files already formatted`, нарушение — `F401`, порог — `FAIL Required test coverage`
-- [ ] Крайние случаи обработаны: кириллица, `print`, `subprocess` с `git`, `assert` в тестах проходят; блок `__main__` вне подсчёта (57.14%, а не меньше)
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] Конфиги стандарта проверены на образцах: чистый образец — `All checks passed!` и `2 files already formatted`, нарушение — `F401`, порог — `FAIL Required test coverage`
+- [x] Крайние случаи обработаны: кириллица, `print`, `subprocess` с `git`, `assert` в тестах проходят; блок `__main__` вне подсчёта (57.14%, а не меньше)
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
 
 ## PR 3: `setup` ставит конфиги Python в проект с `*.py`
 **Объём:** `Git.kt`, `GitSpec.kt`, `setup/PythonConfig.kt` со спекой и данными, `SetupMain.kt`, `templates/project/ruff.toml`, `templates/project/coveragerc`, `templates/project/gitignore`, `.gitignore`; ≈ 10 файлов
