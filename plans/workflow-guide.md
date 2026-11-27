@@ -74,7 +74,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: памятка процесса, сверенная со скиллами
-  - [ ] Задача 1: сверка памятки со скиллами
+  - [x] Задача 1: сверка памятки со скиллами
   - [ ] Задача 2: памятка `docs/workflow.md` и проверка репозитория
   - [ ] Задача 3: ссылки на памятку из README
   - [ ] Приёмка
@@ -90,7 +90,7 @@
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/FindWorkflowErrorsSpec.kt` — случаи сверки
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/FindWorkflowErrorsSpecData.kt` — подставные памятки и ожидаемые ошибки
 
-- [ ] 1. Падающий тест: все скиллы упомянуты; команда без скилла; скилл без команды; повтор команды — одна ошибка; `task …` и пути — не команды.
+- [x] 1. Падающий тест: все скиллы упомянуты; команда без скилла; скилл без команды; повтор команды — одна ошибка; `task …` и пути — не команды.
   `FindWorkflowErrorsSpecData.kt`:
   ```kotlin
   package io.github.nakulov.standards.plugin
@@ -145,8 +145,8 @@
       }
   })
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — падает: `Unresolved reference 'findWorkflowErrors'`
-- [ ] 3. Минимальный код: `FindWorkflowErrors.kt`
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — падает: `Unresolved reference 'findWorkflowErrors'`
+- [x] 3. Минимальный код: `FindWorkflowErrors.kt`
   ```kotlin
   package io.github.nakulov.standards.plugin
 
@@ -170,8 +170,8 @@
       return unknownCommands + missingSkills
   }
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — `BUILD SUCCESSFUL`, 5 тестов
-- [ ] 5. Коммит — тест и код вместе: «Сверка памятки процесса со скиллами»
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*FindWorkflowErrorsSpec*'` — `BUILD SUCCESSFUL`, 5 тестов
+- [x] 5. Коммит — тест и код вместе: «Сверка памятки процесса со скиллами»
 
 ### Задача 2: памятка `docs/workflow.md` и проверка репозитория — памятка согласована со `skills/`
 - Создать: `scripts/src/test/kotlin/io/github/nakulov/standards/plugin/FindRepoWorkflowErrors.kt` — ошибки памятки репозитория
