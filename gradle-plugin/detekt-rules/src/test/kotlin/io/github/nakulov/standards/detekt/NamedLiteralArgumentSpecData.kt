@@ -29,7 +29,7 @@ fun greet(name: String, times: Int) {
     println(message = name)
 }
 
-@Suppress("UNUSED")
+@Deprecated("старое имя")
 fun main() {
     greet(name = "Ann", times = -1)
     val list = listOf("a", "b")

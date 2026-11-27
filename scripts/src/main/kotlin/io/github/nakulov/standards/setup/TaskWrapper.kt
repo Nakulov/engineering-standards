@@ -48,8 +48,8 @@ class TaskWrapper(
         try {
             target.parentFile.mkdirs()
             target.writeText(source)
-        } catch (@Suppress("SwallowedException") error: IOException) {
-            throw TaskError.Failure(message = "~/$TARGET: не записана — проверьте права на ~/$BIN")
+        } catch (error: IOException) {
+            throw TaskError.Failure(message = "~/$TARGET: не записана — проверьте права на ~/$BIN", cause = error)
         }
         // Ветка только кодом, без теста: снять право на chmod у владельца файла в тесте нельзя.
         if (!target.setExecutable(true)) {
