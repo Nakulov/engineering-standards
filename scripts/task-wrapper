@@ -1,10 +1,16 @@
 #!/bin/bash
 # engineering-standards task-wrapper
 # Обёртка ~/.local/bin/task (#43, решение 6): ставит и обновляет setup, вторая строка — метка, по ней setup узнаёт
-# свою обёртку. Находит scripts/task плагина для репозитория текущей папки. Совместим с bash 3.2 (macOS).
+# свою обёртку. Находит scripts/task плагина для репозитория текущей папки или папки `-C`. Совместим с bash 3.2 (macOS).
 set -u
 
-top=$(git rev-parse --show-toplevel 2>/dev/null)
+# Корень — от папки `-C`, если она первым аргументом и существует (как разбирает WorkingDirectory.kt): иначе
+# `task -C <копия>` из основной папки запустит task основной. Папки нет — от текущей, ошибку пути покажет task.
+dir=.
+if [ "${1:-}" = "-C" ] && [ -d "${2:-}" ]; then
+  dir=$2
+fi
+top=$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null)
 if [ -z "$top" ]; then
   echo "task: не репозиторий git — перейдите в папку проекта" >&2
   exit 2
@@ -14,7 +20,7 @@ if grep -qs '"name": "engineering-standards"' "$top/.claude-plugin/plugin.json";
   exec "$top/scripts/task" "$@"
 fi
 # Проект: корень плагина записал хук SessionStart последней сессии Claude в этом репозитории.
-common=$(git rev-parse --path-format=absolute --git-common-dir)
+common=$(git -C "$dir" rev-parse --path-format=absolute --git-common-dir)
 key=$(dirname "$common" | tr '/' '-')
 root=$(cat "${XDG_CACHE_HOME:-$HOME/.cache}/engineering-standards/roots/$key" 2>/dev/null)
 if [ -z "$root" ] || [ ! -x "$root/scripts/task" ]; then

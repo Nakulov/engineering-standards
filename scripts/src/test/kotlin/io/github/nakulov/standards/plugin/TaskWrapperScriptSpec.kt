@@ -43,4 +43,21 @@ class TaskWrapperScriptSpec :
         shouldReturnTest(makeNotGitRun()) {
             runWrapper(wrapper = wrapper, directory = makeTempDir(prefix = "plain"), cache = cache)
         }
+
+        shouldReturnTest(makeCopyRun()) {
+            val repo = makeStandardRepo()
+            makeStandardCopy(repo = repo)
+            runWrapper(wrapper = wrapper, directory = repo, cache = cache, "-C", STANDARD_COPY)
+        }
+
+        shouldReturnTest(makeNestedProjectRun()) {
+            val plain = makeTempDir(prefix = "plain")
+            writeRootRecord(cache = cache, project = makeNestedProject(parent = plain), root = plugin)
+            runWrapper(wrapper = wrapper, directory = plain, cache = cache, "-C", NESTED_PROJECT)
+        }
+
+        shouldReturnTest(makeMissingDirectoryRun()) {
+            writeRootRecord(cache = cache, project = project, root = plugin)
+            runWrapper(wrapper = wrapper, directory = project, cache = cache, "-C", MISSING_DIRECTORY)
+        }
     })
