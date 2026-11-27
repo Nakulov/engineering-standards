@@ -114,10 +114,10 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: правила Python и команды проверки языка в банке
-  - [ ] Задача 1: кодстайл Python в банке — BANK-6
-  - [ ] Задача 2: тесты Python в банке — BANK-7
-  - [ ] Задача 3: команды проверки — в «Проверке» банка, не в скилле
-  - [ ] Приёмка
+  - [x] Задача 1: кодстайл Python в банке — BANK-6
+  - [x] Задача 2: тесты Python в банке — BANK-7
+  - [x] Задача 3: команды проверки — в «Проверке» банка, не в скилле
+  - [x] Приёмка
 - PR 2: конфиги ruff и pytest стандарта, проверенные на образцах
   - [ ] Задача 4: `ruff-standard.toml` на образцах
   - [ ] Задача 5: `pytest.ini` и порог покрытия на образце
@@ -143,7 +143,7 @@
 
 Тест: проверка формата банка — `BankIndexSpec` (раздел без строки BANK падает).
 
-- [ ] 1. Падающий тест: раздел `code-style/python` без строки в оглавлении. Создать `docs/code-style/python/README.md`:
+- [x] 1. Падающий тест: раздел `code-style/python` без строки в оглавлении. Создать `docs/code-style/python/README.md`:
 
   ````markdown
   # Кодстайл Python
@@ -200,8 +200,8 @@
   | `pytest tests/test_<модуль>.py --no-cov` — один файл тестов | `N passed` | упавший тест; без `--no-cov` падает по порогу: он считается по всем тестам |
   ````
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `раздел без строки: code-style/python`
-- [ ] 3. Строка BANK-6 и файлы раздела. В `docs/README.md` после строки BANK-5 (`docs/README.md:13`) добавить:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `раздел без строки: code-style/python`
+- [x] 3. Строка BANK-6 и файлы раздела. В `docs/README.md` после строки BANK-5 (`docs/README.md:13`) добавить:
 
   ```markdown
   | BANK-6 | пишешь или правишь код Python (`*.py`) — в плане или в файлах | [code-style/python/README.md](code-style/python/README.md), затем файлы из его таблицы |
@@ -380,9 +380,9 @@
   ```
   ````
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Проверки языка: не применимы — Markdown; проверка формата банка — шаг 4
-- [ ] 6. Коммит — раздел и строка BANK-6 вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Проверки языка: не применимы — Markdown; проверка формата банка — шаг 4
+- [x] 6. Коммит — раздел и строка BANK-6 вместе
 
 ### Задача 2: тесты Python в банке — BANK-7
 - Создать: `docs/testing/python/README.md` — вход раздела тестов
@@ -391,7 +391,7 @@
 
 Тест: `BankIndexSpec`.
 
-- [ ] 1. Падающий тест: раздел `testing/python` без строки. Создать `docs/testing/python/README.md`:
+- [x] 1. Падающий тест: раздел `testing/python` без строки. Создать `docs/testing/python/README.md`:
 
   ````markdown
   # Тесты Python
@@ -418,8 +418,8 @@
   Замечание ревью ссылается на ID: «нарушено PY-TEST-2».
   ````
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `раздел без строки: testing/python`
-- [ ] 3. Строки банка и файл правил. В `docs/README.md` строки BANK-3 и BANK-4 заменить и после BANK-6 добавить BANK-7:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `раздел без строки: testing/python`
+- [x] 3. Строки банка и файл правил. В `docs/README.md` строки BANK-3 и BANK-4 заменить и после BANK-6 добавить BANK-7:
 
   ```markdown
   | BANK-3 | переносишь в файлы готовый код из плана | ничего: код плана уже по стандарту. BANK-1, BANK-2, BANK-6, BANK-7 — только когда пишешь код не из плана: чинишь упавший тест или сборку |
@@ -488,9 +488,9 @@
   ```
   ````
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Проверки языка: не применимы — Markdown
-- [ ] 6. Коммит — раздел и строки банка вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Проверки языка: не применимы — Markdown
+- [x] 6. Коммит — раздел и строки банка вместе
 
 ### Задача 3: команды проверки — в «Проверке» банка, не в скилле
 - Изменить: `docs/code-style/kotlin/README.md:51` — раздел «Проверка»
@@ -499,7 +499,7 @@
 
 Тест: `MarkersSpec` — копия блока `plan:granularity` совпадает с источником; сам текст — «тест: не применим — текст скилла».
 
-- [ ] 1. Падающий тест: правка источника блока без копии. В `skills/decompose/SKILL.md` заменить строку 123:
+- [x] 1. Падающий тест: правка источника блока без копии. В `skills/decompose/SKILL.md` заменить строку 123:
 
   было:
   ```markdown
@@ -511,8 +511,8 @@
   ```
 
   и в строке 129 `проверки модуля — тоже не применимы` → `проверки языка — тоже не применимы`.
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает на блоке `plan:granularity`: копия в `agents/plan-reviewer.md` расходится с источником
-- [ ] 3. Копия, остальные строки скилла и «Проверка» Kotlin:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — падает на блоке `plan:granularity`: копия в `agents/plan-reviewer.md` расходится с источником
+- [x] 3. Копия, остальные строки скилла и «Проверка» Kotlin:
   - `agents/plan-reviewer.md:87` и строка «Без логики …» блока — те же замены, что в шаге 1.
   - `skills/decompose/SKILL.md:229`:
 
@@ -538,14 +538,14 @@
     | `./gradlew :<модуль>:test --tests '*<Имя>Spec*'` — одна спека | `BUILD SUCCESSFUL` | `Unresolved reference: <имя>` или упавший случай спеки |
     | `./gradlew :<модуль>:check` — тесты, detekt, порог покрытия | `BUILD SUCCESSFUL` | имя правила detekt, например `FunctionSignature`, или порог покрытия (KT-TEST-7) |
     ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; `grep -rn "gradlew" skills/decompose/SKILL.md agents/plan-reviewer.md` — пусто
-- [ ] 5. Проверки языка: не применимы — Markdown; полный `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (спеки читают `skills/` и `agents/`)
-- [ ] 6. Коммит — скилл, агент и «Проверка» Kotlin вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*MarkersSpec*'` — `BUILD SUCCESSFUL`; `grep -rn "gradlew" skills/decompose/SKILL.md agents/plan-reviewer.md` — пусто
+- [x] 5. Проверки языка: не применимы — Markdown; полный `./gradlew :scripts:test` — `BUILD SUCCESSFUL` (спеки читают `skills/` и `agents/`)
+- [x] 6. Коммит — скилл, агент и «Проверка» Kotlin вместе
 
 ### Приёмка
-- [ ] Правила Python и команды проверки языка в банке — проверено: BANK-6/7 ведут на разделы, в скилле и агенте нет `gradlew`
-- [ ] Крайние случаи обработаны: BANK-3 и BANK-4 называют виды файлов Python; запуск одного файла тестов — с `--no-cov`
-- [ ] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
+- [x] Правила Python и команды проверки языка в банке — проверено: BANK-6/7 ведут на разделы, в скилле и агенте нет `gradlew`
+- [x] Крайние случаи обработаны: BANK-3 и BANK-4 называют виды файлов Python; запуск одного файла тестов — с `--no-cov`
+- [x] Полный набор тестов зелёный: `./gradlew :scripts:test` — `BUILD SUCCESSFUL`
 
 ## PR 2: конфиги ruff и pytest стандарта, проверенные на образцах
 **Объём:** `templates/project/ruff-standard.toml`, `templates/project/pytest.ini`, `scripts/src/test/.../plugin/` (4 файла); ≈ 6 файлов
