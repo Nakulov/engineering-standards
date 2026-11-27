@@ -9,10 +9,11 @@
 | BANK-1 | пишешь или правишь код Kotlin (`*.kt`, `*.kts`) — в плане или в файлах | [code-style/kotlin/README.md](code-style/kotlin/README.md), затем файлы из его таблицы |
 | BANK-2 | пишешь или правишь тест Kotlin (`src/test/`) | BANK-1 и ещё [testing/kotlin/README.md](testing/kotlin/README.md) |
 | BANK-3 | переносишь в файлы готовый код из плана | ничего: код плана уже по стандарту. BANK-1, BANK-2, BANK-6, BANK-7 — только когда пишешь код не из плана: чинишь упавший тест или сборку |
-| BANK-4 | проверяешь дифф | BANK-1, BANK-2, BANK-6, BANK-7 — по видам изменённых файлов |
+| BANK-4 | проверяешь дифф | BANK-1, BANK-2, BANK-6, BANK-7, BANK-8 — по видам изменённых файлов |
 | BANK-5 | запускаешь `task <команда>` или `setup` | файл команды — из таблицы [commands/README.md](commands/README.md) |
 | BANK-6 | пишешь или правишь код Python (`*.py`) — в плане или в файлах | [code-style/python/README.md](code-style/python/README.md), затем файлы из его таблицы |
 | BANK-7 | пишешь или правишь тест Python (`tests/`) | BANK-6 и ещё [testing/python/README.md](testing/python/README.md) |
+| BANK-8 | пишешь или правишь JSON, формат которого задаёт проект (`*.json`, `*.schema.json`), — в плане или в файлах | [code-style/json/README.md](code-style/json/README.md), затем файлы из его таблицы |
 
 Строки для твоей работы нет — банка для неё нет: работай по образцам существующего кода, правил не придумывай.
 
