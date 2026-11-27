@@ -153,10 +153,7 @@ fun makeWrapperCopy(): File {
     return wrapper
 }
 
-private fun writeScript(
-    file: File,
-    text: String,
-) {
+private fun writeScript(file: File, text: String) {
     file.parentFile.mkdirs()
     file.writeText(text)
     file.setExecutable(true)

@@ -5,7 +5,7 @@
 ### KT-FMT-1. Параметры конструктора — каждый с новой строки
 Почему: параметры читаются столбцом, а новый параметр — одна строка в диффе.
 Проверка: detekt `ClassSignature` (ktlint, основной код) + ревью (тесты: правило там выключено, чтобы спека писалась `class … : BehaviorSpec({` одной строкой)
-Правило действует и для одного параметра. Перед `@Inject constructor` — перенос строки.
+Правило действует и для одного параметра. Перед `@Inject constructor` — перенос строки. Параметры функции — KT-FMT-10.
 
 ```kotlin
 // Разрешено
@@ -217,5 +217,41 @@ when (isValid) {
 when {
     isValid -> doSomething()
     else -> doAnother()
+}
+```
+
+### KT-FMT-10. Параметры функции — каждый с новой строки, если их три и больше
+Почему: длинный список параметров читается столбцом, а новый параметр — одна строка в диффе; один-два параметра читаются и одной строкой.
+Проверка: detekt `FunctionSignature` (ktlint)
+Один-два параметра — одной строкой, пока сигнатура помещается в 120 символов (`max_line_length` в `.editorconfig`); не помещается — каждый параметр с новой строки. Правило действует и в тестах. Параметры конструктора — KT-FMT-1.
+
+```kotlin
+// Разрешено
+fun updatePassword(password: String) {
+    // …
+}
+
+fun createAccountRequest(user: UserModel, password: String): AccountRequest {
+    // …
+}
+
+fun createAccount(
+    name: String,
+    email: String,
+    password: String,
+): AccountModel {
+    // …
+}
+
+// Запрещено
+fun createAccountRequest(
+    user: UserModel,
+    password: String,
+): AccountRequest {
+    // …
+}
+
+fun createAccount(name: String, email: String, password: String): AccountModel {
+    // …
 }
 ```

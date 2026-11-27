@@ -121,10 +121,6 @@
     <ID>FunctionSignature:PluginSettingsSpecData.kt:private fun makeStandardKeys: String</ID>
     <ID>FunctionSignature:SessionStartHookSpecData.kt:fun readRootRecord: String</ID>
     <ID>FunctionSignature:SessionStartHookSpecData.kt:fun runGit: String</ID>
-    <ID>FunctionSignature:SessionStartHookSpecData.kt:fun runHook: LauncherRun</ID>
-    <ID>FunctionSignature:StandardFilesSpecData.kt:fun writeProjectFile</ID>
-    <ID>FunctionSignature:TaskWrapperScriptSpecData.kt:fun runWrapper: LauncherRun</ID>
-    <ID>FunctionSignature:TaskWrapperScriptSpecData.kt:fun writeRootRecord</ID>
     <ID>FunctionSignature:TaskWrapperScriptSpecData.kt:private fun writeScript</ID>
     <ID>FunctionSignature:TaskWrapperSpecData.kt:fun makeWrapperFinding: Finding</ID>
     <ID>FunctionSignature:TaskWrapperSpecData.kt:fun writeWrapper</ID>
