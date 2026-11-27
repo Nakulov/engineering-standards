@@ -114,7 +114,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: правила Python и команды проверки языка в банке
-  - [ ] Задача 1: кодстайл Python в банке — BANK-6
+  - [x] Задача 1: кодстайл Python в банке — BANK-6
   - [ ] Задача 2: тесты Python в банке — BANK-7
   - [ ] Задача 3: команды проверки — в «Проверке» банка, не в скилле
   - [ ] Приёмка
@@ -143,7 +143,7 @@
 
 Тест: проверка формата банка — `BankIndexSpec` (раздел без строки BANK падает).
 
-- [ ] 1. Падающий тест: раздел `code-style/python` без строки в оглавлении. Создать `docs/code-style/python/README.md`:
+- [x] 1. Падающий тест: раздел `code-style/python` без строки в оглавлении. Создать `docs/code-style/python/README.md`:
 
   ````markdown
   # Кодстайл Python
@@ -200,8 +200,8 @@
   | `pytest tests/test_<модуль>.py --no-cov` — один файл тестов | `N passed` | упавший тест; без `--no-cov` падает по порогу: он считается по всем тестам |
   ````
 
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `раздел без строки: code-style/python`
-- [ ] 3. Строка BANK-6 и файлы раздела. В `docs/README.md` после строки BANK-5 (`docs/README.md:13`) добавить:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — падает: `раздел без строки: code-style/python`
+- [x] 3. Строка BANK-6 и файлы раздела. В `docs/README.md` после строки BANK-5 (`docs/README.md:13`) добавить:
 
   ```markdown
   | BANK-6 | пишешь или правишь код Python (`*.py`) — в плане или в файлах | [code-style/python/README.md](code-style/python/README.md), затем файлы из его таблицы |
@@ -380,9 +380,9 @@
   ```
   ````
 
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`
-- [ ] 5. Проверки языка: не применимы — Markdown; проверка формата банка — шаг 4
-- [ ] 6. Коммит — раздел и строка BANK-6 вместе
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*BankIndexSpec*'` — `BUILD SUCCESSFUL`
+- [x] 5. Проверки языка: не применимы — Markdown; проверка формата банка — шаг 4
+- [x] 6. Коммит — раздел и строка BANK-6 вместе
 
 ### Задача 2: тесты Python в банке — BANK-7
 - Создать: `docs/testing/python/README.md` — вход раздела тестов
