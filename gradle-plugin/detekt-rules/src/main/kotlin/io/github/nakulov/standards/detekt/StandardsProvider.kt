@@ -18,6 +18,7 @@ class StandardsProvider : RuleSetProvider {
                 { config -> NoImplicitIt(config) },
                 { config -> OneClassPerFile(config) },
                 { config -> SpecDataContent(config) },
+                { config -> StubsInMockBlock(config) },
             ),
         )
     }

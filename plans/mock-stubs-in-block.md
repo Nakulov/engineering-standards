@@ -107,7 +107,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: заглушки верхнего уровня спеки ловит detekt
   - [x] Задача 1: правило detekt `StubsInMockBlock`
-  - [ ] Задача 2: регистрация в `StandardsProvider`
+  - [x] Задача 2: регистрация в `StandardsProvider`
   - [ ] Задача 3: включение в `detekt.yml` и бейзлайн `scripts/`
   - [ ] Задача 4: правило KT-KIT-13 в банке
   - [ ] Приёмка
@@ -322,18 +322,18 @@
 - Изменить: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/StandardsProviderSpecData.kt:16` — новое имя в ожидании
 - Изменить: `gradle-plugin/detekt-rules/src/main/kotlin/io/github/nakulov/standards/detekt/StandardsProvider.kt:20` — регистрация
 
-- [ ] 1. Падающий тест: в `makeStandardsRuleNames()` после `RuleName(value = "SpecDataContent"),` добавить строку
+- [x] 1. Падающий тест: в `makeStandardsRuleNames()` после `RuleName(value = "SpecDataContent"),` добавить строку
   ```kotlin
           RuleName(value = "StubsInMockBlock"),
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — падает: ожидаемый набор содержит `StubsInMockBlock`, фактический — нет
-- [ ] 3. Минимальный код: в `StandardsProvider.instance()` после `{ config -> SpecDataContent(config) },` добавить строку
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — падает: ожидаемый набор содержит `StubsInMockBlock`, фактический — нет
+- [x] 3. Минимальный код: в `StandardsProvider.instance()` после `{ config -> SpecDataContent(config) },` добавить строку
   ```kotlin
                   { config -> StubsInMockBlock(config) },
   ```
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — зелёный
-- [ ] 5. Запустить `./gradlew -p gradle-plugin :detekt-rules:check` — `BUILD SUCCESSFUL`
-- [ ] 6. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StandardsProviderSpec*'` — зелёный
+- [x] 5. Запустить `./gradlew -p gradle-plugin :detekt-rules:check` — `BUILD SUCCESSFUL`
+- [x] 6. Коммит — тест и код вместе
 
 ### Задача 3: включение `StubsInMockBlock` в `detekt.yml` и бейзлайн `scripts/`
 - Изменить: `gradle-plugin/conventions/src/main/resources/standards/detekt.yml:94` — правило активно, только тесты
