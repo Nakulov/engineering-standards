@@ -51,7 +51,7 @@ class OrderServiceSpec : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerRoot
 
     val repository = mockk<OrderRepository>()
-    val service = OrderService(repository = repository)
+    val service = OrderService(repository)
 
     given(name = "новый заказ") {
         val order = Order(id = 1000L, total = 20)
@@ -97,13 +97,19 @@ val gitHub = mockk<GitHub> {
 // Разрешено — функции с Unit не требуют заглушек
 val gitHub = mockk<GitHub>(relaxUnitFun = true)
 
-// Разрешено — заглушка вызова
-every { gitHub.read(makeAdminArgs()) } returns "true"
-coEvery { gitHub.load(makeAdminArgs()) } returns "true"
+// Разрешено — заглушка вызова на один случай; общие заглушки уровня спеки — KT-KIT-13
+given(name = "администратор") {
+    every { gitHub.read(makeAdminArgs()) } returns "true"
+    coEvery { gitHub.load(makeAdminArgs()) } returns "true"
+    // …
+}
 
-// Разрешено — заглушка вызова с Unit
-justRun { pause.invoke(any()) }
-coJustRun { pause.invoke(any()) }
+// Разрешено — заглушка вызова с Unit на один случай
+given(name = "пауза") {
+    justRun { pause.invoke(any()) }
+    coJustRun { pause.invoke(any()) }
+    // …
+}
 
 // Запрещено — ручной фейк
 class FakeGitHub : GitHub {
@@ -489,4 +495,43 @@ data class PriceDto(
 withJson {
     shouldRoundTripTest<PriceDto>(resource = "dto/price/full.json")
 }
+```
+
+### KT-KIT-13. Заглушки мока верхнего уровня спеки — в блоке при создании мока
+Почему: мок и его поведение читаются в одном месте; отдельные `every` ниже объявления разрывают мок — читатель собирает его по кускам среди других объявлений.
+Проверка: detekt `StubsInMockBlock` (своё правило из engineering-standards)
+- Верхний уровень спеки — прямые выражения лямбды `BehaviorSpec({ … })`. Заглушки там — `every`, `coEvery`, `justRun`, `coJustRun` — только в блоке `mockk<T> { … }`.
+- Заглушка на один случай — отдельной строкой внутри `given`, `when` или `withGivens`; мок, объявленный внутри `given`, правило не затрагивает.
+- Значение для заглушки объявляется выше мока.
+- Мок из функции (`val repository = makeRepository()`) с заглушкой на верхнем уровне — нарушение: заглушки — в блоке при создании мока внутри функции или в `given`.
+
+```kotlin
+// Разрешено
+class RepositoryServiceSpec : BehaviorSpec({
+    isolationMode = IsolationMode.InstancePerRoot
+
+    val root = makeRoot()
+    val repository = mockk<Repository> {
+        every { root() } returns root.path
+        justRun { save(any()) }
+    }
+    val service = RepositoryService(repository)
+
+    given(name = "пустой репозиторий") {
+        every { repository.files() } returns emptyList()
+        // …
+    }
+})
+
+// Запрещено — заглушки мока отдельными строками на верхнем уровне спеки
+class RepositoryServiceSpec : BehaviorSpec({
+    isolationMode = IsolationMode.InstancePerRoot
+
+    val repository = mockk<Repository>()
+    val service = RepositoryService(repository)
+    val root = makeRoot()
+    every { repository.root() } returns root.path
+    justRun { repository.save(any()) }
+    // …
+})
 ```

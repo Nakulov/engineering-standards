@@ -14,5 +14,6 @@ fun makeStandardsRuleNames(): Set<RuleName> {
         RuleName(value = "NoImplicitIt"),
         RuleName(value = "OneClassPerFile"),
         RuleName(value = "SpecDataContent"),
+        RuleName(value = "StubsInMockBlock"),
     )
 }

@@ -545,5 +545,130 @@
     <ID>SpecDataContent:TemplatesSpecData.kt:fun findTemplatesWithoutLabel: List&lt;String&gt;</ID>
     <ID>SpecDataContent:TemplatesSpecData.kt:private val COMMENT = Regex(pattern = "&lt;!--.*?--&gt;", option = RegexOption.DOT_MATCHES_ALL)</ID>
     <ID>SpecDataContent:TemplatesSpecData.kt:private val CONCRETE = Regex(pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2}|#[0-9]+")</ID>
+    <ID>StubsInMockBlock:BoardSetupSpec.kt:BoardSetupSpec$every { gitHub.listGraphql(query = any(), jq = any(), variables = makeRepositoryVariables()) }</ID>
+    <ID>StubsInMockBlock:BoardSetupSpec.kt:BoardSetupSpec$every { gitHub.read(args = match { args -&gt; args.last() == makeRepositoryJq() }) }</ID>
+    <ID>StubsInMockBlock:BoardSetupSpec.kt:BoardSetupSpec$every { gitHub.read(args = match { args -&gt; args.last() == makeTemplateJq() }) }</ID>
+    <ID>StubsInMockBlock:BoardSpec.kt:BoardSpec$every { gitHub.listGraphql(query = any(), jq = any(), variables = makeRepoVariables()) }</ID>
+    <ID>StubsInMockBlock:BoardSpec.kt:BoardSpec$every { gitHub.read(args = makeRepoArgs()) }</ID>
+    <ID>StubsInMockBlock:BoardSpec.kt:BoardSpec$justRun { pause.invoke(any()) }</ID>
+    <ID>StubsInMockBlock:CommitCommandSpec.kt:CommitCommandSpec$every { git.addedPaths(base = "origin/dev") }</ID>
+    <ID>StubsInMockBlock:CommitCommandSpec.kt:CommitCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:CommitCommandSpec.kt:CommitCommandSpec$justRun { git.commitPaths(paths = any(), messageFile = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$every { git.copyPath(slug = "task-scripts") }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$every { git.currentBranch() }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$every { git.isClean() }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$every { issues.nodeId(number = 13) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$every { issues.pullRequest(branch = "task/13-task-scripts") }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { git.deleteBranch(name = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { git.deleteRemoteBranch(name = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { git.detach(ref = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { git.fetch() }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { git.removeWorktree(path = any()) }</ID>
+    <ID>StubsInMockBlock:DoneCommandSpec.kt:DoneCommandSpec$justRun { git.updateDev() }</ID>
+    <ID>StubsInMockBlock:EnvironmentSpec.kt:EnvironmentSpec$every { gitHub.read(args = makeAdminArgs()) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { board.item(issue = 13, nodeId = "I_issue13") }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { git.currentBranch() }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { git.hasLocalBranch(name = "task/13-final") }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { git.hasRemoteBranch(name = "task/13-final") }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { git.isClean() }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { git.longBranch(issue = 13) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { git.merge(ref = "origin/long/13-x") }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$every { issues.nodeId(number = 13) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$justRun { git.createBranch(name = any(), base = any()) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$justRun { git.fetch() }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$justRun { git.switchTo(name = any()) }</ID>
+    <ID>StubsInMockBlock:FinalCommandSpec.kt:FinalCommandSpec$justRun { publisher.publish(draft = any(), console = console) }</ID>
+    <ID>StubsInMockBlock:GitHubSpec.kt:GitHubSpec$justRun { pause.invoke(any()) }</ID>
+    <ID>StubsInMockBlock:GitignoreBlockSpec.kt:GitignoreBlockSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:GroomedCommandSpec.kt:GroomedCommandSpec$every { board.item(issue = 13, nodeId = "I_issue13") }</ID>
+    <ID>StubsInMockBlock:GroomedCommandSpec.kt:GroomedCommandSpec$every { issues.nodeId(number = 13) }</ID>
+    <ID>StubsInMockBlock:GroomedCommandSpec.kt:GroomedCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:GroomedCommandSpec.kt:GroomedCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:GroomingSpec.kt:GroomingSpec$every { issues.nodeId(number = 13) }</ID>
+    <ID>StubsInMockBlock:GroomingSpec.kt:GroomingSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:InitialBranchSpec.kt:InitialBranchSpec$every { gitHub.read(args = makeBranchesArgs()) }</ID>
+    <ID>StubsInMockBlock:InitialBranchSpec.kt:InitialBranchSpec$every { gitHub.read(args = makeCommitsArgs()) }</ID>
+    <ID>StubsInMockBlock:InitialBranchSpec.kt:InitialBranchSpec$every { gitHub.read(args = makeDefaultBranchArgs()) }</ID>
+    <ID>StubsInMockBlock:InitialBranchSpec.kt:InitialBranchSpec$every { gitHub.read(args = makeDevBranchArgs()) }</ID>
+    <ID>StubsInMockBlock:InitialBranchSpec.kt:InitialBranchSpec$every { gitHub.read(args = makeMainShaArgs()) }</ID>
+    <ID>StubsInMockBlock:InitialBranchSpec.kt:InitialBranchSpec$every { gitHub.write(args = any()) }</ID>
+    <ID>StubsInMockBlock:LabelsSpec.kt:LabelsSpec$every { gitHub.read(args = makeUsageArgs(encoded = "bug")) }</ID>
+    <ID>StubsInMockBlock:LabelsSpec.kt:LabelsSpec$every { gitHub.read(args = makeUsageArgs(encoded = "good%20first%20issue")) }</ID>
+    <ID>StubsInMockBlock:LabelsSpec.kt:LabelsSpec$every { gitHub.write(args = any()) }</ID>
+    <ID>StubsInMockBlock:NewCommandSpec.kt:NewCommandSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:NewCommandSpec.kt:NewCommandSpec$every { issues.databaseId(number = 40) }</ID>
+    <ID>StubsInMockBlock:NewCommandSpec.kt:NewCommandSpec$every { issues.nodeId(number = 40) }</ID>
+    <ID>StubsInMockBlock:NewCommandSpec.kt:NewCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:NewCommandSpec.kt:NewCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:PlanArchiveSpec.kt:PlanArchiveSpec$every { git.mainRoot() }</ID>
+    <ID>StubsInMockBlock:PlanArchiveSpec.kt:PlanArchiveSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:PlanArchiveSpec.kt:PlanArchiveSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:PlanArchiveSpec.kt:PlanArchiveSpec$justRun { git.removeAndCommit(paths = any(), message = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { board.item(issue = 53, nodeId = "I_issue53") }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { git.commonDir() }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { git.hasChanges(path = temp) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { git.head(path = temp) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { git.openedAt(branch = PLAN_BRANCH) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { issues.body(number = 53) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { issues.info(number = 53) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$every { issues.nodeId(number = 53) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { console.error(text = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { git.addWorktree(path = any(), ref = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { git.commitAll(path = any(), message = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { git.fetch() }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { git.moveBranch(branch = any(), commit = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { git.pushHead(path = any(), branch = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { git.removeWorktree(path = any()) }</ID>
+    <ID>StubsInMockBlock:PlanCommandSpec.kt:PlanCommandSpec$justRun { issues.editBody(number = any(), body = any()) }</ID>
+    <ID>StubsInMockBlock:PluginSettingsSpec.kt:PluginSettingsSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:PrCommandSpec.kt:PrCommandSpec$every { git.currentBranch() }</ID>
+    <ID>StubsInMockBlock:PrCommandSpec.kt:PrCommandSpec$every { issues.nodeId(number = 13) }</ID>
+    <ID>StubsInMockBlock:PrCommandSpec.kt:PrCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:PrCommandSpec.kt:PrCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:PrCommandSpec.kt:PrCommandSpec$justRun { publisher.publish(draft = any(), console = console) }</ID>
+    <ID>StubsInMockBlock:PrCommandSpec.kt:PrCommandSpec$justRun { pullRequests.ready(head = any()) }</ID>
+    <ID>StubsInMockBlock:PublisherSpec.kt:PublisherSpec$every { git.isClean() }</ID>
+    <ID>StubsInMockBlock:PublisherSpec.kt:PublisherSpec$justRun { archive.run(console = any()) }</ID>
+    <ID>StubsInMockBlock:PublisherSpec.kt:PublisherSpec$justRun { checks.run(command = any()) }</ID>
+    <ID>StubsInMockBlock:PublisherSpec.kt:PublisherSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:PublisherSpec.kt:PublisherSpec$justRun { git.push(name = any()) }</ID>
+    <ID>StubsInMockBlock:RulesetsSpec.kt:RulesetsSpec$every { gitHub.listRest(path = makeRulesetsPath(), jq = makeRulesetsJq()) }</ID>
+    <ID>StubsInMockBlock:RulesetsSpec.kt:RulesetsSpec$every { gitHub.read(args = makeCheckRunsArgs()) }</ID>
+    <ID>StubsInMockBlock:RulesetsSpec.kt:RulesetsSpec$every { gitHub.read(args = makeClassicArgs()) }</ID>
+    <ID>StubsInMockBlock:RulesetsSpec.kt:RulesetsSpec$every { gitHub.read(args = makeWorkflowsArgs()) }</ID>
+    <ID>StubsInMockBlock:SetupSpec.kt:SetupSpec$justRun { console.error(text = any()) }</ID>
+    <ID>StubsInMockBlock:SetupSpec.kt:SetupSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:SetupSpec.kt:SetupSpec$justRun { environment.verify() }</ID>
+    <ID>StubsInMockBlock:StageCommandSpec.kt:StageCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:StandardFilesSpec.kt:StandardFilesSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$every { git.copyPath(slug = "task-scripts") }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$every { git.isClean() }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$every { git.openedAt(branch = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$every { git.root() }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$every { issues.nodeId(number = 13) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { board.move(item = any(), status = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { files.copyInto(copy = any(), console = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.addBranchWorktree(path = any(), name = any(), base = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.addWorktreeOn(path = any(), name = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.createBranch(name = any(), base = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.fastForwardIn(path = any(), name = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.fetch() }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.push(name = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.setBase(branch = any(), base = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.switchIn(path = any(), name = any()) }</ID>
+    <ID>StubsInMockBlock:StartCommandSpec.kt:StartCommandSpec$justRun { git.switchTo(name = any()) }</ID>
+    <ID>StubsInMockBlock:TaskSpec.kt:TaskSpec$every { command.usage }</ID>
+    <ID>StubsInMockBlock:TaskSpec.kt:TaskSpec$justRun { console.error(text = any()) }</ID>
+    <ID>StubsInMockBlock:TaskSpec.kt:TaskSpec$justRun { console.line(text = any()) }</ID>
+    <ID>StubsInMockBlock:WorktreeFilesSpec.kt:WorktreeFilesSpec$justRun { console.line(text = any()) }</ID>
   </CurrentIssues>
 </SmellBaseline>
