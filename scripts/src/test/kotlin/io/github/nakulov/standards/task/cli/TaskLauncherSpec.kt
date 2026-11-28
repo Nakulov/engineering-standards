@@ -72,7 +72,7 @@ class TaskLauncherSpec :
             ),
         ) { name, expected, environment, args, launcher ->
             shouldReturnTest(expected, options = TestOptions(name)) {
-                runLauncher(environment = environment(), args = args, launcher = launcher)
+                runLauncher(environment(), args, launcher)
             }
         }
 
@@ -84,17 +84,13 @@ class TaskLauncherSpec :
             case(arg1 = listOf("-C", MISSING_DIRECTORY, "--help")),
         ) { args ->
             shouldReturnTest(makeNoJavaRun()) {
-                runLauncher(environment = makeNoJavaEnvironment(), args = args, timeout = 10.seconds)
+                runLauncher(makeNoJavaEnvironment(), args, timeout = 10.seconds)
             }
         }
 
         shouldReturnTest(makeCopyRun(), options = TestOptions(name = "-C в копию стандарта — task копии")) {
             val repo = makeStandardRepo()
             makeStandardCopy(repo = repo)
-            runLauncher(
-                environment = makeBareEnvironment(),
-                args = listOf("-C", STANDARD_COPY, "--help"),
-                directory = repo,
-            )
+            runLauncher(makeBareEnvironment(), listOf("-C", STANDARD_COPY, "--help"), directory = repo)
         }
     })

@@ -70,14 +70,14 @@ fun makeRepoRoot(): String {
 }
 
 fun makeDownloadEnvironment(): Map<String, String> {
-    return makeEnvironment(path = makeSystemPath(), packages = makePublishedPackages(), gradle = makeGradle(code = 1))
+    return makeEnvironment(makeSystemPath(), makePublishedPackages(), makeGradle(code = 1))
 }
 
 fun makeCachedEnvironment(): Map<String, String> {
-    val cache = makeTempDir(prefix = CACHE_PREFIX)
+    val cache = makeTempDir(CACHE_PREFIX)
     val jar = File(/* parent = */ cache, /* child = */ "engineering-standards/task-${makeTaskVersion()}.jar")
     jar.parentFile.mkdirs()
-    File(System.getProperty(/* key = */ "task.jar")).copyTo(target = jar)
+    File(System.getProperty(/* key = */ "task.jar")).copyTo(jar)
     return makeEnvironment(
         path = makeSystemPath(),
         packages = makeEmptyPackages(),
@@ -87,32 +87,28 @@ fun makeCachedEnvironment(): Map<String, String> {
 }
 
 fun makeLocalBuildEnvironment(): Map<String, String> {
-    return makeEnvironment(path = makeSystemPath(), packages = makeEmptyPackages(), gradle = makeGradle(code = 0))
+    return makeEnvironment(makeSystemPath(), makeEmptyPackages(), makeGradle(code = 0))
 }
 
 fun makeFailedBuildEnvironment(): Map<String, String> {
-    return makeEnvironment(path = makeSystemPath(), packages = makeEmptyPackages(), gradle = makeGradle(code = 1))
+    return makeEnvironment(makeSystemPath(), makeEmptyPackages(), makeGradle(code = 1))
 }
 
 // Первая `java` в PATH не запускается — как заглушка macOS `/usr/bin/java` без установленной JDK.
 fun makeNoJavaEnvironment(): Map<String, String> {
-    return makeEnvironment(
-        path = makeJavaPath(script = "exit 1"),
-        packages = makeEmptyPackages(),
-        gradle = makeGradle(code = 1),
-    )
+    return makeEnvironment(makeJavaPath(script = "exit 1"), makeEmptyPackages(), makeGradle(code = 1))
 }
 
 fun makeOldJavaEnvironment(): Map<String, String> {
     return makeEnvironment(
-        path = makeJavaPath(script = "echo 'openjdk version \"17.0.2\" 2022-01-18' >&2"),
-        packages = makeEmptyPackages(),
-        gradle = makeGradle(code = 1),
+        makeJavaPath(script = "echo 'openjdk version \"17.0.2\" 2022-01-18' >&2"),
+        makeEmptyPackages(),
+        makeGradle(code = 1),
     )
 }
 
 fun makeBareEnvironment(): Map<String, String> {
-    return makeEnvironment(path = makeBarePath(), packages = makeEmptyPackages(), gradle = makeGradle(code = 1))
+    return makeEnvironment(makeBarePath(), makeEmptyPackages(), makeGradle(code = 1))
 }
 
 fun makeTaskLauncher(): String {
@@ -153,7 +149,7 @@ private fun makeEnvironment(
     path: String,
     packages: String,
     gradle: String,
-    cache: File = makeTempDir(prefix = CACHE_PREFIX),
+    cache: File = makeTempDir(CACHE_PREFIX),
 ): Map<String, String> {
     return mapOf(
         "PATH" to path,
@@ -169,13 +165,13 @@ private fun makeSystemPath(): String {
 }
 
 private fun makeJavaPath(script: String): String {
-    val java = makeStub(file = File(makeTempDir(prefix = "stub"), /* child = */ "java"), script = script)
+    val java = makeStub(File(makeTempDir(prefix = "stub"), /* child = */ "java"), script)
     return "${java.parentFile.absolutePath}:${makeSystemPath()}"
 }
 
 // Код 0 — запускатель забирает `build/libs/task.jar`, собранный до тестов.
 private fun makeGradle(code: Int): String {
-    val gradle = makeStub(file = File(makeTempDir(prefix = "gradle"), /* child = */ "gradlew"), script = "exit $code")
+    val gradle = makeStub(File(makeTempDir(prefix = "gradle"), /* child = */ "gradlew"), script = "exit $code")
     return gradle.absolutePath
 }
 
