@@ -1,13 +1,15 @@
 #!/bin/bash
-# Запускатель task (#13, решения 1 и 3): проверяет Kotlin, один раз компилирует логику в jar в кеше и запускает её.
+# Запускатель task: готовый jar этой версии из кеша; нет — скачивает его из GitHub Packages, не скачался — собирает
+# локально Gradle (ветка разработчика до слияния). Версия — scripts/task-version, её же публикует CI.
 # Логики процесса здесь нет — она в src/main/kotlin. Совместим с bash 3.2 (macOS).
-# Точка входа — TASK_MAIN (по умолчанию task); scripts/setup запускает через него setup (#8).
+# Точка входа — TASK_MAIN (по умолчанию task); scripts/setup запускает через него setup.
+# TASK_PACKAGES_URL и TASK_GRADLE подменяет спека запускателя: пакеты — папка file://, Gradle — заглушка.
 set -eu
 
-min_major=2
-min_minor=2 # совпадает с languageVersion в build.gradle.kts
+min_java=21 # Gradle собирает jar на JDK 21 (gradle/gradle-daemon-jvm.properties): на старой Java он не запустится
 
 dir=$(cd "$(dirname "$0")" && pwd -P)
+root=$(cd "$dir/.." && pwd)
 
 # Копия стандарта по `-C` (разбор — как в WorkingDirectory.kt): в сессии Claude `task` — scripts/task основной папки
 # из PATH хука, мимо обёртки ~/.local/bin/task. Корень папки `-C` — другая копия стандарта → её task; совпал со своим —
@@ -20,38 +22,42 @@ if [ "${1:-}" = "-C" ] && [ -d "${2:-}" ]; then
   fi
 fi
 
-if ! command -v kotlinc >/dev/null 2>&1; then
-  echo "Нет Kotlin — установите: brew install kotlin" >&2
-  exit 2
-fi
-
-# Ключ кеша: исходники и путь к kotlinc (в пути установки есть версия, при обновлении Kotlin jar пересобирается).
-kotlinc_path=$(readlink -f "$(command -v kotlinc)")
-key=$( (cd "$dir/src/main/kotlin" && find . -name '*.kt' | sort | xargs shasum; echo "$kotlinc_path") | shasum | cut -c1-16)
+version=$("$dir/task-version")
 cache="${XDG_CACHE_HOME:-$HOME/.cache}/engineering-standards"
-jar="$cache/task-$key.jar"
+jar="$cache/task-$version.jar"
 
 if [ ! -f "$jar" ]; then
-  version=$(kotlinc -version 2>&1 | sed -n 's/.*kotlinc-jvm \([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/p')
-  major=${version%%.*}
-  minor=${version#*.}
-  minor=${minor%%.*}
-  if [ -z "$version" ] || [ "$major" -lt "$min_major" ] ||
-    { [ "$major" -eq "$min_major" ] && [ "$minor" -lt "$min_minor" ]; }; then
-    echo "Kotlin ${version:-неизвестной версии}, нужен ≥ $min_major.$min_minor — обновите: brew upgrade kotlin" >&2
+  # Нет java или это заглушка macOS без JDK — версии в выводе нет.
+  java_version=$(java -version 2>&1 | sed -n '1s/.*version "\([0-9][0-9]*\).*/\1/p' || true)
+  if [ -z "$java_version" ]; then
+    echo "Нет Java — установите JDK $min_java: brew install openjdk@$min_java" >&2
+    exit 2
+  fi
+  if [ "$java_version" -lt "$min_java" ]; then
+    echo "Java $java_version, нужна ≥ $min_java — установите JDK $min_java: brew install openjdk@$min_java" >&2
     exit 2
   fi
   mkdir -p "$cache"
   tmp="$cache/tmp-$$.jar"
-  if ! kotlinc -nowarn -language-version "$min_major.$min_minor" -api-version "$min_major.$min_minor" \
-    "$dir/src/main/kotlin" -d "$tmp" >&2; then
-    rm -f "$tmp"
-    echo "сбой компиляции task — подробности выше" >&2
-    exit 2
+  packages="${TASK_PACKAGES_URL:-https://maven.pkg.github.com/Nakulov/engineering-standards}"
+  # Токен — как у Gradle (gpr.key), иначе gh; передаётся curl через stdin, а не аргументом: не виден в списке процессов.
+  token=$(sed -n 's/^gpr\.key=//p' "$HOME/.gradle/gradle.properties" 2>/dev/null || true)
+  if [ -z "$token" ]; then
+    token=$(gh auth token 2>/dev/null || true)
+  fi
+  if ! printf 'user = "token:%s"\n' "$token" |
+    curl -K - -fsSL -o "$tmp" "$packages/io/github/nakulov/standards/task/$version/task-$version.jar" 2>/dev/null; then
+    echo "task: готовый jar не скачан — собираю локально; нет доступа к GitHub Packages — gh auth refresh -s read:packages" >&2
+    if ! "${TASK_GRADLE:-$root/gradlew}" -p "$root" --quiet :scripts:shadowJar >&2 ||
+      ! cp "$root/scripts/build/libs/task.jar" "$tmp"; then
+      rm -f "$tmp"
+      echo "сбой сборки task — подробности выше" >&2
+      exit 2
+    fi
   fi
   mv -f "$tmp" "$jar" # атомарно: параллельный запуск не увидит недописанный jar
 fi
 
-TASK_PLUGIN_ROOT=$(cd "$dir/.." && pwd)
+TASK_PLUGIN_ROOT=$root
 export TASK_PLUGIN_ROOT # шаблоны плагина (этап) — от корня плагина
-exec kotlin -cp "$jar" "${TASK_MAIN:-io.github.nakulov.standards.task.cli.MainKt}" "$@"
+exec java -cp "$jar" "${TASK_MAIN:-io.github.nakulov.standards.task.cli.MainKt}" "$@"

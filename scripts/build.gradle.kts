@@ -73,6 +73,10 @@ kover {
 
 tasks.test {
     useJUnitPlatform()
+    // Спека запускателя скачивает jar из testPackages и забирает локальную сборку build/libs/task.jar.
+    dependsOn("publishTaskPublicationToTestPackagesRepository")
+    systemProperty("task.packages", testPackages.get().asFile.absolutePath)
+    systemProperty("task.jar", tasks.shadowJar.get().archiveFile.get().asFile.absolutePath)
     systemProperty("task.launcher", file("task").absolutePath)
     systemProperty("task.setupLauncher", file("setup").absolutePath)
     systemProperty("task.versionScript", versionScript.absolutePath)

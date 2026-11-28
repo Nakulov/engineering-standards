@@ -94,7 +94,7 @@
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: task запускается готовым jar из GitHub Packages
   - [x] Задача 1: Версия и сборка jar
-  - [ ] Задача 2: Запускатель скачивает или собирает jar
+  - [x] Задача 2: Запускатель скачивает или собирает jar
   - [ ] Задача 3: Публикация jar из CI
   - [ ] Задача 4: Требования к машине в README
   - [ ] Приёмка
@@ -270,7 +270,7 @@
 - Изменить: `TaskLauncherSpec.kt`, `TaskLauncherSpecData.kt` — окружения запуска и случаи
 - Изменить: `scripts/detekt-baseline-test.xml:453-460` — убрать находки удалённого кода
 
-- [ ] 1. Падающий тест: скачивание, кеш, локальная сборка, сбой сборки, нет Java, Java 17.
+- [x] 1. Падающий тест: скачивание, кеш, локальная сборка, сбой сборки, нет Java, Java 17.
   `scripts/build.gradle.kts` — в `tasks.test` после `useJUnitPlatform()`:
   ```kotlin
       // Спека запускателя скачивает jar из testPackages и забирает локальную сборку build/libs/task.jar.
@@ -325,7 +325,11 @@
               makeSetupHelpRun(),
               options = TestOptions(name = "setup --help: тот же jar, другая точка входа"),
           ) {
-              runLauncher(environment = makeDownloadEnvironment(), args = listOf("--help"), launcher = makeSetupLauncher())
+              runLauncher(
+                  environment = makeDownloadEnvironment(),
+                  args = listOf("--help"),
+                  launcher = makeSetupLauncher(),
+              )
           }
 
           withGivens(
@@ -565,11 +569,11 @@
   }
   ```
   Удалены: `makeNoKotlinRun`, `makeOldKotlinRun`, `makeOldKotlinPath`, публичный `makeSystemPath` (теперь закрытый, вне спеки не используется — `grep -rn makeSystemPath scripts/src/test` до правки: только `TaskLauncherSpec*`). `LauncherRun` не меняется — его используют `TaskWrapperScriptSpec*` и `SessionStartHookSpecData.kt`. `makeBarePath` остаётся публичным с прежней сигнатурой — находка бейзлайна `FunctionOnlyReturningConstant:…fun makeBarePath: String` остаётся на месте.
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — старый запускатель игнорирует `TASK_PACKAGES_URL`, `TASK_GRADLE` и кеш и компилирует `kotlinc`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — красный прогон пропущен в попытке 1, повторно не выполнялся (решение пользователя). Старый запускатель игнорирует `TASK_PACKAGES_URL`, `TASK_GRADLE` и кеш и компилирует `kotlinc`:
   - падают: «jar не скачан — локальная сборка», «сборка упала» — в stderr нет `DOWNLOAD_MISS`; четыре «нет java», «java 17» — вместо сообщения о Java справка или вывод `kotlinc`;
   - проходят и на старом запускателе (`kotlinc` на машине есть): «task-version», «jar из GitHub Packages», «jar из кеша», «setup --help», «-C в копию стандарта» — вывод тот же; скачивание и кеш они проверяют только на шаге 4, после нового кода;
   - упал другой случай или по другой причине (например, `NullPointerException` в `TaskLauncherSpecData`) — разобраться до кода.
-- [ ] 3. Минимальный код:
+- [x] 3. Минимальный код:
   `scripts/task` — целиком:
   ```bash
   #!/bin/bash
@@ -649,9 +653,9 @@
       <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.cache"</ID>
       <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:true</ID>
   ```
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — зелёный (`BUILD SUCCESSFUL`). Затем `./gradlew :scripts:test --tests '*TaskWrapperScriptSpec*' --tests '*SessionStartHookSpec*'` — зелёный (`LauncherRun` не изменился).
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; упал `NamedLiteralArgument` или `SpecDataContent` по новому коду `TaskLauncherSpecData.kt` — исправить код, бейзлайн не пополнять.
-- [ ] 6. Коммит — тест и код вместе: «Запускатель task скачивает готовый jar или собирает его Gradle».
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — зелёный (`BUILD SUCCESSFUL`). Затем `./gradlew :scripts:test --tests '*TaskWrapperScriptSpec*' --tests '*SessionStartHookSpec*'` — зелёный (`LauncherRun` не изменился).
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`; упал `NamedLiteralArgument` или `SpecDataContent` по новому коду `TaskLauncherSpecData.kt` — исправить код, бейзлайн не пополнять.
+- [x] 6. Коммит — тест и код вместе: «Запускатель task скачивает готовый jar или собирает его Gradle».
 
 ### Задача 3: Публикация jar из CI
 - Создать: `.github/workflows/publish-task.yml` — публикация при слиянии в `dev`
