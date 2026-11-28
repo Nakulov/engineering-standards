@@ -1,0 +1,13 @@
+#!/bin/bash
+# Версия jar task: хеш исходников рабочего кода и его сборки. Под ней Gradle собирает и публикует jar, по ней
+# запускатель ищет его в кеше и GitHub Packages — расчёт один, иначе версии CI и запускателя разойдутся.
+# Сортировка LC_ALL=C — один порядок на macOS и Linux CI; скрытые файлы (.DS_Store) не в git — не в хеше.
+# Совместим с bash 3.2 (macOS).
+set -eu
+
+root=$(cd "$(dirname "$0")/.." && pwd -P)
+cd "$root"
+{
+  find scripts/src/main -type f ! -name '.*' | LC_ALL=C sort | xargs shasum
+  shasum scripts/build.gradle.kts gradle/libs.versions.toml
+} | shasum | cut -c1-16

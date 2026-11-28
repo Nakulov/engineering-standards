@@ -450,14 +450,8 @@
     <ID>NamedLiteralArgument:StartCommandSpecData.kt:"start"</ID>
     <ID>NamedLiteralArgument:StartCommandSpecData.kt:"task.cache"</ID>
     <ID>NamedLiteralArgument:TaskLauncherSpec.kt:TaskLauncherSpec$"--help"</ID>
-    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"#!/bin/sh\necho 'info: kotlinc-jvm 2.1.20 (JRE 17.0.21)' &gt;&amp;2\n"</ID>
-    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"PATH"</ID>
-    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"kotlinc"</ID>
-    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"old-kotlin"</ID>
-    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.cache"</ID>
     <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.launcher"</ID>
     <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:"task.setupLauncher"</ID>
-    <ID>NamedLiteralArgument:TaskLauncherSpecData.kt:true</ID>
     <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"--help"</ID>
     <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"nope"</ID>
     <ID>NamedLiteralArgument:TaskSpec.kt:TaskSpec$"команда отказывает"</ID>

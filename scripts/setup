@@ -1,5 +1,5 @@
 #!/bin/bash
-# Запускатель setup (#8): та же проверка Kotlin и компиляция, что у task, другая точка входа.
+# Запускатель setup (#8): тот же jar и та же проверка Java, что у task, другая точка входа.
 set -eu
 TASK_MAIN=io.github.nakulov.standards.setup.SetupMainKt
 export TASK_MAIN
