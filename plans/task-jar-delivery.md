@@ -95,7 +95,7 @@
 - PR 1: task запускается готовым jar из GitHub Packages
   - [x] Задача 1: Версия и сборка jar
   - [x] Задача 2: Запускатель скачивает или собирает jar
-  - [ ] Задача 3: Публикация jar из CI
+  - [x] Задача 3: Публикация jar из CI
   - [ ] Задача 4: Требования к машине в README
   - [ ] Приёмка
 
@@ -660,8 +660,8 @@
 ### Задача 3: Публикация jar из CI
 - Создать: `.github/workflows/publish-task.yml` — публикация при слиянии в `dev`
 
-- [ ] 1. Тест: не применим — workflow запускает GitHub после слияния; проверка — первый запуск (приёмка, «После завершения»). Проверки языка для YAML в банке нет.
-- [ ] 2. Код — `.github/workflows/publish-task.yml`:
+- [x] 1. Тест: не применим — workflow запускает GitHub после слияния; проверка — первый запуск (приёмка, «После завершения»). Проверки языка для YAML в банке нет.
+- [x] 2. Код — `.github/workflows/publish-task.yml`:
   ```yaml
   # Публикация jar task в GitHub Packages при слиянии в dev. Версия — scripts/task-version (хеш исходников), её же
   # ищет запускатель scripts/task. Тесты здесь не запускаются: проверки идут до PR.
@@ -714,8 +714,8 @@
             ./gradlew :scripts:publishTaskPublicationToGitHubPackagesRepository
             -Pgpr.user="$GITHUB_ACTOR" -Pgpr.key="$GITHUB_TOKEN"
   ```
-- [ ] 3. Проверить синтаксис: `ruby -ryaml -e 'YAML.load_file(".github/workflows/publish-task.yml")'` — без вывода, код 0 (`ruby` есть в macOS); `./gradlew :scripts:test` — зелёный (`.github` — вход тестов, спеки содержимого репозитория перезапускаются).
-- [ ] 4. Коммит: «CI публикует jar task при слиянии в dev».
+- [x] 3. Проверить синтаксис: `ruby -ryaml -e 'YAML.load_file(".github/workflows/publish-task.yml")'` — без вывода, код 0 (`ruby` есть в macOS); `./gradlew :scripts:test` — зелёный (`.github` — вход тестов, спеки содержимого репозитория перезапускаются).
+- [x] 4. Коммит: «CI публикует jar task при слиянии в dev».
 
 ### Задача 4: Требования к машине в README
 - Изменить: `README.md:52` — после абзаца «Обновление плагина…»

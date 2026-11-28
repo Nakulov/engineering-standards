@@ -1,0 +1,50 @@
+# Публикация jar task в GitHub Packages при слиянии в dev. Версия — scripts/task-version (хеш исходников), её же
+# ищет запускатель scripts/task. Тесты здесь не запускаются: проверки идут до PR.
+name: Публикация task
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - scripts/src/main/**
+      - scripts/build.gradle.kts
+      - scripts/task-version
+      - gradle/libs.versions.toml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Версия jar
+        id: version
+        run: echo "value=$(scripts/task-version)" >> "$GITHUB_OUTPUT"
+      # GitHub Packages не принимает версию повторно: тот же хеш (откат) — публикация пропускается.
+      - name: Версия уже опубликована?
+        id: published
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          url="https://maven.pkg.github.com/$GITHUB_REPOSITORY/io/github/nakulov/standards/task/$VERSION/task-$VERSION.pom"
+          if curl -fsS -o /dev/null -u "$GITHUB_ACTOR:$GITHUB_TOKEN" "$url"; then
+            echo "value=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Публикация
+        if: steps.published.outputs.value == 'false'
+        run: >-
+          ./gradlew :scripts:publishTaskPublicationToGitHubPackagesRepository
+          -Pgpr.user="$GITHUB_ACTOR" -Pgpr.key="$GITHUB_TOKEN"
