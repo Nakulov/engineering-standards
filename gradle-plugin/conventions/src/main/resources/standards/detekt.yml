@@ -92,3 +92,6 @@ standards:
   SpecDataContent: # KT-TEST-2, KT-TEST-3, KT-TEST-5, только тесты
     active: true
     includes: ['**/test/**']
+  StubsInMockBlock: # KT-KIT-13, только тесты
+    active: true
+    includes: ['**/test/**']

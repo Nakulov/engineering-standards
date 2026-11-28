@@ -108,7 +108,7 @@
 - PR 1: заглушки верхнего уровня спеки ловит detekt
   - [x] Задача 1: правило detekt `StubsInMockBlock`
   - [x] Задача 2: регистрация в `StandardsProvider`
-  - [ ] Задача 3: включение в `detekt.yml` и бейзлайн `scripts/`
+  - [x] Задача 3: включение в `detekt.yml` и бейзлайн `scripts/`
   - [ ] Задача 4: правило KT-KIT-13 в банке
   - [ ] Приёмка
 
@@ -354,7 +354,7 @@
   Задача пересоздала файл и задела прежние записи (удалены, изменены, переставлены) — запасной путь: сохранить добавленные строки `StubsInMockBlock:` из диффа, вернуть файл `git checkout -- scripts/detekt-baseline-test.xml` и вставить эти строки через Edit перед `  </CurrentIssues>` в порядке сортировки по ID. Затем повторить проверку диффа: удалённых строк 0.
 - [x] 6. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
 - [x] 7. Запустить `./gradlew -p gradle-plugin :conventions:check` — `BUILD SUCCESSFUL`
-- [ ] 8. Коммит — `detekt.yml` и бейзлайн вместе
+- [x] 8. Коммит — `detekt.yml` и бейзлайн вместе
 
 ### Задача 4: правило KT-KIT-13 в банке
 - Изменить: `docs/testing/kotlin/kotest-kit.md:100-106` — примеры «заглушка вызова» и «заглушка вызова с Unit» KT-KIT-3 внутри `given`, со ссылкой на KT-KIT-13
