@@ -106,7 +106,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: заглушки верхнего уровня спеки ловит detekt
-  - [ ] Задача 1: правило detekt `StubsInMockBlock`
+  - [x] Задача 1: правило detekt `StubsInMockBlock`
   - [ ] Задача 2: регистрация в `StandardsProvider`
   - [ ] Задача 3: включение в `detekt.yml` и бейзлайн `scripts/`
   - [ ] Задача 4: правило KT-KIT-13 в банке
@@ -123,7 +123,7 @@
 - Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/StubsInMockBlockSpecData.kt` — код примеров, ожидаемая находка
 - Создать: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/StubsInMockBlockSpec.kt` — случаи правила
 
-- [ ] 1. Падающий тест: четыре случая находки (`every … returns … andThen …`, `justRun`, `coEvery … coAnswers`, мок из `makeX()`) и пять без находки (заглушки в блоке мока, в `given` и `withGivens`, `verifySequence` наверху, `FunSpec`, `BehaviorSpec()` без лямбды). Во всех случаях с находкой заглушка — на строке 4, столбце 5: код начинается с перевода строки, строка 2 — класс, строка 3 — мок.
+- [x] 1. Падающий тест: четыре случая находки (`every … returns … andThen …`, `justRun`, `coEvery … coAnswers`, мок из `makeX()`) и пять без находки (заглушки в блоке мока, в `given` и `withGivens`, `verifySequence` наверху, `FunSpec`, `BehaviorSpec()` без лямбды). Во всех случаях с находкой заглушка — на строке 4, столбце 5: код начинается с перевода строки, строка 2 — класс, строка 3 — мок.
 
   `StubsInMockBlockSpecData.kt`:
   ```kotlin
@@ -242,8 +242,8 @@
       }
   })
   ```
-- [ ] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StubsInMockBlockSpec*'` — падает: `Unresolved reference 'StubsInMockBlock'`
-- [ ] 3. Минимальный код: правило по потоку из «Технических деталей».
+- [x] 2. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StubsInMockBlockSpec*'` — падает: `Unresolved reference 'StubsInMockBlock'`
+- [x] 3. Минимальный код: правило по потоку из «Технических деталей».
 
   `StubsInMockBlock.kt`:
   ```kotlin
@@ -314,9 +314,9 @@
       }
   }
   ```
-- [ ] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StubsInMockBlockSpec*'` — зелёный, 9 случаев
-- [ ] 5. Запустить `./gradlew -p gradle-plugin :detekt-rules:check` — `BUILD SUCCESSFUL`; падение — имя правила detekt (например `FunctionSignature`) или порог покрытия
-- [ ] 6. Коммит — тест и код вместе
+- [x] 4. Запустить `./gradlew -p gradle-plugin :detekt-rules:test --tests '*StubsInMockBlockSpec*'` — зелёный, 9 случаев
+- [x] 5. Запустить `./gradlew -p gradle-plugin :detekt-rules:check` — `BUILD SUCCESSFUL`; падение — имя правила detekt (например `FunctionSignature`) или порог покрытия
+- [x] 6. Коммит — тест и код вместе
 
 ### Задача 2: регистрация `StubsInMockBlock` в наборе `standards`
 - Изменить: `gradle-plugin/detekt-rules/src/test/kotlin/io/github/nakulov/standards/detekt/StandardsProviderSpecData.kt:16` — новое имя в ожидании
