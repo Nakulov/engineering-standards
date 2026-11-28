@@ -341,19 +341,19 @@
 
 Тест: проверка формата — сам detekt `scripts/`: до бейзлайна падает на `StubsInMockBlock`, после — зелёный.
 
-- [ ] 1. Включить правило: в `detekt.yml` после записи `SpecDataContent` (после строки 94 `    includes: ['**/test/**']`) добавить
+- [x] 1. Включить правило: в `detekt.yml` после записи `SpecDataContent` (после строки 94 `    includes: ['**/test/**']`) добавить
   ```yaml
     StubsInMockBlock: # KT-KIT-13, только тесты
       active: true
       includes: ['**/test/**']
   ```
-- [ ] 2. Запустить `./gradlew :scripts:check` — падает: находки `StubsInMockBlock` в спеках `scripts/src/test` (≈ 127, например `GroomedCommandSpec.kt:29`)
-- [ ] 3. Найти задачу бейзлайна тестов: `./gradlew :scripts:tasks --all` → строка `detektBaselineTest` (предполагаю имя по плагину detekt 2: бейзлайн по набору исходников). Нет такой задачи — ⚠️, остановиться и сообщить.
-- [ ] 4. Пополнить бейзлайн: `./gradlew :scripts:detektBaselineTest` — `BUILD SUCCESSFUL`. Право на пополнение — «Ограничения», пункт о бейзлайне.
-- [ ] 5. Проверить дифф бейзлайна: `git diff --numstat scripts/detekt-baseline-test.xml` — удалённых строк 0; `git diff scripts/detekt-baseline-test.xml` — добавлены только строки `<ID>StubsInMockBlock:…</ID>`.
+- [x] 2. Запустить `./gradlew :scripts:check` — падает: находки `StubsInMockBlock` в спеках `scripts/src/test` (≈ 127, например `GroomedCommandSpec.kt:29`)
+- [x] 3. Найти задачу бейзлайна тестов: `./gradlew :scripts:tasks --all` → строка `detektBaselineTest` (предполагаю имя по плагину detekt 2: бейзлайн по набору исходников). Нет такой задачи — ⚠️, остановиться и сообщить.
+- [x] 4. Пополнить бейзлайн: `./gradlew :scripts:detektBaselineTest` — `BUILD SUCCESSFUL`. Право на пополнение — «Ограничения», пункт о бейзлайне.
+- [x] 5. Проверить дифф бейзлайна: `git diff --numstat scripts/detekt-baseline-test.xml` — удалённых строк 0; `git diff scripts/detekt-baseline-test.xml` — добавлены только строки `<ID>StubsInMockBlock:…</ID>`.
   Задача пересоздала файл и задела прежние записи (удалены, изменены, переставлены) — запасной путь: сохранить добавленные строки `StubsInMockBlock:` из диффа, вернуть файл `git checkout -- scripts/detekt-baseline-test.xml` и вставить эти строки через Edit перед `  </CurrentIssues>` в порядке сортировки по ID. Затем повторить проверку диффа: удалённых строк 0.
-- [ ] 6. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] 7. Запустить `./gradlew -p gradle-plugin :conventions:check` — `BUILD SUCCESSFUL`
+- [x] 6. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] 7. Запустить `./gradlew -p gradle-plugin :conventions:check` — `BUILD SUCCESSFUL`
 - [ ] 8. Коммит — `detekt.yml` и бейзлайн вместе
 
 ### Задача 4: правило KT-KIT-13 в банке

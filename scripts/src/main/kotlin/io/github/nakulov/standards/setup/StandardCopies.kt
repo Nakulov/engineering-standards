@@ -7,7 +7,11 @@ internal class StandardCopies(
     private val area: String,
 ) {
 
-    fun run(root: File, copies: List<Pair<String, String>>, mode: Setup.Mode): List<Finding> {
+    fun run(
+        root: File,
+        copies: List<Pair<String, String>>,
+        mode: Setup.Mode,
+    ): List<Finding> {
         val differing = copies.filter { (source, target) ->
             val file = File(root, target)
             !file.isFile || file.readText() != File(pluginRoot, source).readText()
