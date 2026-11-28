@@ -93,7 +93,7 @@
 ## Состав работ
 **Шаги реализации** (в этой кодовой базе):
 - PR 1: task запускается готовым jar из GitHub Packages
-  - [ ] Задача 1: Версия и сборка jar
+  - [x] Задача 1: Версия и сборка jar
   - [ ] Задача 2: Запускатель скачивает или собирает jar
   - [ ] Задача 3: Публикация jar из CI
   - [ ] Задача 4: Требования к машине в README
@@ -113,7 +113,7 @@
 - Изменить: `gradle/libs.versions.toml` — плагин shadow
 - Изменить: `TaskLauncherSpec.kt`, `TaskLauncherSpecData.kt` — случай «версия скрипта = версия Gradle»
 
-- [ ] 1. Падающий тест: вывод `scripts/task-version` совпадает с версией, под которой Gradle собирает jar.
+- [x] 1. Падающий тест: вывод `scripts/task-version` совпадает с версией, под которой Gradle собирает jar.
   В `TaskLauncherSpec.kt` — первым тестом в теле спеки:
   ```kotlin
         shouldReturnTest(makeVersionRun(), options = TestOptions(name = "task-version: версия сборки Gradle")) {
@@ -135,8 +135,8 @@
       return System.getProperty(/* key = */ "task.version")
   }
   ```
-- [ ] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — падает: `NullPointerException` в `makeTaskVersion` — свойства `task.version` нет.
-- [ ] 3. Минимальный код:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — падает: `NullPointerException` в `makeTaskVersion` — свойства `task.version` нет.
+- [x] 3. Минимальный код:
   `scripts/task-version` (новый; затем `chmod +x scripts/task-version`, проверка `ls -l scripts/task-version` → `-rwxr-xr-x`; `git` сохраняет бит исполнения — `git diff --summary` после `git add`: `create mode 100755`):
   ```bash
   #!/bin/bash
@@ -257,11 +257,11 @@
   }
   ```
   Ограничение `languageVersion`/`apiVersion` 2.2 и импорты `KotlinVersion`, `KotlinCompile` убраны: старый запускатель компилирует `kotlinc` с флагами `-language-version 2.2` сам, до задачи 2 он работает как раньше.
-- [ ] 4. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — зелёный (`BUILD SUCCESSFUL`). Дополнительно:
+- [x] 4. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — зелёный (`BUILD SUCCESSFUL`). Дополнительно:
   - `./gradlew :scripts:shadowJar` — `BUILD SUCCESSFUL`; `unzip -l scripts/build/libs/task.jar kotlin/Unit.class` — строка `kotlin/Unit.class` (стандартная библиотека внутри jar);
   - `./gradlew :scripts:publishTaskPublicationToTestPackagesRepository` — `BUILD SUCCESSFUL`; `ls scripts/build/test-packages/io/github/nakulov/standards/task/` — одна папка, имя = вывод `scripts/task-version`, в ней `task-<версия>.jar`.
-- [ ] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`.
-- [ ] 6. Коммит — тест и код вместе: «Версия jar task — хеш исходников, Gradle собирает и публикует jar».
+- [x] 5. Запустить `./gradlew :scripts:check` — `BUILD SUCCESSFUL`.
+- [x] 6. Коммит — тест и код вместе: «Версия jar task — хеш исходников, Gradle собирает и публикует jar».
 
 ### Задача 2: Запускатель скачивает или собирает jar
 - Изменить: `scripts/task` — кеш → скачивание → локальная сборка → `java -cp`

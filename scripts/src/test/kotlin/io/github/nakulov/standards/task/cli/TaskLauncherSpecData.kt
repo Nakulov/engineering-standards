@@ -39,6 +39,19 @@ fun makeOldKotlinRun(): LauncherRun {
     return LauncherRun(code = 2, out = "", err = "Kotlin 2.1.20, нужен ≥ 2.2 — обновите: brew upgrade kotlin\n")
 }
 
+/** Вывод `scripts/task-version`: версия, под которой Gradle собирает и публикует jar. */
+fun makeVersionRun(): LauncherRun {
+    return LauncherRun(code = 0, out = makeTaskVersion() + "\n", err = "")
+}
+
+fun makeVersionScript(): String {
+    return System.getProperty(/* key = */ "task.versionScript")
+}
+
+private fun makeTaskVersion(): String {
+    return System.getProperty(/* key = */ "task.version")
+}
+
 fun makeSetupLauncher(): String {
     return System.getProperty("task.setupLauncher")
 }

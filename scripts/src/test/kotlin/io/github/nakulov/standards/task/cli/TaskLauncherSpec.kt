@@ -20,6 +20,10 @@ import kotlin.time.Duration.Companion.seconds
 // TaskLauncherSpecData.
 class TaskLauncherSpec :
     BehaviorSpec({
+        shouldReturnTest(makeVersionRun(), options = TestOptions(name = "task-version: версия сборки Gradle")) {
+            runLauncher(path = makeBarePath(), args = emptyList(), launcher = makeVersionScript())
+        }
+
         shouldReturnTest(
             makeUnknownCommandRun(),
             options = TestOptions(
