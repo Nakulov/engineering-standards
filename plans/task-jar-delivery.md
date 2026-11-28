@@ -569,7 +569,7 @@
   }
   ```
   Удалены: `makeNoKotlinRun`, `makeOldKotlinRun`, `makeOldKotlinPath`, публичный `makeSystemPath` (теперь закрытый, вне спеки не используется — `grep -rn makeSystemPath scripts/src/test` до правки: только `TaskLauncherSpec*`). `LauncherRun` не меняется — его используют `TaskWrapperScriptSpec*` и `SessionStartHookSpecData.kt`. `makeBarePath` остаётся публичным с прежней сигнатурой — находка бейзлайна `FunctionOnlyReturningConstant:…fun makeBarePath: String` остаётся на месте.
-- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — красный прогон пропущен в попытке 1, повторно не выполнялся (решение пользователя). Старый запускатель игнорирует `TASK_PACKAGES_URL`, `TASK_GRADLE` и кеш и компилирует `kotlinc`:
+- [x] 2. Запустить `./gradlew :scripts:test --tests '*TaskLauncherSpec*'` — красный прогон пропущен в попытке 1, выполнен отдельно после задачи 4 (`scripts/task` и `scripts/setup` временно взяты из `51303e2`): 12 тестов, 7 упало, 5 прошло — как ниже. Старый запускатель игнорирует `TASK_PACKAGES_URL`, `TASK_GRADLE` и кеш и компилирует `kotlinc`:
   - падают: «jar не скачан — локальная сборка», «сборка упала» — в stderr нет `DOWNLOAD_MISS`; четыре «нет java», «java 17» — вместо сообщения о Java справка или вывод `kotlinc`;
   - проходят и на старом запускателе (`kotlinc` на машине есть): «task-version», «jar из GitHub Packages», «jar из кеша», «setup --help», «-C в копию стандарта» — вывод тот же; скачивание и кеш они проверяют только на шаге 4, после нового кода;
   - упал другой случай или по другой причине (например, `NullPointerException` в `TaskLauncherSpecData`) — разобраться до кода.
