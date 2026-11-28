@@ -12,19 +12,16 @@ const val DOWNLOAD_MISS = "task: готовый jar не скачан — соб
 const val UNKNOWN_COMMAND_ERROR = "неизвестная команда nope — см. task --help\n"
 const val CACHE_PREFIX = "cache"
 
-/** Результат запуска `scripts/task`: код выхода, stdout, stderr. */
 data class LauncherRun(
     val code: Int,
     val out: String,
     val err: String,
 )
 
-/** Ответ `Task` на неизвестную команду: не зависит от списка команд и их опций. */
 fun makeUnknownCommandRun(): LauncherRun {
     return LauncherRun(code = 2, out = "", err = UNKNOWN_COMMAND_ERROR)
 }
 
-/** jar не скачан, заглушка Gradle «собрала» его: запускатель забрал `build/libs/task.jar` сборки тестов. */
 fun makeLocalBuildRun(): LauncherRun {
     return LauncherRun(code = 2, out = "", err = DOWNLOAD_MISS + UNKNOWN_COMMAND_ERROR)
 }
@@ -56,7 +53,6 @@ fun makeOldJavaRun(): LauncherRun {
     )
 }
 
-/** Вывод `scripts/task-version`: версия, под которой Gradle собирает и публикует jar. */
 fun makeVersionRun(): LauncherRun {
     return LauncherRun(code = 0, out = makeTaskVersion() + "\n", err = "")
 }
@@ -69,17 +65,14 @@ fun makeSetupLauncher(): String {
     return System.getProperty("task.setupLauncher")
 }
 
-/** Корень репозитория, из которого запущены тесты: `-C` в него — свой корень, без перенаправления. */
 fun makeRepoRoot(): String {
     return System.getProperty(/* key = */ "task.repoRoot")
 }
 
-/** jar этой версии опубликован в папке пакетов сборки; Gradle падает — запуск идёт только со скачанного jar. */
 fun makeDownloadEnvironment(): Map<String, String> {
     return makeEnvironment(path = makeSystemPath(), packages = makePublishedPackages(), gradle = makeGradle(code = 1))
 }
 
-/** jar этой версии уже в кеше; пакетов нет, Gradle падает — запуск идёт только из кеша. */
 fun makeCachedEnvironment(): Map<String, String> {
     val cache = makeTempDir(prefix = CACHE_PREFIX)
     val jar = File(/* parent = */ cache, /* child = */ "engineering-standards/task-${makeTaskVersion()}.jar")
@@ -101,7 +94,7 @@ fun makeFailedBuildEnvironment(): Map<String, String> {
     return makeEnvironment(path = makeSystemPath(), packages = makeEmptyPackages(), gradle = makeGradle(code = 1))
 }
 
-/** Первая `java` в PATH не запускается — как заглушка macOS `/usr/bin/java` без установленной JDK. */
+// Первая `java` в PATH не запускается — как заглушка macOS `/usr/bin/java` без установленной JDK.
 fun makeNoJavaEnvironment(): Map<String, String> {
     return makeEnvironment(
         path = makeJavaPath(script = "exit 1"),
@@ -118,24 +111,24 @@ fun makeOldJavaEnvironment(): Map<String, String> {
     )
 }
 
-/** Только системные утилиты: для скриптов, которым не нужна Java. */
 fun makeBareEnvironment(): Map<String, String> {
     return makeEnvironment(path = makeBarePath(), packages = makeEmptyPackages(), gradle = makeGradle(code = 1))
 }
 
-/** PATH без Kotlin и Java: только системные утилиты. */
+fun makeTaskLauncher(): String {
+    return System.getProperty(/* key = */ "task.launcher")
+}
+
 fun makeBarePath(): String {
     return "/usr/bin:/bin"
 }
 
-/**
- * Запуск `scripts/task` с таймаутом: вывод — в файлы, иначе сломанное перенаправление `-C` (копия запускает себя
- * бесконечно) повесит чтение вывода, и тест зависнет, а не упадёт.
- */
+// Вывод — в файлы: иначе сломанное перенаправление `-C` (копия запускает себя бесконечно) повесит чтение вывода,
+// и тест зависнет, а не упадёт.
 fun runLauncher(
     environment: Map<String, String>,
     args: List<String>,
-    launcher: String = System.getProperty("task.launcher"),
+    launcher: String = makeTaskLauncher(),
     directory: File? = null,
     timeout: Duration = 3.minutes,
 ): LauncherRun {
@@ -155,7 +148,7 @@ fun runLauncher(
     return LauncherRun(code = process.exitValue(), out = out.readText(), err = err.readText())
 }
 
-/** Окружение запуска: свой пустой кеш на каждый случай — jar прошлого случая не подменяет скачивание или сборку. */
+// Свой пустой кеш на каждый случай: jar прошлого случая не подменяет скачивание или сборку.
 private fun makeEnvironment(
     path: String,
     packages: String,
@@ -170,18 +163,17 @@ private fun makeEnvironment(
     )
 }
 
-/** java тестовой JVM — первой: запускатель запускает jar той же Java, на которой его собрал Gradle. */
+// java тестовой JVM — первой: запускатель запускает jar той же Java, на которой его собрал Gradle.
 private fun makeSystemPath(): String {
     return "${System.getProperty(/* key = */ "java.home")}/bin:${System.getenv(/* name = */ "PATH")}"
 }
 
-/** PATH, где первая `java` — заглушка с телом [script]. */
 private fun makeJavaPath(script: String): String {
     val java = makeStub(file = File(makeTempDir(prefix = "stub"), /* child = */ "java"), script = script)
     return "${java.parentFile.absolutePath}:${makeSystemPath()}"
 }
 
-/** Заглушка Gradle с кодом выхода [code]: код 0 — запускатель забирает `build/libs/task.jar`, собранный до тестов. */
+// Код 0 — запускатель забирает `build/libs/task.jar`, собранный до тестов.
 private fun makeGradle(code: Int): String {
     val gradle = makeStub(file = File(makeTempDir(prefix = "gradle"), /* child = */ "gradlew"), script = "exit $code")
     return gradle.absolutePath

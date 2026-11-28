@@ -19,35 +19,61 @@ import kotlin.time.Duration.Companion.seconds
 // TaskLauncherSpecData.
 class TaskLauncherSpec :
     BehaviorSpec({
-        shouldReturnTest(makeVersionRun(), options = TestOptions(name = "task-version: версия сборки Gradle")) {
-            runLauncher(environment = makeBareEnvironment(), args = emptyList(), launcher = makeVersionScript())
-        }
-
-        shouldReturnTest(makeUnknownCommandRun(), options = TestOptions(name = "task: jar из GitHub Packages")) {
-            runLauncher(environment = makeDownloadEnvironment(), args = listOf(UNKNOWN_COMMAND))
-        }
-
-        shouldReturnTest(makeUnknownCommandRun(), options = TestOptions(name = "task: jar из кеша")) {
-            runLauncher(environment = makeCachedEnvironment(), args = listOf(UNKNOWN_COMMAND))
-        }
-
-        shouldReturnTest(makeLocalBuildRun(), options = TestOptions(name = "task: jar не скачан — локальная сборка")) {
-            runLauncher(environment = makeLocalBuildEnvironment(), args = listOf(UNKNOWN_COMMAND))
-        }
-
-        shouldReturnTest(makeFailedBuildRun(), options = TestOptions(name = "task: jar не скачан, сборка упала")) {
-            runLauncher(environment = makeFailedBuildEnvironment(), args = listOf(UNKNOWN_COMMAND))
-        }
-
-        shouldReturnTest(
-            makeSetupHelpRun(),
-            options = TestOptions(name = "setup --help: тот же jar, другая точка входа"),
-        ) {
-            runLauncher(
-                environment = makeDownloadEnvironment(),
-                args = listOf("--help"),
-                launcher = makeSetupLauncher(),
-            )
+        withGivens(
+            nameFn = { case -> "запуск: ${case.arg1}" },
+            case(
+                arg1 = "task-version: версия сборки Gradle",
+                arg2 = makeVersionRun(),
+                arg3 = { makeBareEnvironment() },
+                arg4 = emptyList(),
+                arg5 = makeVersionScript(),
+            ),
+            case(
+                arg1 = "task: jar из GitHub Packages",
+                arg2 = makeUnknownCommandRun(),
+                arg3 = { makeDownloadEnvironment() },
+                arg4 = listOf(UNKNOWN_COMMAND),
+                arg5 = makeTaskLauncher(),
+            ),
+            case(
+                arg1 = "task: jar из кеша",
+                arg2 = makeUnknownCommandRun(),
+                arg3 = { makeCachedEnvironment() },
+                arg4 = listOf(UNKNOWN_COMMAND),
+                arg5 = makeTaskLauncher(),
+            ),
+            case(
+                arg1 = "task: jar не скачан — локальная сборка",
+                arg2 = makeLocalBuildRun(),
+                arg3 = { makeLocalBuildEnvironment() },
+                arg4 = listOf(UNKNOWN_COMMAND),
+                arg5 = makeTaskLauncher(),
+            ),
+            case(
+                arg1 = "task: jar не скачан, сборка упала",
+                arg2 = makeFailedBuildRun(),
+                arg3 = { makeFailedBuildEnvironment() },
+                arg4 = listOf(UNKNOWN_COMMAND),
+                arg5 = makeTaskLauncher(),
+            ),
+            case(
+                arg1 = "setup --help: тот же jar, другая точка входа",
+                arg2 = makeSetupHelpRun(),
+                arg3 = { makeDownloadEnvironment() },
+                arg4 = listOf("--help"),
+                arg5 = makeSetupLauncher(),
+            ),
+            case(
+                arg1 = "java 17",
+                arg2 = makeOldJavaRun(),
+                arg3 = { makeOldJavaEnvironment() },
+                arg4 = listOf("--help"),
+                arg5 = makeTaskLauncher(),
+            ),
+        ) { name, expected, environment, args, launcher ->
+            shouldReturnTest(expected, options = TestOptions(name)) {
+                runLauncher(environment = environment(), args = args, launcher = launcher)
+            }
         }
 
         withGivens(
@@ -70,9 +96,5 @@ class TaskLauncherSpec :
                 args = listOf("-C", STANDARD_COPY, "--help"),
                 directory = repo,
             )
-        }
-
-        shouldReturnTest(makeOldJavaRun(), options = TestOptions(name = "java 17")) {
-            runLauncher(environment = makeOldJavaEnvironment(), args = listOf("--help"))
         }
     })
