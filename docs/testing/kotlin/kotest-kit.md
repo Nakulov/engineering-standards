@@ -51,7 +51,7 @@ class OrderServiceSpec : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerRoot
 
     val repository = mockk<OrderRepository>()
-    val service = OrderService(repository = repository)
+    val service = OrderService(repository)
 
     given(name = "новый заказ") {
         val order = Order(id = 1000L, total = 20)
@@ -515,7 +515,7 @@ class RepositoryServiceSpec : BehaviorSpec({
         every { root() } returns root.path
         justRun { save(any()) }
     }
-    val service = RepositoryService(repository = repository)
+    val service = RepositoryService(repository)
 
     given(name = "пустой репозиторий") {
         every { repository.files() } returns emptyList()
@@ -528,7 +528,7 @@ class RepositoryServiceSpec : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerRoot
 
     val repository = mockk<Repository>()
-    val service = RepositoryService(repository = repository)
+    val service = RepositoryService(repository)
     val root = makeRoot()
     every { repository.root() } returns root.path
     justRun { repository.save(any()) }
