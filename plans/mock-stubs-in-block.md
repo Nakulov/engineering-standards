@@ -110,7 +110,7 @@
   - [x] Задача 2: регистрация в `StandardsProvider`
   - [x] Задача 3: включение в `detekt.yml` и бейзлайн `scripts/`
   - [x] Задача 4: правило KT-KIT-13 в банке
-  - [ ] Приёмка
+  - [x] Приёмка
 
 **После завершения** (внешнее, без чекбоксов):
 - #107 — перевод заглушек 26 спек `scripts/` и удаление записей `StubsInMockBlock:` из `scripts/detekt-baseline-test.xml`.
@@ -434,11 +434,11 @@
 - [x] 4. Коммит
 
 ### Приёмка
-- [ ] Что даёт этот PR — проверено: с включённым правилом и без бейзлайна `./gradlew :scripts:check` падал на `StubsInMockBlock` (задача 3, шаг 2), с бейзлайном — зелёный (задача 3, шаг 6)
-- [ ] Крайние случаи обработаны: случаи «Технических деталей» — в `StubsInMockBlockSpec`
-- [ ] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check` и `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
-- [ ] Последний блок: критерии цели из «Обзора» — по пунктам
-- [ ] Документация: `docs/testing/kotlin/kotest-kit.md` — KT-KIT-13 и пример KT-KIT-3 (задача 4)
+- [x] Что даёт этот PR — проверено: с включённым правилом и без бейзлайна `./gradlew :scripts:check` падал на `StubsInMockBlock` (задача 3, шаг 2), с бейзлайном — зелёный (задача 3, шаг 6)
+- [x] Крайние случаи обработаны: случаи «Технических деталей» — в `StubsInMockBlockSpec`
+- [x] Полный набор тестов зелёный: `./gradlew -p gradle-plugin check` и `./gradlew :scripts:check` — `BUILD SUCCESSFUL`
+- [x] Последний блок: критерии цели из «Обзора» — по пунктам
+- [x] Документация: `docs/testing/kotlin/kotest-kit.md` — KT-KIT-13 и пример KT-KIT-3 (задача 4)
 
 ## Открыто
 - нет
